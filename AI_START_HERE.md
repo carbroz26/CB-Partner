@@ -362,5 +362,91 @@ The AI must move the project from one known, documented, verified state to the n
 ## 30. ONE-LINE EXTERNAL AI INSTRUCTION
 'Read AI_START_HERE.md first and strictly follow its routing, authority, workflow, permission, documentation, verification and handoff rules. Determine the current project state before taking action. Never guess or silently skip a required state.'
 
-## 31. STATUS
+## 32. PROJECT TRACKER IS THE CONTROL LEDGER
+The project tracker is the execution ledger for every significant feature/module/work item. It records ID, name, workflow state, current implementation unit, frozen decision reference, implementation-plan reference, status-document reference, Trello reference, Git branch/PR when applicable, test/verification state, blockers, last completed action, next valid action, and last update. The tracker answers "Where are we?" Detailed technical rules remain in their owning documents.
+
+## 33. AUTOMATIC DOCUMENT UPDATE MATRIX
+After each transition, update the required records before declaring it complete.
+
+| Transition | Required record |
+|---|---|
+| New module/feature discussion | Current Status + Tracker |
+| Durable decision produced | Decision Log + relevant module/feature plan |
+| Decision frozen | Decision Log + module plan + Tracker |
+| Implementation plan created | Module plan + Tracker |
+| Implementation plan frozen | Module plan + Tracker + Trello |
+| Unit selected | Module Status + Tracker + Trello |
+| Coding starts/completes | Module Status + Tracker |
+| Tests run | Module Status + Tracker + test result |
+| Review completes | Module Status + Tracker |
+| Unit accepted/frozen | Module Status + Tracker + Trello |
+| Module complete | Module Status + Current Status + Tracker + Trello |
+| Checkpoint | Checkpoints + Current Status + Tracker |
+| Commit/merge | Tracker + Current Status when materially relevant |
+
+If a required record cannot be updated, do not falsely declare the transition complete.
+
+## 34. TWO DOCUMENTS PER SIGNIFICANT MODULE
+Each significant module has exactly two primary lifecycle documents.
+
+### 00-MODULE-IMPLEMENTATION-PLAN.md
+The frozen contract: purpose/boundary, responsibilities/non-responsibilities, architecture, dependencies, public contracts, Store/state design, domain/data/API rules, platform rules, DI/lifecycle rules, error handling, logging, security, testing strategy, coding constraints, ordered implementation units, acceptance criteria, and out-of-scope items. Changes require the decision/reopening process.
+
+### 01-MODULE-IMPLEMENTATION-STATUS.md
+The living execution ledger. For each unit record unit ID, requirement reference, status, files changed, tests written/executed, verification result, review result, frozen/accepted state, checkpoint/date, limitations, and next unit. Never erase implementation history.
+
+## 35. ONE IMPLEMENTATION UNIT AT A TIME
+After a module plan is frozen:
+SELECT → IMPLEMENT → TEST → REVIEW → ACCEPT/FIX → FREEZE → RECORD → STOP
+
+After the unit is frozen, update Module Status, Tracker, Trello, Current Status when materially relevant, and checkpoint when required. Then STOP. Never automatically implement the next unit.
+
+## 36. GLOBAL CODING QUALITY GATE
+Every code change follows applicable frozen engineering standards. Verify as applicable: cohesive/single-responsibility classes; intentional ownership/lifecycle; immutability; safe nullability; clear naming; minimal public API; dependency direction and DI; appropriate class lifetime; Singleton only when justified by lifecycle/resource/ownership; no unnecessary design patterns; no speculative abstractions; no hidden global state; structured error handling; coroutine/concurrency/thread-safety correctness; logging/security rules; Compose state/recomposition rules; platform boundaries; testability; maintainability.
+
+If a desired coding rule is not frozen, propose it instead of silently making it permanent.
+
+## 37. TESTING GATE
+Compiling is not sufficient. For every unit, determine required verification from the frozen plan and testing standards. As applicable: build/compile, unit tests, Store/state tests, domain/use-case tests, repository/data tests, serialization/API tests, UI tests, platform tests, regression tests, failure/edge-case tests, lint/format/static checks. Record what actually ran and the result. Never claim an unrun test passed.
+
+## 38. CONTROLLED PROGRESS NOTIFICATION
+During repository work, keep the user informed.
+
+Before each material action:
+ABOUT TO DO: <action>
+
+After it:
+DONE: <result>
+
+For coding, announce the unit, intended files/scope, and intended change. After coding, show the relevant changed code/diff or precise file summary, test commands/results, and any deviation immediately. Do not expose hidden chain-of-thought; provide operational progress, decisions, changed files, commands/results, and diffs.
+
+## 39. NO UNAUTHORIZED BATCH WORK
+Do not silently implement multiple units, create unrelated modules, refactor unrelated code, upgrade dependencies, alter architecture, modify frozen decisions, touch backend, change unrelated Trello cards, or merge code. Material scope expansion requires authorization.
+
+## 40. AUTOMATION FAILURE RULE
+This process reduces omissions but cannot honestly guarantee zero mistakes. If a required tool/action is unavailable: STOP; identify the missing action; perform it manually if authorized and possible; otherwise mark BLOCKED and tell the user exactly what remains.
+
+## 41. POST-FREEZE GATE
+After any meaningful freeze, STOP. Do not automatically start the next feature, module, unit, dependency change, or refactor.
+
+Return FREEZE COMPLETE with what was frozen, records updated, Tracker state, Trello state, current state, and remaining work. Then ask what objective the user wants next. Offer: continue this module; discuss another aspect; start another module; start another feature; research; review; status; end session. Provide one recommended copy/paste prompt but do not execute it automatically.
+
+## 42. MANDATORY RESPONSE FOOTER
+Every substantial workflow response ends with:
+CURRENT STATE — topic/module, workflow state, current unit, frozen items, open items.
+RECORDS UPDATED — documents, Tracker, Trello, Git when applicable.
+NEXT ACTION — one precise process action.
+NEXT PROMPT — one copy/paste-ready prompt.
+At a freeze boundary also include POST-FREEZE CHOICE and wait for the user's objective.
+
+## 43. USER OVERRIDE DOES NOT BYPASS GATES
+"Just do it" does not authorize silently skipping required decision, planning, testing, review, documentation, or Git safety gates. Identify the minimum missing authorization instead.
+
+## 44. DEFINITION OF DONE
+A work item is DONE only when applicable: requirement understood; scope known; decisions frozen; approved plan exists; correct unit selected; code implemented; required tests executed; review completed; acceptance/freeze recorded; Module Status updated; Tracker updated; Trello synchronized; Git state recorded; checkpoint/documentation completed; user notified; next action returned. If an applicable condition is false, do not report DONE.
+
+## 45. SINGLE SOURCE FOR "WHERE ARE WE?"
+CURRENT-STATUS + Tracker + relevant Module Status + Git + Trello must agree. If they disagree, STOP and reconcile before material work.
+
+## 46. STATUS
 This document is PROPOSED. Once frozen, changes to it are process changes and must themselves follow the project decision/freeze process.
