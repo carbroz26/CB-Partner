@@ -1,11 +1,54 @@
 # CB-Partner — Do Not Do
 
-Status: PROPOSED
+**Status:** PROPOSED
 
-Project: Do not restart because of localized problems; do not throw away working code; do not allow endless architecture discussion without a freeze point; do not use Trello as architecture source of truth.
+This is the project's explicit anti-pattern list.
 
-AI: do not let AI autonomously redesign architecture, expand a frozen task, add dependencies simply because they are popular, guess critical requirements, modify unrelated files, or merge unreviewed AI-generated code.
+## Process
+- Do not restart the entire project because of one broken feature.
+- Do not treat a clean rewrite as automatically better.
+- Do not code before a meaningful plan is approved.
+- Do not let discussion continue forever without a decision/freeze point.
+- Do not use Trello as the permanent architecture source of truth.
+- Do not let documentation become contradictory duplicate sources.
 
-Architecture: do not introduce ViewModel; do not bypass Store/MVI/UDF; do not create generic abstractions without demonstrated need; do not build speculative infrastructure; do not put business logic in Compose UI; do not leak transport DTOs through every layer; do not silently change accepted decisions.
+## AI
+- Do not give AI unrestricted authority to redesign the project.
+- Do not allow AI to silently change frozen decisions.
+- Do not allow AI to silently expand scope.
+- Do not accept generated code without review and validation.
+- Do not let AI guess critical requirements.
+- Do not overwrite unknown user changes.
+- Do not merge unreviewed AI work.
 
-Development/Git: do not mix unrelated refactoring with feature work; do not mark complete because it compiles only; do not skip relevant tests; do not commit unrelated changes together; do not force-push or use destructive reset without understanding the impact; do not normally work directly on main.
+## Architecture
+- Do not introduce ViewModel.
+- Do not bypass Store/MVI/UDF.
+- Do not create a generic abstraction before a real use case exists.
+- Do not add modules merely to make a diagram look cleaner.
+- Do not add dependencies because they are trendy or popular.
+- Do not put business/network/persistence logic in composables.
+- Do not leak API DTOs throughout the application.
+- Do not create platform abstractions that hide meaningful platform differences.
+- Do not build infrastructure for hypothetical future requirements.
+
+## Feature Work
+- Do not implement the entire product in one task.
+- Do not mix unrelated refactoring into a feature.
+- Do not weaken acceptance criteria to make a task pass.
+- Do not call a feature complete because it compiles.
+- Do not skip relevant tests.
+
+## Git
+- Do not normally work directly on main.
+- Do not force-push without explicit understanding and authorization.
+- Do not use reset --hard as a first response to uncertainty.
+- Do not commit unrelated changes together.
+
+## Project Evolution
+- Do not confuse a newly released library with a justified dependency.
+- Do not reopen frozen decisions merely because another approach looks interesting.
+- Do not turn every code-review suggestion into immediate work.
+- Do not restart when migration or focused repair is practical.
+
+**This document is PROPOSED until explicitly frozen.**
