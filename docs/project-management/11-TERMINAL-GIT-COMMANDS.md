@@ -74,3 +74,24 @@ After commit: git log --oneline -3; git status.
 
 ## Project-specific commands
 To be filled after the actual KMP/Compose module structure is established.
+## Mandatory Antigravity Handoff
+The AI must return exact commands after material repository changes. Never give a generic command when the actual Git state is known.
+
+### Post-Merge Main Sync
+```bash
+git fetch origin
+git switch main
+git pull --ff-only origin main
+```
+
+### Existing Module Branch
+```bash
+git fetch origin
+git switch feature/<module>
+git pull --ff-only origin feature/<module>
+```
+
+Before giving commands, confirm the target branch and whether the remote branch was pushed/merged. After synchronization verify `git status` and relevant build/test commands.
+
+### Git Rules
+main is the protected stable branch. Use feature/<module> for active module/feature work by default. Keep meaningful implementation units as focused commits. Tags mark meaningful milestones. Record branch, commit, PR and tag in Tracker/Module Status when applicable.
