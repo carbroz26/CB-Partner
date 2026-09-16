@@ -51,3 +51,8 @@ Acceptance criteria pass; relevant checks pass; review complete; no unauthorized
 - DONE means verified, not merely coded.
 
 **This document is PROPOSED until explicitly frozen.**
+## State Synchronization
+Trello is execution tracking, not the technical source of truth. Each meaningful implementation unit should link to its Tracker/module references and record branch, acceptance criteria, testing state, and completion/freeze state. Synchronize Trello when a unit is selected, implemented, accepted/frozen, blocked, or completed.
+
+## No Automatic Next Task
+After a task reaches its required freeze/completion state, stop. Do not automatically start the next Trello card.
