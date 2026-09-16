@@ -605,3 +605,87 @@ Wait for the user's objective. Do not automatically proceed.
 ### 55.9 No Hidden Context Dependency
 A new AI must be able to recover the current workflow without access to prior chat messages. If durable information exists only in conversation history, document it before claiming recovery is complete.
 
+
+## 56. THREE-TIER BRANCH STRATEGY
+
+The repository uses three branch levels:
+
+main ← development ← feature/<module>
+
+- main = production/stable branch. It receives changes only when the relevant product feature is production-ready and complete acceptance criteria are satisfied.
+
+- development = integration branch. Completed/frozen module work is merged here for integration and regression verification.
+
+- feature/<module> = active module branch. Example: feature/authentication or feature/network. Module implementation work occurs here.
+
+Never develop directly on main or development.
+
+
+
+## 57. MODULE BRANCH LIFECYCLE
+
+New module: development → feature/<module> → discussion → plan freeze → implementation units → test/review/freeze each unit → module acceptance → PR to development → integration verification.
+
+A frozen module does not mean its branch is permanently closed, nor that AI should switch back to it automatically.
+
+
+
+## 58. FROZEN MODULE REACTIVATION RULE
+
+After a module is frozen and merged into development, remain in the current working context unless a new task actually requires changing that module.
+
+If a later issue belongs to Network while Authentication is current: identify the issue as Network-owned; stop Authentication workflow; check Tracker for Network branch/state; switch/create feature/network only as authorized; read Network Plan + Status; create a Network task/unit if required; implement/test/review through normal gates; merge Network to development; then return to the requested context only when the Network task is complete or explicitly paused.
+
+Never switch branches merely because another module exists. Branch switching must be caused by an authorized work item.
+
+If a module branch was already merged/deleted, create a new issue branch from current development according to Git protocol; do not resurrect stale state without checking Tracker/Git history.
+
+
+
+## 59. DEVELOPMENT INTEGRATION GATE
+
+A module branch may merge into development only when applicable implementation units are accepted/frozen, required tests/checks pass, documentation is synchronized, and required review is complete.
+
+Track separately: MODULE_FROZEN → PR_TO_DEVELOPMENT → REVIEWED → MERGED_TO_DEVELOPMENT → INTEGRATION_VERIFIED.
+
+After integration, run applicable cross-module/regression verification before treating the integrated state as stable.
+
+
+
+## 60. MAIN RELEASE GATE
+
+main is not a module integration branch.
+
+A module such as Authentication is not merged to main merely because Authentication is frozen. The relevant product feature must be production-ready according to its frozen acceptance criteria.
+
+Example: Authentication (Login + OTP + session/auth state + error/retry handling + required tests + review + production acceptance) → development → release review → main.
+
+The exact definition of production-ready must be frozen for the feature/release. Do not invent missing acceptance criteria at merge time.
+
+
+
+## 61. MAIN MERGE SAFETY
+
+Before development → main: confirm release/feature scope; all required feature/module acceptance criteria; integration/regression verification; documentation/Tracker/Trello; PR/diff and Git status; repository protections/reviews/checks; required authorization; merge commit/tag/release milestone. Then provide Antigravity commands to synchronize main.
+
+Never merge a single completed module to main solely because that module is complete.
+
+
+
+## 62. BRANCH SWITCH RESPONSE REQUIREMENT
+
+Whenever a task requires a branch switch, explicitly report:
+
+BRANCH SWITCH REQUIRED
+
+Current: <branch>
+
+Target: <branch>
+
+Reason: <authorized work item>
+
+Tracker: <reference/state>
+
+Then verify the target branch before making changes.
+
+When no branch switch is required, do not switch branches merely for convenience.
