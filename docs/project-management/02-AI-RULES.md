@@ -50,3 +50,14 @@ After work report changed files, behavior, checks/tests, build results, deviatio
 Stop if requirements are materially ambiguous, a frozen decision must change, scope expands, destructive action is proposed, unexpected user changes exist, or the plan cannot be followed safely.
 
 **This document is PROPOSED until explicitly frozen.**
+## Router Rule
+AI_START_HERE.md must be read before substantial work and is the routing authority for determining workflow mode, current context, required documents, permissions, and next action.
+
+## Continue Rule
+CONTINUE means recover state and determine the next valid workflow step. It does not mean implement automatically. If multiple unresolved contexts exist, ask the user to choose rather than guess.
+
+## State Gates
+IMPLEMENT requires a frozen plan. TEST requires an implemented change. REVIEW requires an implementation and verification target. FREEZE requires completed acceptance gates. MERGE requires the Git gate and applicable review/checks. After a freeze, stop and return the next prompt.
+
+## Change Reporting
+Every material code change must report the complete changed-file list, important changed classes/functions, verification commands/results, Git state, document updates, and exact Antigravity synchronization commands.
