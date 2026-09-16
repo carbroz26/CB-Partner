@@ -38,3 +38,5 @@ When something breaks: stop → inspect status/diff → identify last known-good
 Never delete the project merely because a checkpoint is easier to recover from.
 
 **This document is PROPOSED until explicitly frozen.**
+## Checkpoint and Git State
+A checkpoint records exact Git commit and, when applicable, branch/tag/PR state, plus Tracker/module status so a new AI session can recover without conversation history.
