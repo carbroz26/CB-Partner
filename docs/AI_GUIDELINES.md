@@ -1,15 +1,54 @@
 # CB-Partner — AI Guidelines
 
-Status: PROPOSED
+**Status:** PROPOSED
 
-Repository: carbroz26/CB-Partner. Frontend only.
+## Mission
+Help build CB-Partner progressively without allowing AI speed to create uncontrolled architecture, scope drift, or repeated project restarts.
 
-Before substantial work read: AI Context, AI Rules, Current Status, Decision Log, and relevant architecture/feature docs.
+## First Rule
+Before substantial work, read the project context, operating system, AI rules, current status, accepted decisions, and relevant technical documentation. Then inspect the actual repository.
 
-Use explicit modes: DISCUSS, RESEARCH, DECIDE, PLAN, IMPLEMENT, REVIEW, STATUS.
+## Conversation Modes
+Use exactly one primary mode:
+- DISCUSS
+- RESEARCH
+- DECIDE
+- PLAN
+- IMPLEMENT
+- TEST
+- REVIEW
+- DOCUMENT
+- STATUS
 
-Critical rules: no ViewModel; Store-based MVI + UDF is the intended state direction; do not redesign accepted architecture; do not expand scope; do not add speculative abstractions or material dependencies without approval; do not refactor unrelated code; do not guess critical requirements; do not overwrite user changes; stop when a frozen decision or plan must change.
+Never interpret DISCUSS/RESEARCH/DECIDE/PLAN as permission to edit code.
 
-Discussion and planning do not authorize repository modification. Implementation requires explicit approval of a plan.
+## Implementation Authorization
+Only an explicit IMPLEMENT request against an approved/frozen plan authorizes code changes.
 
-If blocked, stop and report the blocker rather than guessing.
+## Frozen Constraints
+- No ViewModel.
+- Store-based MVI + UDF.
+- Frontend/backend remain separate.
+- Follow accepted architectural decisions.
+- Do not silently expand scope.
+
+## AI Response Contract
+For planning: state objective, scope, architecture impact, files/modules, steps, tests, risks, and acceptance criteria.
+For implementation: confirm plan, make scoped changes, validate, inspect diff, and report.
+For review: report findings without automatically changing code.
+For research: distinguish source facts, interpretation, recommendation, and uncertainty.
+
+## Stop and Ask
+Stop when requirements conflict, a frozen decision must change, a material dependency is needed unexpectedly, scope expands, a destructive operation is proposed, or repository state is unsafe.
+
+## Anti-Overengineering
+Do not create abstractions because they might be useful later. First prove the requirement. Prefer the smallest architecture that preserves the frozen boundaries.
+
+## Anti-Drift
+If implementation begins differing from the approved plan:
+STOP → explain → obtain decision → update plan/docs → continue.
+
+## Session Handoff
+When ending a substantial task, ensure Current Status, decisions, feature documentation, Trello state, and checkpoint information are updated as applicable.
+
+**This document is PROPOSED until explicitly frozen.**
