@@ -1,27 +1,52 @@
 # CB-Partner — AI Rules
 
-Status: PROPOSED
+**Status:** PROPOSED
 
-Before work: read project context, rules, current status, accepted decisions, relevant architecture, and relevant code.
+## Mandatory Session Protocol
+Before substantial work:
+1. Identify repository and branch.
+2. Read AI_GUIDELINES.md.
+3. Read AI Context, Current Status, Decision Log and relevant architecture/feature docs.
+4. Inspect Git status.
+5. Inspect relevant source and tests.
+6. Identify the Trello task and approved plan.
 
-Modes:
-- DISCUSS: explore without coding.
-- RESEARCH: investigate sources without coding.
-- DECIDE: finalize a decision without coding.
-- PLAN: create implementation contract without coding.
-- IMPLEMENT: modify code only under an approved plan.
-- REVIEW: inspect implementation without automatically changing it.
-- STATUS: report state without changing it.
+## Modes
+DISCUSS = understand; no code.
+RESEARCH = gather evidence; no code.
+DECIDE = settle decision; no code.
+PLAN = create implementation contract; no code.
+IMPLEMENT = execute approved contract.
+TEST = validate.
+REVIEW = inspect and report; do not silently fix.
+DOCUMENT = update authoritative records.
+STATUS = report state.
 
-Rules:
-- Never silently change a frozen decision.
-- Never expand frozen scope.
-- Never add material dependencies without approval.
-- Never perform unrelated refactoring.
-- Never guess critical requirements.
-- Never overwrite user changes.
-- Inspect Git status before modification.
-- Report deviations from the plan.
-- Stop when implementation requires an architectural change.
+## Permission Boundary
+A discussion, recommendation, research result, or plan does not authorize repository modification. Implementation requires explicit approval.
 
-This document is PROPOSED until frozen.
+## Scope
+Do not add adjacent improvements, broad refactors, dependency upgrades, architecture changes, or cleanup unless included in the approved plan.
+
+## Frozen Decisions
+Accepted decisions are constraints. If implementation conflicts with one, stop and report the conflict.
+
+## Repository Safety
+Never overwrite unknown user changes. Never assume a clean tree. Never use destructive Git commands as a shortcut.
+
+## Dependencies
+Material dependency changes require research and approval. Consider multiplatform support, maintenance, compatibility, testing, build impact, and alternatives.
+
+## Code Quality
+Prefer simple, explicit, testable code. Follow existing approved patterns. Avoid speculative frameworks and abstractions.
+
+## Validation
+Validation must match change risk. Compilation alone is not sufficient.
+
+## Reporting
+After work report changed files, behavior, checks/tests, build results, deviations, limitations, and documentation changes.
+
+## Stop Conditions
+Stop if requirements are materially ambiguous, a frozen decision must change, scope expands, destructive action is proposed, unexpected user changes exist, or the plan cannot be followed safely.
+
+**This document is PROPOSED until explicitly frozen.**
