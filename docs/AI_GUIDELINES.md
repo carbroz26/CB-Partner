@@ -52,3 +52,11 @@ STOP → explain → obtain decision → update plan/docs → continue.
 When ending a substantial task, ensure Current Status, decisions, feature documentation, Trello state, and checkpoint information are updated as applicable.
 
 **This document is PROPOSED until explicitly frozen.**
+## Mandatory Router
+AI_START_HERE.md is the first operational document. It determines state recovery, user intent, required documents, workflow gates and next prompt.
+
+## CONTINUE
+CONTINUE means recover state from the Project Tracker and relevant status documents. It is not permission to code.
+
+## Controlled Output
+Before material repository actions state ABOUT TO DO. After each material action state DONE. At every stop/freeze return CURRENT STATE, RECORDS UPDATED, NEXT ACTION and NEXT PROMPT. After a freeze also return POST-FREEZE CHOICE and wait.
