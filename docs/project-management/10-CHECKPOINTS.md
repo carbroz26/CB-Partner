@@ -1,13 +1,40 @@
 # CB-Partner — Checkpoints
 
-Status: PROPOSED
+**Status:** PROPOSED
 
-Purpose: Record known-good project states so problems do not force a restart.
+## Purpose
+Checkpoints are recovery anchors. They make experimentation safe because a known-good project state is always recoverable.
 
-Each checkpoint records ID, date, Git commit, milestone, completed work, verification, known limitations, and documentation state.
+## When to Create
+Create a checkpoint after meaningful stable milestones, especially after project foundation, architecture validation, first vertical slice, and release-ready milestones.
 
-Initial placeholders: CP-001 Project Constitution Frozen; CP-002 Architecture Frozen; CP-003 Build/Repository Foundation; CP-004 Core Technical Foundation; CP-005 First Vertical Slice; CP-006 First Release Candidate.
+## Record
+- Checkpoint ID
+- Date
+- Git commit
+- Milestone
+- Completed work
+- Verification performed
+- Known limitations
+- Documentation state
+- Recovery notes if relevant
+
+## Naming
+CP-001, CP-002, CP-003, etc.
+
+## Initial Milestones
+CP-001 Project Constitution Frozen
+CP-002 Architecture Frozen
+CP-003 Build/Repository Foundation
+CP-004 Core Technical Foundation
+CP-005 First Vertical Slice
+CP-006 First Release Candidate
 
 These are placeholders, not commitments.
 
-Recovery rule: prefer returning to a relevant checkpoint and applying a focused fix rather than deleting the project.
+## Recovery
+When something breaks: stop → inspect status/diff → identify last known-good checkpoint → classify failure → fix forward or revert deliberately → verify → create a new checkpoint when stable.
+
+Never delete the project merely because a checkpoint is easier to recover from.
+
+**This document is PROPOSED until explicitly frozen.**
