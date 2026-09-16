@@ -34,3 +34,8 @@ None yet.
 Update when phase, objective, blocker, frozen decision, or next milestone materially changes. Historical detail belongs in Git and checkpoint records.
 
 **This document is PROPOSED until explicitly frozen.**
+## Persisted Workflow State
+Current status is the human-readable summary. The Project Tracker is the detailed execution ledger. Both must agree with relevant Module Status and Git/Trello state. If they disagree, reconcile before material work.
+
+## Current Documentation Phase
+No application source implementation has been authorized. The next objective is to finish and freeze the project operating/documentation system, then begin base-architecture research and planning.
