@@ -450,3 +450,56 @@ CURRENT-STATUS + Tracker + relevant Module Status + Git + Trello must agree. If 
 
 ## 46. STATUS
 This document is PROPOSED. Once frozen, changes to it are process changes and must themselves follow the project decision/freeze process.
+
+## 47. MANDATORY GIT / ANTIGRAVITY CONTROL GATE
+Every code change is tracked through an explicit Git lifecycle. The AI must never treat code written as the end of a task.
+
+PREPARE → IMPLEMENT → VERIFY → RECORD → COMMIT → PUBLISH/PR → MERGE → SYNC.
+
+For every material code change, verify the authorized branch, implement only the authorized scope, inspect the complete changed-file list and diff, run required checks, update Module Status/Tracker/Trello, commit the focused unit, push/open or update the PR when required, merge only after required review/checks and authorization, and then provide exact Antigravity synchronization commands.
+
+## 48. BRANCHING STRATEGY
+Use branches to isolate development work. GitHub documents branches as a way to isolate feature/fix work and recommends pull requests and protection for important branches. citeturn0search2turn0search6
+
+Default:
+- main = protected, stable source of truth.
+- One active module/feature branch for an authorized module/feature, based on the current main or explicitly authorized integration base.
+- Task-level commits live on that module branch.
+- Do not work directly on main.
+- Do not create a new branch for every tiny edit unless the task is independently reviewable or the plan requires it.
+
+Suggested names: feature/<module>, fix/<module>-<short-description>, chore/<short-description>, docs/<short-description>.
+The exact branch name must be recorded in the Tracker before implementation.
+
+## 49. COMMIT STRATEGY
+Commits represent meaningful, reviewable units. A module follows: module branch → task/implementation-unit commits → verification → PR → merge → optional milestone tag. Unrelated refactors must not be mixed into the commit.
+
+## 50. TAGGING STRATEGY
+Tags are milestones, not save points. Use them for meaningful milestones such as module acceptance/freeze, release candidates, project releases, or another explicitly defined milestone. Record tag name and purpose in Tracker and Module Status. Never move an existing tag silently.
+
+## 51. REQUIRED CHANGE REPORT
+After every material code change, return:
+- CHANGE: implementation unit/task ID, branch, commit/PR if created, purpose.
+- FILES CHANGED: full relative path of every added/modified/deleted file and reason.
+- CODE REVIEW: key classes/functions, behavior, dependencies/configuration, unrelated-change confirmation.
+- VERIFICATION: exact commands run, results, tests/checks, known failures.
+- RECORDS: Module Status, Tracker, Trello, Git/PR/tag.
+- ANTIGRAVITY SYNC: exact commands appropriate to the final Git state. Never invent a branch, commit, merge, tag, or SHA.
+
+Typical post-merge synchronization when returning to main:
+git fetch origin
+git checkout main
+git pull --ff-only origin main
+
+If the user needs a module branch, return branch-specific commands instead of assuming main.
+
+## 52. GIT SAFETY GATE
+Before push/merge/tag: verify branch, working tree, changed files, diff, tests/checks, task scope, and that unrelated user changes will not be overwritten. Never use destructive commands such as hard reset, force push, or deletion to clean up without explicit authorization.
+GitHub protected branches can require pull requests, reviews, status checks, conversation resolution, signed commits, linear history, and can block force pushes/deletion. These protections should be configured for important branches rather than relying only on AI behavior. citeturn0search0turn0search3
+
+## 53. MERGE IS A DISTINCT STATE
+Track separately: IMPLEMENTED → VERIFIED → COMMITTED → PUSHED → PR OPEN → REVIEWED → MERGED → SYNCED.
+IMPLEMENTED does not mean MERGED.
+
+## 54. LOCAL ANTIGRAVITY IS PART OF THE WORKFLOW
+Antigravity is the user's local execution/synchronization environment. When the AI changes the repository remotely, it must report what changed, branch/commit/PR/tag state, exact local synchronization commands, and local verification commands. It must never assume those commands were executed.
