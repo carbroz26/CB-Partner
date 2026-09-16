@@ -52,3 +52,12 @@ This is the project's explicit anti-pattern list.
 - Do not restart when migration or focused repair is practical.
 
 **This document is PROPOSED until explicitly frozen.**
+## Workflow Automation
+- Do not treat CONTINUE as permission to code.
+- Do not skip the router, Tracker or relevant module documents.
+- Do not batch implementation units.
+- Do not report DONE before required verification, documentation and Git states are complete.
+- Do not omit the complete changed-file list after code changes.
+- Do not omit Antigravity synchronization commands after material remote Git changes.
+- Do not merge or tag silently.
+- Do not automatically begin the next unit after a freeze.
