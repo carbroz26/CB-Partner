@@ -38,3 +38,8 @@ Review the actual Git diff and tests, not only the final result. Compare with th
 Acceptance occurs after blockers/required findings are resolved and verification passes.
 
 **This document is PROPOSED until explicitly frozen.**
+## Mandatory Changed-File Review
+Review the complete Git changed-file list and relevant diff. Explicitly identify changed classes/functions and verify that no unrelated scope was introduced.
+
+## Acceptance Boundary
+Review does not automatically implement fixes. Findings are returned; required fixes are implemented only through an authorized implementation step. After acceptance, update Module Status, Tracker, Trello and Git records as applicable.
