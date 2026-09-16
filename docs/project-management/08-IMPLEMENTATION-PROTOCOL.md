@@ -1,24 +1,34 @@
 # CB-Partner — Implementation Protocol
 
-Status: PROPOSED
+**Status:** PROPOSED
 
-Entry conditions: requirements understood, required decisions accepted, implementation plan frozen, Trello task ready, correct branch selected, repository inspected.
+## Preconditions
+Implementation requires an understood requirement, accepted required decisions, approved implementation plan, READY Trello card, correct branch, and known repository state.
 
-AI preflight:
-- Read AI Guidelines, AI Rules, Context, Current Status, decisions, architecture, feature docs.
-- Inspect source, tests, and Git status.
+## AI Preflight
+Read AI Guidelines, AI Context, AI Rules, Current Status, Decision Log, relevant architecture/feature docs. Inspect source, tests, build configuration and Git status. Confirm the request matches the frozen plan.
 
-During implementation:
-- Follow frozen contract.
-- Stay in scope.
-- Prefer existing patterns.
-- Do not create speculative abstractions.
-- Do not change accepted architecture.
-- Do not refactor unrelated code.
-- Stop on material deviation.
+## Implementation Loop
+1. Establish baseline.
+2. Implement the smallest coherent increment.
+3. Compile/check frequently.
+4. Add/update tests.
+5. Inspect diff.
+6. Continue only while still within scope.
 
-If blocked: stop, explain conflict, identify affected decision/plan, propose minimum resolution, wait for approval.
+## Forbidden Silent Changes
+Do not silently add material dependencies, change module boundaries, redesign architecture, refactor unrelated areas, rename broad APIs, or weaken tests.
 
-After implementation: format/lint as applicable, tests, platform compilation/build, inspect diff, report files, tests, deviations, limitations.
+## Deviation Protocol
+STOP → identify conflict → explain impact → propose minimum alternatives → obtain approval → update plan/ADR → continue.
 
-Compilation alone does not mean complete.
+## Failure Handling
+Classify failures as current-change, pre-existing, environment, or unrelated. Do not hide failures by deleting tests or weakening verification.
+
+## Completion Report
+Report changed files, delivered behavior, tests/checks and results, platform builds verified, deviations, known limitations, docs updated, and Git state.
+
+## Hard Stop
+Stop when the frozen contract cannot be safely implemented without a material change.
+
+**This document is PROPOSED until explicitly frozen.**
