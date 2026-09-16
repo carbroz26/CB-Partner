@@ -1,28 +1,59 @@
 # CB-Partner — Decision Log
 
-Status: PROPOSED
+**Status:** PROPOSED
 
-Purpose: Permanent record of significant decisions and rationale.
+## Purpose
+This is the durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
 
-Statuses: PROPOSED, ACCEPTED, REJECTED, SUPERSEDED.
+## Decision Classes
+- Architecture: module boundaries, layers, Store contract, state flow.
+- Technology: libraries, frameworks, build tooling.
+- Product/technical contract: behavior affecting implementation.
+- API integration: authentication, mapping, errors, client behavior.
+- Quality/security: testing, privacy, reliability, release.
+- Process: AI and development governance.
 
-Decision template:
+## Status
+PROPOSED → ACCEPTED or REJECTED.
+ACCEPTED → SUPERSEDED only through the reopening process.
 
-ADR-XXX — Title
+## ADR Template
+
+### ADR-XXX — Title
 Status:
 Date:
+Owner:
+
 Context:
+Why is a decision needed?
+
 Decision:
-Why:
-Alternatives considered:
+Exactly what is being accepted?
+
+Rationale:
+Why does it fit this project?
+
+Alternatives:
+What meaningful alternatives were considered?
+
 Consequences:
-Related decisions:
-Implementation notes:
+Benefits, costs, constraints, and operational effects.
 
-Rules:
-- Significant architecture, dependency, module, state, build, API integration, or workflow decisions belong here.
-- ACCEPTED decisions are frozen for normal development.
-- Reopening requires a concrete reason and impact assessment.
-- Never use this as a general task log.
+Migration / Rollout:
+What must change and in what order?
 
+Validation:
+How will we prove the decision works in the real project?
+
+Related Documents / Decisions:
+
+## Acceptance
+A decision is not accepted because AI recommends it. The project owner explicitly accepts it, then it becomes frozen.
+
+## Reopening
+Use concrete evidence: changed requirements, incompatibility, security issue, unacceptable performance, maintenance problem, or incorrect assumption. Record evidence and impact before replacing a decision.
+
+## Current State
 No technical decision is frozen yet.
+
+**This document is PROPOSED until explicitly frozen.**
