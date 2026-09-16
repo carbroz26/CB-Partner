@@ -1,29 +1,53 @@
 # CB-Partner — Trello Workflow
 
-Status: PROPOSED
-Scope: Frontend Trello workspace only.
+**Status:** PROPOSED
+**Scope:** Frontend Trello workspace only
 
-Purpose: Trello tracks actionable work, not architectural truth.
+## Purpose
+Trello is the execution board. It answers what we are doing, why, status, and remaining work. It is not the source of truth for architecture or permanent decisions.
 
-Suggested lists:
-BACKLOG → DISCOVERY → READY → IN PROGRESS → AI REVIEW → DEV REVIEW → TESTING → DONE
-BLOCKED may be entered from any active stage.
+## Lists
+1. BACKLOG
+2. DISCOVERY
+3. READY
+4. IN PROGRESS
+5. AI REVIEW
+6. DEV REVIEW
+7. TESTING
+8. BLOCKED
+9. DONE
 
-Suggested labels: Frontend, UI, Architecture, Infrastructure, API, Testing, Bug, Research, Documentation, Feature.
+## Card Types
+Feature, Bug, Technical Task, Research, Architecture, Documentation, Maintenance.
 
-Card template:
+## Card Template
 Goal
+Context
 Scope
 Out of Scope
-Implementation Contract
+Frozen Decisions / ADRs
+Implementation Plan
 Acceptance Criteria
-Testing
-Related Decisions
+Testing / Verification
+Dependencies / Blockers
 Branch
-Notes/Links
+Related Documents
 
-Definition of Ready: requirement understood, scope explicit, required decisions accepted, dependencies known, acceptance criteria defined.
+## Workflow
+BACKLOG → DISCOVERY → READY → IN PROGRESS → AI REVIEW → DEV REVIEW → TESTING → DONE.
+BLOCKED can be entered whenever progress is prevented by a real blocker.
 
-Definition of Done: acceptance criteria met, validation passed, review complete, no unauthorized changes, required documentation updated, Git work completed.
+## Definition of Ready
+Requirement understood; required decisions resolved; scope explicit; acceptance criteria measurable; plan approved where required; dependencies identified.
 
-Do not create giant cards such as Build Partner App.
+## Definition of Done
+Acceptance criteria pass; relevant checks pass; review complete; no unauthorized changes; documentation updated; Git work complete.
+
+## Rules
+- Never create a card for the entire application.
+- Split work into independently reviewable outcomes.
+- Link ADRs instead of duplicating architecture.
+- Mark blockers explicitly.
+- DONE means verified, not merely coded.
+
+**This document is PROPOSED until explicitly frozen.**
