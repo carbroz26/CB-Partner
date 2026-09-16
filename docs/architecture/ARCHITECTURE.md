@@ -1,17 +1,44 @@
 # CB-Partner — Frontend Architecture
 
-Status: PROPOSED
+**Status:** PROPOSED
+**Scope:** Frontend repository only
 
-Purpose: High-level authoritative frontend architecture.
+## Purpose
+Authoritative high-level architecture. Detailed technology decisions belong in ADRs; feature implementation details belong in feature documentation.
 
-Current direction: Kotlin Multiplatform, Compose Multiplatform, Clean Architecture, pure Store-based MVI, UDF, no ViewModel, multi-module design, Dependency Injection, and Gradle Convention Plugins.
+## Architectural Direction
+- Kotlin Multiplatform
+- Compose Multiplatform
+- Clean Architecture
+- Pure Store-based MVI
+- UDF
+- No ViewModel
+- Multi-module architecture
+- Dependency Injection
+- Gradle Convention Plugins
 
-Goals: clear dependency direction, testability, appropriate code sharing, explicit platform boundaries, predictable state ownership, maintainability, and controlled complexity.
+## Goals
+Testability, understandable dependency direction, appropriate code sharing, explicit platform boundaries, predictable state ownership, maintainability, and controlled complexity.
 
-Exact module graph and library choices are not frozen yet.
+## Layering Principle
+Dependencies must follow stable boundaries. Presentation must not directly depend on transport implementation. Domain/application behavior should remain independent of UI and transport details.
 
-State management uses Store-based MVI and UDF. ViewModel is outside the intended architecture.
+## Store Principle
+The Store is the state-management boundary. UI sends events; Store coordinates state and effects according to the final accepted Store contract. ViewModel is not part of the architecture.
 
-Material architecture changes require an accepted Decision Log entry before implementation.
+## Module Principle
+Create modules for real boundaries: feature isolation, dependency control, platform separation, reusable capability, ownership, or build concerns. Do not create modules merely to maximize count.
 
-To finalize after research: module graph, Store contract, DI, networking, persistence, navigation, error model, concurrency, testing, source sets, and build architecture.
+## Platform Principle
+Share code when it provides real value. Keep platform-specific APIs and behavior explicit and localized.
+
+## Technology Selection
+Every material library/tool choice requires a documented decision considering KMP support, maturity, maintenance, compatibility, testing, build impact, and project fit.
+
+## Architecture Change
+A material architecture change requires discussion, evidence where appropriate, an updated decision, explicit acceptance, and an implementation/migration plan.
+
+## To Be Frozen
+Exact module graph, Store contract, DI, networking, persistence, navigation, error model, concurrency model, testing structure, source-set strategy, and build conventions.
+
+**This document is PROPOSED until reviewed and explicitly frozen.**
