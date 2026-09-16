@@ -503,3 +503,105 @@ IMPLEMENTED does not mean MERGED.
 
 ## 54. LOCAL ANTIGRAVITY IS PART OF THE WORKFLOW
 Antigravity is the user's local execution/synchronization environment. When the AI changes the repository remotely, it must report what changed, branch/commit/PR/tag state, exact local synchronization commands, and local verification commands. It must never assume those commands were executed.
+
+## 55. MANDATORY AI ROUTER / STATE RECOVERY
+AI_START_HERE.md is the first document for every new AI session and every request that may involve project work. It is a router, not a replacement for module documentation.
+
+### 55.1 Recover Before Acting
+1. Identify repository/project.
+2. Read this document completely.
+3. Read `docs/project-management/12-PROJECT-TRACKER.md`.
+4. Read `04-CURRENT-STATUS.md`.
+5. Determine current module/work item and workflow state.
+6. Read only the relevant module Implementation Plan/Status and required technical/process documents.
+7. Inspect actual Git branch/status/diff and relevant Trello state.
+8. Reconcile contradictions before acting.
+
+### 55.2 Interpret the User Request
+Classify the request as one primary intent:
+DISCUSS, RESEARCH, DECIDE, FREEZE, PLAN, IMPLEMENT, TEST, REVIEW, DOCUMENT, STATUS, CONTINUE, or RECOVER.
+
+The user's words are intent signals, not permission to bypass gates.
+
+### 55.3 CONTINUE Protocol
+If the user says `CONTINUE`, `continue Auth`, or gives an otherwise underspecified continuation request:
+- recover state from Tracker first;
+- identify the active module/work item;
+- read its status and frozen plan;
+- determine the next valid workflow state;
+- check whether user approval is required;
+- return the next action and a copy/paste prompt;
+- do not automatically implement the next unit.
+
+If more than one unresolved context exists, ask the user to select one.
+
+### 55.4 State-to-Document Routing
+| Detected state/intent | Required next reads |
+|---|---|
+| New discussion | Tracker + relevant project context |
+| Existing module discussion | Tracker + module Plan + module Status |
+| Research | Tracker + relevant architecture/technical docs + authoritative external sources when needed |
+| Decision | Decision Log + relevant technical docs |
+| Plan | Decision Log + Architecture + module context |
+| Implementation | Frozen module Plan + Module Status + coding/testing rules + Tracker |
+| Testing | Module Plan + Module Status + testing/review rules + Tracker |
+| Review | Module Plan + Module Status + actual Git diff + testing rules + Tracker |
+| Freeze | relevant Plan/Status + acceptance/review evidence + Tracker + Git/Trello state |
+| Continue | Tracker first, then state-specific documents |
+| New chat/recovery | AI_START + Tracker + Current Status, then current module documents |
+
+### 55.5 Authorization Gates
+- DISCUSS/RESEARCH/DECIDE/PLAN: no source-code modification.
+- IMPLEMENT: requires a frozen applicable plan and explicit implementation authorization.
+- TEST: requires an implementation target.
+- REVIEW: requires an implementation target and actual diff/evidence.
+- FREEZE: requires acceptance evidence and all required records.
+- MERGE/TAG/PUSH: requires Git safety checks and applicable authorization.
+- After meaningful FREEZE: STOP.
+
+### 55.6 Automatic State Interpretation
+The router must never assume that the last conversation message describes the current state. State comes from the Tracker plus authoritative project/module records and actual Git/Trello evidence.
+
+Examples:
+- Plan not frozen + user says Implement → route to plan freeze; do not code.
+- Unit implemented but not verified + user says Continue → route to verification.
+- Unit verified but not committed → route to commit.
+- PR open and awaiting review → route to review.
+- Unit merged but local workspace not synced → route to Antigravity synchronization.
+- Module has no pending units and is frozen → route to post-freeze choice; do not invent new work.
+- Contradictory records → route to reconciliation; do not continue implementation.
+
+### 55.7 Mandatory Response Contract
+At each workflow boundary return:
+CURRENT STATE
+RECORDS UPDATED
+NEXT ACTION
+NEXT PROMPT
+
+After a meaningful freeze additionally return:
+FREEZE COMPLETE
+POST-FREEZE CHOICE
+
+During repository work announce:
+ABOUT TO DO
+then after the action:
+DONE
+
+For every material code change also return the complete changed-file list, important changed classes/functions, verification results, Git state, and exact Antigravity sync commands.
+
+### 55.8 Post-Freeze Choice
+After freezing a unit/module, offer:
+1. Continue this module
+2. Discuss another aspect
+3. Start another module
+4. Start another feature
+5. Research a technical decision
+6. Review existing work
+7. Check project status
+8. End session
+
+Wait for the user's objective. Do not automatically proceed.
+
+### 55.9 No Hidden Context Dependency
+A new AI must be able to recover the current workflow without access to prior chat messages. If durable information exists only in conversation history, document it before claiming recovery is complete.
+
