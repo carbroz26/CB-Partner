@@ -47,3 +47,11 @@ Review UI for state ownership, lifecycle safety, platform correctness, accessibi
 Exact design system, navigation implementation, resource tooling, localization tooling, UI testing stack, and package/module conventions.
 
 **This document is PROPOSED until explicitly frozen.**
+## Implementation Discipline
+Every feature follows its frozen module/feature plan and works one unit at a time. The implementation status document records actual code, tests, review and freeze state.
+
+## Store Lifecycle
+Store ownership and lifetime must be explicit. Singleton is not a default requirement; use it only when resource/lifecycle/ownership justifies it.
+
+## Quality Gate
+Code must be reviewable, testable, platform-safe and free of speculative abstractions. Every material code change requires a complete changed-file report and verification results.
