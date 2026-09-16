@@ -39,3 +39,8 @@ Do not assume DI, networking, navigation, persistence, API behavior, product rul
 Keep this document short and stable. It is project context, not a task history.
 
 **This document is PROPOSED until explicitly frozen.**
+## Operational State Recovery
+AI_START_HERE.md is the mandatory router. On every new session or ambiguous CONTINUE request, first read it, then read the Project Tracker and use the current state to select the relevant module documents. Do not infer the current module or unit from conversation history alone.
+
+## Context Is Persistent
+The durable context chain is: AI_START_HERE → Project Tracker → Current Status → relevant Decision Log entries → relevant module Implementation Plan → relevant module Implementation Status → Git/Trello state. A new chat must be able to reconstruct work from this chain.
