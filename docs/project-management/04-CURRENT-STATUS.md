@@ -1,16 +1,36 @@
 # CB-Partner — Current Status
 
-Status: PROPOSED
-Last updated: 2026-09-16
+**Status:** PROPOSED
+**Last Updated:** 2026-09-16
 
-Current milestone: Project documentation and development operating system.
-Current phase: Documentation design and review.
-Current task: Draft and review project documentation.
-Completed: Repository identified; frontend/backend separation confirmed; documentation skeleton created.
-Frozen decisions: None.
-Next: Review, revise, and freeze governance documents.
-Blocked: None known.
-Known technical debt: None recorded.
-Last checkpoint: None.
+## Current Phase
+Phase 0 — Project Constitution and Architecture Preparation.
 
-Keep this file short and current. It is not a history log.
+## Current Objective
+Establish stable documentation and AI-development controls before implementation begins.
+
+## Active Work
+Review and freeze governance documents, then research and freeze the technical foundation.
+
+## Frozen Decisions
+None yet.
+
+## Active Task
+Documentation review.
+
+## Next Milestone
+Freeze the project operating system and supporting workflow documents.
+
+## Blockers
+None currently recorded.
+
+## Primary Risk
+Architecture/process drift caused by implementing too much before decisions are frozen.
+
+## Last Known-Good Checkpoint
+None yet.
+
+## Update Rule
+Update when phase, objective, blocker, frozen decision, or next milestone materially changes. Historical detail belongs in Git and checkpoint records.
+
+**This document is PROPOSED until explicitly frozen.**
