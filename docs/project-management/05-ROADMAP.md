@@ -1,25 +1,41 @@
 # CB-Partner — Roadmap
 
-Status: PROPOSED
+**Status:** PROPOSED
+**Scope:** Frontend only
 
-Purpose: Major outcomes only. Trello owns detailed tasks.
+## Purpose
+The roadmap defines major outcomes. Trello owns detailed execution tasks.
 
-Phase 0 — Project Constitution
-Documentation, AI rules, workflow, Git discipline, governance.
+## Principles
+- Outcome-oriented, not code-oriented.
+- No artificial deadlines without validated scope.
+- Every phase has an exit condition.
+- Architecture is validated by progressively larger real features.
+- A phase exposing a problem does not automatically justify a restart.
 
-Phase 1 — Technical Foundation
-KMP/Compose foundation, convention plugins, modules, DI, networking, testing, and required infrastructure after decisions are frozen.
+## Phase 0 — Constitution
+Outcome: governance, AI workflow, documentation, Git discipline, and recovery process are stable.
+Exit: required governance documents frozen.
 
-Phase 2 — First Vertical Slice
-One small real partner workflow end-to-end to validate architecture.
+## Phase 1 — Technical Foundation
+Outcome: reproducible KMP/Compose foundation, approved module graph, convention plugins, Store/MVI/UDF foundation, DI, networking and testing foundations as justified.
+Exit: foundation builds on intended platforms and passes agreed checks.
 
-Phase 3 — Partner Core Workflows
-Progressively implement partner product workflows as requirements are defined.
+## Phase 2 — First Vertical Slice
+Outcome: one intentionally small real partner workflow end-to-end.
+Exit: workflow works, is tested, and validates architecture against reality.
 
-Phase 4 — Product Hardening
-Reliability, testing depth, performance, accessibility, observability, release readiness.
+## Phase 3 — Partner Product Expansion
+Outcome: incremental delivery of partner workflows as requirements are defined.
+Exit: scope follows real product requirements, not speculative architecture.
 
-Phase 5 — Future Expansion
-Only when justified by real requirements.
+## Phase 4 — Hardening
+Outcome: reliability, performance, accessibility, error handling, observability, testing depth, release automation, and platform quality.
 
-No roadmap milestone is currently frozen.
+## Phase 5 — Evolution
+Add capabilities only when justified by real requirements.
+
+## Governance
+Major roadmap changes are discussed and documented before implementation. Detailed work stays in Trello.
+
+**This document is PROPOSED until explicitly frozen.**
