@@ -31,3 +31,11 @@ Classify problems before reacting: local bug, local refactor, architectural issu
 Trivial changes may skip formal research/ADR, but must retain appropriate scope, validation and Git discipline.
 
 **This document is PROPOSED until explicitly frozen.**
+## Controlled Unit Lifecycle
+After PLAN FREEZE, work one implementation unit at a time: SELECT → IMPLEMENT → TEST → REVIEW → ACCEPT/FIX → FREEZE → RECORD → STOP. Do not batch units.
+
+## Git Lifecycle
+IMPLEMENTED → VERIFIED → COMMITTED → PUSHED → PR OPEN → REVIEWED → MERGED → SYNCED. These are separate states. The user receives a change report and exact Antigravity sync commands after material code changes.
+
+## Post-Freeze Gate
+Every meaningful freeze is a hard stop. Return the current state, records updated, remaining work, and one next prompt. Wait for the user's next objective.
