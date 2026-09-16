@@ -42,3 +42,11 @@ A material architecture change requires discussion, evidence where appropriate, 
 Exact module graph, Store contract, DI, networking, persistence, navigation, error model, concurrency model, testing structure, source-set strategy, and build conventions.
 
 **This document is PROPOSED until reviewed and explicitly frozen.**
+## Lifecycle Governance
+Significant architecture is researched, decided, frozen, and implemented in small units. Store contract, module graph, DI, networking, build conventions, navigation, testing structure and platform strategy are not treated as frozen until accepted.
+
+## No ViewModel
+ViewModel is explicitly excluded. State ownership uses pure Store + MVI + UDF.
+
+## Complexity Control
+Patterns, Singleton lifetimes, abstractions and modules require concrete responsibility/lifecycle justification. Do not introduce them speculatively.
