@@ -13,13 +13,13 @@ Make the completed Base Architecture research and frozen decisions durable and i
 
 ## Active Work
 
-Documentation checkpoint for BASE-ARCH-001 through BASE-ARCH-012.
+Documentation checkpoint complete: BASE-ARCH-001 through BASE-ARCH-012 are now documented and decision-frozen.
 
 ## Base Architecture State
 
-- BASE-ARCH-001 → RESEARCHED
-- BASE-ARCH-002 → RESEARCHED
-- BASE-ARCH-003 → RESEARCHED
+- BASE-ARCH-001 → DECISION_FROZEN
+- BASE-ARCH-002 → DECISION_FROZEN
+- BASE-ARCH-003 → DECISION_FROZEN
 - BASE-ARCH-004 → DECISION_FROZEN
 - BASE-ARCH-005 → DECISION_FROZEN
 - BASE-ARCH-006 → DECISION_FROZEN
@@ -46,11 +46,11 @@ Implementation requires a separately created and explicitly frozen implementatio
 
 ## Current Workflow State
 
-DOCUMENTATION_CHECKPOINT
+DOCUMENTATION_CHECKPOINT — COMPLETE
 
 ## Current Work Item
 
-ARCH-DOC-001 — Durable documentation and consistency review through BASE-ARCH-012.
+ARCH-DOC-001 — Durable documentation and consistency review through BASE-ARCH-012 — COMPLETE.
 
 ## Blockers
 
@@ -58,11 +58,11 @@ None.
 
 ## Next Valid Action
 
-Complete the consistency review of the documented BASE-ARCH-001–012 record. Do not start BASE-ARCH-013 until the project owner explicitly resumes Base Architecture research.
+BASE-ARCH-001–003 status is resolved as DECISION_FROZEN. Do not start BASE-ARCH-013 until the project owner explicitly resumes Base Architecture research.
 
 ## Last Completed Action
 
-Created and synchronized the durable Base Architecture decision record through BASE-ARCH-012 on the `docs/base-architecture-record` branch.
+Resolved BASE-ARCH-001–003 as DECISION_FROZEN and synchronized the durable architecture/status records on the `docs/base-architecture-record` branch.
 
 ## Primary Risk
 
