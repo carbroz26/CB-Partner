@@ -5,16 +5,16 @@
 **Purpose:** Single execution ledger for recovering and tracking the current project state across AI sessions.
 
 ## Current Project State
-- Phase: Base Architecture documentation checkpoint
+- Phase: Base Architecture decision/freeze checkpoint
 - Current module: Base Architecture
-- Current work item: ARCH-DOC-001 — documentation checkpoint complete
-- Workflow state: DOCUMENTATION_CHECKPOINT
+- Current work item: BASE-ARCH-013 — Application Bootstrap Data Flow & Layer Ownership
+- Workflow state: DECISION_FROZEN
 - Current implementation unit: None
-- Frozen decisions: BASE-ARCH-001 through BASE-ARCH-012
+- Frozen decisions: BASE-ARCH-001 through BASE-ARCH-013
 - Researched units: None within BASE-ARCH-001 through BASE-ARCH-012
 - Blockers: None
-- Last completed action: Resolved BASE-ARCH-001–003 as DECISION_FROZEN and synchronized all architecture status records
-- Next valid action: Stop at the documentation checkpoint; do not start BASE-ARCH-013 until explicitly authorized
+- Last completed action: User selected Option A and BASE-ARCH-013 was formally frozen and synchronized across architecture/status records
+- Next valid action: Stop after the BASE-ARCH-013 freeze; do not begin another architecture unit until explicitly authorized
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
@@ -33,14 +33,14 @@
 | BASE-ARCH-010 | Application Startup Lifecycle and Initialization Ordering | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 | BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 | BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | PENDING | — | No |
+| BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 
 ## Work Item Register
 
 | ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Tag | Trello | Blocker | Next Action |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | subsequent docs commit | — | — | — | None | Stop; await explicit decision to resume Base Architecture research |
-| BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | PENDING | — | — | — | — | — | — | — | Research paused | Explicitly resume Base Architecture research |
+| ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | d02cb569 | — | — | — | None | Complete |
+| BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | d02cb569 | — | — | — | None | Await next architecture unit authorization |
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
