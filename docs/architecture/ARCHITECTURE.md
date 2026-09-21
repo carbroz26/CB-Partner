@@ -1,6 +1,6 @@
 # CB-Partner — Frontend Architecture
 
-**Status:** DECISION RECORD DOCUMENTED THROUGH BASE-ARCH-012  
+**Status:** DECISION-FROZEN ARCHITECTURE RECORD THROUGH BASE-ARCH-012  
 **Scope:** Frontend repository only
 
 ## Purpose
@@ -23,7 +23,7 @@ See:
 
 `docs/architecture/BASE-ARCHITECTURE.md`
 
-This record documents BASE-ARCH-001 through BASE-ARCH-012.
+This record documents BASE-ARCH-001 through BASE-ARCH-012. All twelve units are decision-frozen; 001–003 are the frozen foundation decisions.
 
 ## Frozen Architecture Through BASE-ARCH-012
 
@@ -49,7 +49,7 @@ This record documents BASE-ARCH-001 through BASE-ARCH-012.
 
 ## Current Scope
 
-BASE-ARCH-001–003 are recorded as researched foundation work. BASE-ARCH-004–012 are decision-frozen.
+BASE-ARCH-001–012 are decision-frozen. BASE-ARCH-001–003 are the frozen foundation decisions for structure, responsibilities/dependencies, and module granularity.
 
 ## Implementation Rule
 
