@@ -23,7 +23,7 @@ See:
 
 `docs/architecture/BASE-ARCHITECTURE.md`
 
-This record documents BASE-ARCH-001 through BASE-ARCH-012. All twelve units are decision-frozen; 001–003 are the frozen foundation decisions.
+This record documents BASE-ARCH-001 through BASE-ARCH-013. All thirteen units are decision-frozen; 001–003 are the frozen foundation decisions.
 
 ## Frozen Architecture Through BASE-ARCH-012
 
@@ -42,7 +42,9 @@ This record documents BASE-ARCH-001 through BASE-ARCH-012. All twelve units are 
 - Application Root is the composition boundary.
 - Startup initialization follows Platform Entry → Application Root → DI → Navigation → Splash Store → Bootstrap.
 - Startup failure/retry belongs to Splash.
-- Bootstrap is exposed through a Domain-facing abstraction and implemented in Data.
+- Bootstrap is exposed through a Domain-facing ApplicationBootstrap contract and implemented in Data.
+- BASE-ARCH-013 freezes the direct ApplicationBootstrap ownership model: Splash Store → Domain contract → Data implementation → remote data source → Core Network.
+- No separate bootstrap use-case/repository abstraction chain is required initially.
 - Bootstrap returns a UI-independent `Result<T>`.
 - Bootstrap lifecycle is owned by the Store and is cancellable.
 - Business-specific authentication, booking, payment and SDUI internals remain outside this Base Architecture scope.
