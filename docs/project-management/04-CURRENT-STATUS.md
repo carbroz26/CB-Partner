@@ -9,11 +9,11 @@ Phase 0 — Project Constitution and Base Architecture Preparation.
 
 ## Current Objective
 
-Make the completed Base Architecture research and frozen decisions durable and internally consistent before continuing Base Architecture research or beginning implementation.
+Make the completed Base Architecture research and frozen decisions durable and internally consistent before beginning implementation.
 
 ## Active Work
 
-Documentation checkpoint complete: BASE-ARCH-001 through BASE-ARCH-012 are now documented and decision-frozen.
+BASE-ARCH-001 through BASE-ARCH-013 are now documented and decision-frozen.
 
 ## Base Architecture State
 
@@ -29,6 +29,7 @@ Documentation checkpoint complete: BASE-ARCH-001 through BASE-ARCH-012 are now d
 - BASE-ARCH-010 → DECISION_FROZEN
 - BASE-ARCH-011 → DECISION_FROZEN
 - BASE-ARCH-012 → DECISION_FROZEN
+- BASE-ARCH-013 → DECISION_FROZEN
 
 ## Authoritative Record
 
@@ -36,7 +37,7 @@ The durable Base Architecture record is:
 
 `docs/architecture/BASE-ARCHITECTURE.md`
 
-It contains the research focus, conclusions, accepted/frozen decisions, rejected alternatives, deferred decisions, implementation consequences, cross-architecture rules, non-goals and current status for BASE-ARCH-001 through BASE-ARCH-012.
+It contains the research focus, conclusions, accepted/frozen decisions, rejected alternatives, deferred decisions, implementation consequences, cross-architecture rules, non-goals and current status for BASE-ARCH-001 through BASE-ARCH-013.
 
 ## Implementation Authorization
 
@@ -46,11 +47,11 @@ Implementation requires a separately created and explicitly frozen implementatio
 
 ## Current Workflow State
 
-DOCUMENTATION_CHECKPOINT — COMPLETE
+DECISION_FROZEN — COMPLETE
 
 ## Current Work Item
 
-ARCH-DOC-001 — Durable documentation and consistency review through BASE-ARCH-012 — COMPLETE.
+BASE-ARCH-013 — Application Bootstrap Data Flow & Layer Ownership — DECISION_FROZEN.
 
 ## Blockers
 
@@ -58,11 +59,11 @@ None.
 
 ## Next Valid Action
 
-BASE-ARCH-001–003 status is resolved as DECISION_FROZEN. Do not start BASE-ARCH-013 until the project owner explicitly resumes Base Architecture research.
+BASE-ARCH-013 is decision-frozen. Do not begin the next architecture unit until the project owner explicitly authorizes it.
 
 ## Last Completed Action
 
-Resolved BASE-ARCH-001–003 as DECISION_FROZEN and synchronized the durable architecture/status records on the `docs/base-architecture-record` branch.
+User selected Option A for BASE-ARCH-013 and the decision was frozen and synchronized across the durable architecture/status records on the `docs/base-architecture-record` branch.
 
 ## Primary Risk
 
