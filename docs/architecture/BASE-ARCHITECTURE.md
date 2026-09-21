@@ -1,10 +1,10 @@
 # CB-Partner — Base Architecture Decision Record
 
-**Status:** DOCUMENTED — RESEARCH/FREEZE RECORD THROUGH BASE-ARCH-012  
+**Status:** DOCUMENTED — DECISION-FROZEN RECORD THROUGH BASE-ARCH-012  
 **Scope:** Frontend repository only  
 **Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-012. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
 
-> **Important:** BASE-ARCH-001–003 are recorded as researched foundation work. BASE-ARCH-004–012 are recorded as decision-frozen. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
+> **Important:** BASE-ARCH-001–012 are decision-frozen. BASE-ARCH-001–003 are frozen foundation decisions; BASE-ARCH-004–012 build on those foundation decisions. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
 
 ---
 
@@ -31,8 +31,8 @@ No silent architecture change is permitted.
 
 # BASE-ARCH-001 — Project and Gradle Module Structure
 
-**State:** RESEARCHED  
-**Freeze state:** Not independently frozen in the current record.
+**State:** DECISION_FROZEN  
+**Freeze state:** Frozen as the foundational project/module-structure decision.
 
 ## Research focus
 
@@ -47,6 +47,10 @@ No silent architecture change is permitted.
 The project should use a scalable multi-module Kotlin Multiplatform structure with explicit platform application entry points and shared architecture modules. Current JetBrains/Kotlin guidance supports separating shared code from Android, iOS and desktop entry points rather than blindly adopting an old single shared `composeApp` structure.
 
 Gradle convention plugins belong in an included `build-logic` build for scalable build conventions.
+
+## Frozen foundation decision
+
+The researched structure is accepted and frozen as the foundation for the later Base Architecture decisions. Implementation must use this structure unless a later approved architecture change explicitly reopens it.
 
 ## Direction carried forward
 
@@ -73,8 +77,12 @@ No additional top-level `shared/` module is required merely to contain the archi
 
 # BASE-ARCH-002 — Module Responsibilities and Dependency Graph
 
-**State:** RESEARCHED  
-**Freeze state:** Not independently frozen in the current record.
+**State:** DECISION_FROZEN  
+**Freeze state:** Frozen as the foundational module-responsibility and dependency-boundary decision.
+
+## Frozen foundation decision
+
+The researched responsibility model and dependency direction are accepted and frozen. Later architecture units may refine contracts within these boundaries but must not reverse the layer direction without an explicit architecture reopening.
 
 ## Responsibility model
 
@@ -132,8 +140,12 @@ Do not create base-architecture modules/folders for authentication, booking, pay
 
 # BASE-ARCH-003 — Gradle Module Granularity
 
-**State:** RESEARCHED  
-**Freeze state:** Not independently frozen in the current record.
+**State:** DECISION_FROZEN  
+**Freeze state:** Frozen as the foundational module-granularity decision.
+
+## Frozen foundation decision
+
+The researched module granularity rules and initial module set are accepted and frozen. New modules require concrete ownership/build/dependency/feature justification and must not be introduced speculatively.
 
 ## Direction carried forward
 
@@ -607,7 +619,7 @@ Success may transition through an internal message and then Effect → Navigatio
 
 # 13. Cross-Architecture Rules Frozen Through 012
 
-The following rules must be preserved by later architecture and implementation work:
+The following rules must be preserved by later architecture and implementation work. BASE-ARCH-001–003 are part of this frozen foundation:
 
 ### Layer direction
 
@@ -737,9 +749,9 @@ Until that implementation plan is explicitly frozen, **BASE-ARCH documentation i
 # 17. Current Status
 
 ```text
-BASE-ARCH-001 → RESEARCHED
-BASE-ARCH-002 → RESEARCHED
-BASE-ARCH-003 → RESEARCHED
+BASE-ARCH-001 → DECISION_FROZEN
+BASE-ARCH-002 → DECISION_FROZEN
+BASE-ARCH-003 → DECISION_FROZEN
 BASE-ARCH-004 → DECISION_FROZEN
 BASE-ARCH-005 → DECISION_FROZEN
 BASE-ARCH-006 → DECISION_FROZEN
