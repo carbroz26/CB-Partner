@@ -1,6 +1,6 @@
 # CB-Partner — Decision Log
 
-**Status:** PROPOSED
+**Status:** ACTIVE — Base Architecture decisions documented through BASE-ARCH-012
 
 ## Purpose
 This is the durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
@@ -17,43 +17,39 @@ This is the durable record of significant project decisions. It prevents the pro
 PROPOSED → ACCEPTED or REJECTED.
 ACCEPTED → SUPERSEDED only through the reopening process.
 
-## ADR Template
+## Architecture Decision Record
 
-### ADR-XXX — Title
-Status:
-Date:
-Owner:
+The detailed Base Architecture research/freeze record is maintained in:
 
-Context:
-Why is a decision needed?
+`docs/architecture/BASE-ARCHITECTURE.md`
 
-Decision:
-Exactly what is being accepted?
+That document is the durable implementation input for BASE-ARCH-001 through BASE-ARCH-012 and records research state, accepted/frozen decisions, rejected alternatives, deferred decisions, scope exclusions, and implementation consequences.
 
-Rationale:
-Why does it fit this project?
+## Base Architecture Status
 
-Alternatives:
-What meaningful alternatives were considered?
-
-Consequences:
-Benefits, costs, constraints, and operational effects.
-
-Migration / Rollout:
-What must change and in what order?
-
-Validation:
-How will we prove the decision works in the real project?
-
-Related Documents / Decisions:
+- BASE-ARCH-001 → RESEARCHED
+- BASE-ARCH-002 → RESEARCHED
+- BASE-ARCH-003 → RESEARCHED
+- BASE-ARCH-004 → DECISION_FROZEN
+- BASE-ARCH-005 → DECISION_FROZEN
+- BASE-ARCH-006 → DECISION_FROZEN
+- BASE-ARCH-007 → DECISION_FROZEN
+- BASE-ARCH-008 → DECISION_FROZEN
+- BASE-ARCH-009 → DECISION_FROZEN
+- BASE-ARCH-010 → DECISION_FROZEN
+- BASE-ARCH-011 → DECISION_FROZEN
+- BASE-ARCH-012 → DECISION_FROZEN
 
 ## Acceptance
+
 A decision is not accepted because AI recommends it. The project owner explicitly accepts it, then it becomes frozen.
 
 ## Reopening
+
 Use concrete evidence: changed requirements, incompatibility, security issue, unacceptable performance, maintenance problem, or incorrect assumption. Record evidence and impact before replacing a decision.
 
-## Current State
-No technical decision is frozen yet.
+## Current Documentation Checkpoint
 
-**This document is PROPOSED until explicitly frozen.**
+Base Architecture research is intentionally paused after BASE-ARCH-012 while the completed research and frozen decisions are made durable. BASE-ARCH-013 must not begin until the project owner explicitly resumes Base Architecture research.
+
+**Repository source implementation remains unauthorized at this checkpoint.**
