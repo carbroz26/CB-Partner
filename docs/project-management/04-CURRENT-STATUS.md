@@ -1,41 +1,77 @@
 # CB-Partner — Current Status
 
-**Status:** PROPOSED
-**Last Updated:** 2026-09-16
+**Status:** ACTIVE  
+**Last Updated:** 2026-09-22
 
 ## Current Phase
-Phase 0 — Project Constitution and Architecture Preparation.
+
+Phase 0 — Project Constitution and Base Architecture Preparation.
 
 ## Current Objective
-Establish stable documentation and AI-development controls before implementation begins.
+
+Make the completed Base Architecture research and frozen decisions durable and internally consistent before continuing Base Architecture research or beginning implementation.
 
 ## Active Work
-Review and freeze governance documents, then research and freeze the technical foundation.
 
-## Frozen Decisions
-None yet.
+Documentation checkpoint for BASE-ARCH-001 through BASE-ARCH-012.
 
-## Active Task
-Documentation review.
+## Base Architecture State
 
-## Next Milestone
-Freeze the project operating system and supporting workflow documents.
+- BASE-ARCH-001 → RESEARCHED
+- BASE-ARCH-002 → RESEARCHED
+- BASE-ARCH-003 → RESEARCHED
+- BASE-ARCH-004 → DECISION_FROZEN
+- BASE-ARCH-005 → DECISION_FROZEN
+- BASE-ARCH-006 → DECISION_FROZEN
+- BASE-ARCH-007 → DECISION_FROZEN
+- BASE-ARCH-008 → DECISION_FROZEN
+- BASE-ARCH-009 → DECISION_FROZEN
+- BASE-ARCH-010 → DECISION_FROZEN
+- BASE-ARCH-011 → DECISION_FROZEN
+- BASE-ARCH-012 → DECISION_FROZEN
+
+## Authoritative Record
+
+The durable Base Architecture record is:
+
+`docs/architecture/BASE-ARCHITECTURE.md`
+
+It contains the research focus, conclusions, accepted/frozen decisions, rejected alternatives, deferred decisions, implementation consequences, cross-architecture rules, non-goals and current status for BASE-ARCH-001 through BASE-ARCH-012.
+
+## Implementation Authorization
+
+No application source implementation is authorized by the Base Architecture record alone.
+
+Implementation requires a separately created and explicitly frozen implementation plan after the Base Architecture work is complete.
+
+## Current Workflow State
+
+DOCUMENTATION_CHECKPOINT
+
+## Current Work Item
+
+ARCH-DOC-001 — Durable documentation and consistency review through BASE-ARCH-012.
 
 ## Blockers
-None currently recorded.
+
+None.
+
+## Next Valid Action
+
+Complete the consistency review of the documented BASE-ARCH-001–012 record. Do not start BASE-ARCH-013 until the project owner explicitly resumes Base Architecture research.
+
+## Last Completed Action
+
+Created and synchronized the durable Base Architecture decision record through BASE-ARCH-012 on the `docs/base-architecture-record` branch.
 
 ## Primary Risk
-Architecture/process drift caused by implementing too much before decisions are frozen.
 
-## Last Known-Good Checkpoint
-None yet.
+Architecture/process drift caused by relying on historical conversation or beginning implementation before the documented architecture and implementation plan are frozen.
+
+## Recovery Rule
+
+A new AI session must recover state from `AI_START_HERE.md`, the Project Tracker, this Current Status document, and `docs/architecture/BASE-ARCHITECTURE.md` before taking project action.
 
 ## Update Rule
-Update when phase, objective, blocker, frozen decision, or next milestone materially changes. Historical detail belongs in Git and checkpoint records.
 
-**This document is PROPOSED until explicitly frozen.**
-## Persisted Workflow State
-Current status is the human-readable summary. The Project Tracker is the detailed execution ledger. Both must agree with relevant Module Status and Git/Trello state. If they disagree, reconcile before material work.
-
-## Current Documentation Phase
-No application source implementation has been authorized. The next objective is to finish and freeze the project operating/documentation system, then begin base-architecture research and planning.
+Update this document when phase, objective, blocker, frozen decision state, work item, or next milestone materially changes. Detailed architecture decisions belong in `docs/architecture/BASE-ARCHITECTURE.md`; execution state belongs in the Project Tracker.
