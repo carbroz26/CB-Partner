@@ -2,7 +2,7 @@
 
 **Status:** DOCUMENTED — DECISION-FROZEN RECORD THROUGH BASE-ARCH-012  
 **Scope:** Frontend repository only  
-**Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-012. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
+**Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-013. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
 
 > **Important:** BASE-ARCH-001–012 are decision-frozen. BASE-ARCH-001–003 are frozen foundation decisions; BASE-ARCH-004–012 build on those foundation decisions. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
 
@@ -617,7 +617,122 @@ Success may transition through an internal message and then Effect → Navigatio
 
 ---
 
-# 13. Cross-Architecture Rules Frozen Through 012
+# BASE-ARCH-013 — Application Bootstrap Data Flow and Layer Ownership
+
+**State:** DECISION_FROZEN
+
+## Decision
+
+**Option A — Direct ApplicationBootstrap contract** is selected and frozen.
+
+The initial application bootstrap operation will use a direct Domain-facing ApplicationBootstrap contract. No separate bootstrap use-case and repository abstraction pair is introduced for the initial bootstrap operation.
+
+## Frozen ownership model
+
+```text
+Splash Store
+    ↓
+Domain: ApplicationBootstrap
+    ↓
+Data: ApplicationBootstrap implementation
+    ↓
+Data: Remote Data Source
+    ↓
+Core: Network infrastructure
+```
+
+### Splash Store owns
+- Bootstrap attempt lifecycle.
+- Loading and failure presentation state.
+- Retry Intent.
+- Cancellation through Store lifecycle.
+- Mapping operation outcomes into Store Messages/State/Effects.
+
+### Domain owns
+- The Domain-facing ApplicationBootstrap contract.
+- The Domain/application-facing bootstrap output contract.
+
+The exact interface name and API remain implementation-planning details.
+
+### Data owns
+- The implementation of ApplicationBootstrap.
+- Remote data access.
+- Transport DTOs.
+- Transport-to-domain/application mapping.
+
+### Core owns
+- Generic Ktor/network infrastructure.
+- Serialization infrastructure.
+- Generic technical networking concerns.
+
+### Navigation owns
+- Navigation state.
+- Back-stack/navigation execution.
+
+Bootstrap itself must not know Navigation.
+
+## Frozen data-flow boundary
+
+```text
+Backend response
+      ↓
+Data DTO
+      ↓
+Data mapping
+      ↓
+Domain/Application model
+      ↓
+ApplicationBootstrap result
+      ↓
+Splash Store
+      ↓
+Presentation State / Effect
+```
+
+Transport DTOs and backend JSON must not leak into Feature/Store presentation contracts.
+
+## Architectural rationale
+
+Option A is selected because bootstrap is an application-startup operation rather than a generic domain resource repository. A direct Domain contract preserves dependency inversion and testability while avoiding speculative use-case/repository ceremony for a single operation.
+
+This does NOT reject use cases or repositories from CB-Partner generally. They may be introduced later when a concrete domain responsibility justifies them.
+
+The frozen complexity-control rule remains:
+
+> Introduce an abstraction when its responsibility is justified; do not introduce layers merely because a conventional architecture diagram contains them.
+
+No new Gradle module is created by this decision.
+
+## Explicitly rejected for the initial bootstrap
+
+- BootstrapUseCase → BootstrapRepository as a mandatory two-abstraction chain.
+- BootstrapRepository as the only Domain abstraction.
+- Splash depending directly on Data implementations.
+- Splash accessing Ktor or remote data sources.
+- Transport DTOs in Feature/Store state.
+- Bootstrap knowing Navigation.
+- Business-specific repositories/use cases.
+- SDUI internals or dynamic JSON design.
+
+## Deferred
+
+- Exact ApplicationBootstrap interface/API.
+- Exact BootstrapOutput fields.
+- Exact DTO structure.
+- Exact backend endpoint/API contract.
+- Exact error hierarchy/mapping.
+- Timeout and retry policy.
+- Authentication/session persistence.
+- Business-specific bootstrap behavior.
+
+## Implementation authorization
+
+This decision freezes ownership only. It does NOT authorize application source implementation.
+
+Implementation requires the separately frozen implementation plan defined by the project operating process.
+
+---
+# 14. Cross-Architecture Rules Frozen Through 013
 
 The following rules must be preserved by later architecture and implementation work. BASE-ARCH-001–003 are part of this frozen foundation:
 
@@ -678,7 +793,7 @@ DI → Core, Domain, Data, Feature, Navigation
 
 ---
 
-# 14. Explicit Base-Architecture Non-Goals
+# 15. Explicit Base-Architecture Non-Goals
 
 The following are intentionally NOT designed by BASE-ARCH-001–012:
 
@@ -701,7 +816,7 @@ The following are intentionally NOT designed by BASE-ARCH-001–012:
 
 ---
 
-# 15. Deferred-Decision Register
+# 16. Deferred-Decision Register
 
 The following items must NOT be silently invented during implementation:
 
@@ -723,7 +838,7 @@ When one becomes necessary, create the appropriate research/decision/plan unit b
 
 ---
 
-# 16. Implementation Contract
+# 17. Implementation Contract
 
 When Base Architecture is eventually complete, the implementation plan must translate this record into:
 
@@ -746,7 +861,7 @@ Until that implementation plan is explicitly frozen, **BASE-ARCH documentation i
 
 ---
 
-# 17. Current Status
+# 18. Current Status
 
 ```text
 BASE-ARCH-001 → DECISION_FROZEN
@@ -761,8 +876,7 @@ BASE-ARCH-009 → DECISION_FROZEN
 BASE-ARCH-010 → DECISION_FROZEN
 BASE-ARCH-011 → DECISION_FROZEN
 BASE-ARCH-012 → DECISION_FROZEN
+BASE-ARCH-013 → DECISION_FROZEN
 ```
 
-**Next architecture unit:** BASE-ARCH-013 — Application Bootstrap Data Flow & Layer Ownership.
-
-However, BASE-ARCH-013 must not begin until the project owner explicitly chooses to resume Base Architecture research after this documentation checkpoint.
+**Next architecture unit:** Determine the next Base Architecture unit only after the project owner explicitly authorizes it.
