@@ -1,62 +1,64 @@
 # CB-Partner — Project Tracker
 
-**Status:** PROPOSED
-**Scope:** Frontend repository only
+**Status:** ACTIVE  
+**Scope:** Frontend repository only  
 **Purpose:** Single execution ledger for recovering and tracking the current project state across AI sessions.
 
-## How to Use
-AI_START_HERE.md is the router. This tracker is the persisted state. Detailed technical truth remains in Decision Log, Architecture, Module Implementation Plans and Module Status documents. Trello tracks execution externally; Git tracks implementation history.
-
 ## Current Project State
-- Phase: 0 — Documentation and process preparation
-- Current module: None
-- Current work item: Documentation system review
-- Workflow state: DOCUMENTATION_REVIEW
+- Phase: Base Architecture documentation checkpoint
+- Current module: Base Architecture
+- Current work item: Document BASE-ARCH-001 through BASE-ARCH-012
+- Workflow state: DOCUMENTATION_CHECKPOINT
 - Current implementation unit: None
-- Frozen decisions: None
+- Frozen decisions: BASE-ARCH-004 through BASE-ARCH-012
+- Researched units: BASE-ARCH-001 through BASE-ARCH-003
 - Blockers: None
-- Last completed action: Workflow/Git control documents updated
-- Next valid action: Review and freeze the documentation operating system
-- Last updated: 2026-09-16
+- Last completed action: Durable Base Architecture record created through BASE-ARCH-012
+- Next valid action: Review the documented BASE-ARCH-001–012 record for consistency; do not start BASE-ARCH-013 until explicitly authorized
+- Last updated: 2026-09-22
 
-## State Vocabulary
-DISCUSS → RESEARCH → DECIDE → DECISION_FROZEN → PLAN → PLAN_FROZEN → READY → IMPLEMENTING → IMPLEMENTED → VERIFIED → COMMITTED → PUSHED → PR_OPEN → REVIEWED → ACCEPTED → CODE_FROZEN → MERGED → SYNCED → CHECKPOINTED → COMPLETE
+## Base Architecture Register
 
-A state transition must satisfy its gate. Never skip a state merely because the code appears finished.
+| ID | Unit | State | Durable Record | Implementation Authorization |
+|---|---|---|---|---|
+| BASE-ARCH-001 | Project and Gradle Module Structure | RESEARCHED | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-002 | Module Responsibilities and Dependency Graph | RESEARCHED | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-003 | Gradle Module Granularity | RESEARCHED | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-004 | Core Architecture and Technical Infrastructure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-005 | Navigation and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-006 | Dependency Injection and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-007 | Feature and Pure Store Architecture | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-008 | Application Bootstrap and Startup Flow | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-009 | Application Root and Platform Composition Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-010 | Application Startup Lifecycle and Initialization Ordering | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | PENDING | — | No |
 
 ## Work Item Register
+
 | ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Tag | Trello | Blocker | Next Action |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| DOC-001 | Project Operating System | Documentation system | DOCUMENTATION_REVIEW | 00-PROJECT-OPERATING-SYSTEM | — | — | — | — | — | — | None | Review/freeze documents |
-
-## Module Register
-| Module | Plan | Status | Current Unit | State | Branch | Frozen Units | Pending Units | Last Commit | Trello |
-|---|---|---|---|---|---|---|---|---|---|
-
-## Mandatory Transition Records
-When a decision freezes: Decision Log + relevant plan + Tracker.
-When a plan freezes: plan + Tracker + Trello.
-When a unit is selected: Module Status + Tracker + Trello.
-When code changes: Module Status + Tracker.
-When tests run: Module Status + Tracker + result.
-When reviewed/accepted: Module Status + Tracker.
-When merged: Tracker + relevant status + Git state.
-When synced locally: Tracker when applicable.
-When a checkpoint is created: Checkpoints + Current Status + Tracker.
+| ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | DOCUMENTATION_CHECKPOINT | docs/architecture/BASE-ARCHITECTURE.md | Created | docs/base-architecture-record | 33d838f + subsequent docs commits | — | — | — | None | Review documented 001–012 consistency |
+| BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | PENDING | — | — | — | — | — | — | — | Research paused | Explicitly resume Base Architecture research |
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
 2. Read this Tracker.
 3. Read Current Status.
 4. Identify current module/work item and state.
-5. Read the relevant module Plan and Status.
+5. Read the relevant architecture record.
 6. Inspect Git branch/status/log and relevant Trello card.
 7. Reconcile contradictions before continuing.
 8. Determine exactly one next valid action.
 9. Do not implement unless the state and authorization permit it.
 
-## Change History
-Do not erase history. Record material state transitions and references in the owning status documents and Git history.
-
 ## Freeze Rule
-After a meaningful freeze, update all required records, report the frozen state, return one next prompt and stop. Do not automatically select the next unit.
+After a meaningful freeze or documentation checkpoint, update all required records, report the state, return one next prompt and stop. Do not automatically start the next architecture unit.
+
+## Documentation Authority
+The authoritative Base Architecture record for completed work through BASE-ARCH-012 is:
+
+docs/architecture/BASE-ARCHITECTURE.md
+
+Historical chat is not an implementation source.
