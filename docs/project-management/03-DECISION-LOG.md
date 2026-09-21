@@ -1,6 +1,6 @@
 # CB-Partner — Decision Log
 
-**Status:** ACTIVE — Base Architecture decisions documented through BASE-ARCH-012
+**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-012
 
 ## Purpose
 This is the durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
@@ -27,9 +27,9 @@ That document is the durable implementation input for BASE-ARCH-001 through BASE
 
 ## Base Architecture Status
 
-- BASE-ARCH-001 → RESEARCHED
-- BASE-ARCH-002 → RESEARCHED
-- BASE-ARCH-003 → RESEARCHED
+- BASE-ARCH-001 → DECISION_FROZEN
+- BASE-ARCH-002 → DECISION_FROZEN
+- BASE-ARCH-003 → DECISION_FROZEN
 - BASE-ARCH-004 → DECISION_FROZEN
 - BASE-ARCH-005 → DECISION_FROZEN
 - BASE-ARCH-006 → DECISION_FROZEN
@@ -50,6 +50,6 @@ Use concrete evidence: changed requirements, incompatibility, security issue, un
 
 ## Current Documentation Checkpoint
 
-Base Architecture research is intentionally paused after BASE-ARCH-012 while the completed research and frozen decisions are made durable. BASE-ARCH-013 must not begin until the project owner explicitly resumes Base Architecture research.
+Base Architecture research is intentionally paused after BASE-ARCH-012. The documentation checkpoint is complete and BASE-ARCH-001–003 have been formally resolved as decision-frozen foundation decisions. BASE-ARCH-013 must not begin until the project owner explicitly resumes Base Architecture research.
 
 **Repository source implementation remains unauthorized at this checkpoint.**
