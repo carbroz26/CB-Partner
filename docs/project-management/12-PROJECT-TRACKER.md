@@ -7,23 +7,23 @@
 ## Current Project State
 - Phase: Base Architecture documentation checkpoint
 - Current module: Base Architecture
-- Current work item: Document BASE-ARCH-001 through BASE-ARCH-012
+- Current work item: ARCH-DOC-001 — documentation checkpoint complete
 - Workflow state: DOCUMENTATION_CHECKPOINT
 - Current implementation unit: None
-- Frozen decisions: BASE-ARCH-004 through BASE-ARCH-012
-- Researched units: BASE-ARCH-001 through BASE-ARCH-003
+- Frozen decisions: BASE-ARCH-001 through BASE-ARCH-012
+- Researched units: None within BASE-ARCH-001 through BASE-ARCH-012
 - Blockers: None
-- Last completed action: Durable Base Architecture record created through BASE-ARCH-012
-- Next valid action: Review the documented BASE-ARCH-001–012 record for consistency; do not start BASE-ARCH-013 until explicitly authorized
+- Last completed action: Resolved BASE-ARCH-001–003 as DECISION_FROZEN and synchronized all architecture status records
+- Next valid action: Stop at the documentation checkpoint; do not start BASE-ARCH-013 until explicitly authorized
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
 
 | ID | Unit | State | Durable Record | Implementation Authorization |
 |---|---|---|---|---|
-| BASE-ARCH-001 | Project and Gradle Module Structure | RESEARCHED | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-002 | Module Responsibilities and Dependency Graph | RESEARCHED | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-003 | Gradle Module Granularity | RESEARCHED | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-001 | Project and Gradle Module Structure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-002 | Module Responsibilities and Dependency Graph | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
+| BASE-ARCH-003 | Gradle Module Granularity | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 | BASE-ARCH-004 | Core Architecture and Technical Infrastructure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 | BASE-ARCH-005 | Navigation and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 | BASE-ARCH-006 | Dependency Injection and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
@@ -39,7 +39,7 @@
 
 | ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Tag | Trello | Blocker | Next Action |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | DOCUMENTATION_CHECKPOINT | docs/architecture/BASE-ARCHITECTURE.md | Created | docs/base-architecture-record | 33d838f + subsequent docs commits | — | — | — | None | Review documented 001–012 consistency |
+| ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | subsequent docs commit | — | — | — | None | Stop; await explicit decision to resume Base Architecture research |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | PENDING | — | — | — | — | — | — | — | Research paused | Explicitly resume Base Architecture research |
 
 ## Recovery Algorithm
