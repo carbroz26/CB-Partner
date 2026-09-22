@@ -16,37 +16,30 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-001 — Frontend Trello Operating Model → DECISION_FROZEN.
 
 ## Current Workflow State
-PLAN_FROZEN → READY
+IMPLEMENTING
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
-## Implementation Plan
-Frozen implementation plan:
-docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
-
-Living implementation status:
-docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-
-## Implementation Authorization
-The project owner explicitly approved the BASE-ARCH-014 implementation plan on 2026-09-22. Implementation is authorized through the unit-by-unit gates.
-
-No application source implementation has started.
-
 ## Current Implementation Unit
-014-01 — Gradle Project Skeleton — READY.
+014-01 — Gradle Project Skeleton — IMPLEMENTING.
 
-## Frozen Implementation Scope
-- Gradle project skeleton/module registration.
-- Included build-logic.
-- Minimal type-oriented conventions.
-- Version catalog.
-- KMP targets: Android, iosArm64, iosSimulatorArm64, JVM.
-- Compose only where consumed.
-- Thin Android/Desktop/iOS application boundaries.
-- Foundation-required dependency wiring.
-- Minimal build/test baseline.
-- Architecture verification.
+## What has been implemented
+The 014-01 skeleton has been created on `feature/base-arch-014`:
+- root Gradle settings/build configuration;
+- included `build-logic` boundary;
+- required shared/application module registrations;
+- placeholder build files for registered modules;
+- root Gradle properties and ignore rules.
+
+No later BASE-ARCH-014 unit has been implemented.
+
+## Verification State
+Structural review is partial.
+
+Gradle execution verification is pending because this tool session cannot execute the repository checkout/Gradle wrapper, and the repository did not yet contain a committed Gradle wrapper available for execution through this integration.
+
+No build/test result is being claimed.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -58,29 +51,29 @@ No application source implementation has started.
 - ApplicationBootstrap/Store/Navigation/Koin implementation.
 - ViewModel or speculative architecture modules.
 - Unrelated refactoring.
+- Version catalog and convention implementation before their authorized units.
 
 The later startup vertical slice will use the actual backend API and exact response supplied by the project owner.
 
 ## Trello Execution Tracking
 Authoritative board: **CB-Partner — Frontend**.
 
-TRELLO-001 is frozen. The board workflow is:
+Workflow:
 **BACKLOG → READY → IN PROGRESS → DONE**
 
-Current execution cards:
-- **Set Up Gradle Project Structure** — READY — 014-01.
-- **Define Frontend Trello Workflow** — completed/frozen decision task.
+Current cards:
+- **Set Up Gradle Project Structure** — IN PROGRESS — 014-01.
+- **Define Frontend Trello Workflow** — DONE — TRELLO-001.
 
-No implementation card is to be started automatically.
-
-## Blockers
+## Blocker
 No architecture blocker.
 
+Current verification dependency: an actual local checkout/Gradle runner is required to execute the 014-01 Gradle configuration and confirm module recognition.
+
 ## Next Valid Action
-READY gate: inspect actual Git branch/status, confirm the authorized feature/task branch and execution tracking, then begin only 014-01 when explicitly continuing the implementation workflow.
+Complete 014-01 verification with an actual Gradle runner. If it passes, report acceptance and stop for user review before 014-02.
+
+Do not start 014-02 automatically.
 
 ## Recovery
-A new AI session must read AI_START_HERE.md, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
-
-## Post-freeze rule
-Do not automatically start implementation or the next Trello card. The next action is the READY gate and then 014-01 only when that gate is satisfied.
+A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
