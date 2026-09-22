@@ -12,8 +12,8 @@ class KmpConventionPlugin : Plugin<Project> {
         target.pluginManager.apply("com.android.kotlin.multiplatform.library")
 
         target.extensions.configure<KotlinMultiplatformExtension> {
-            targets.withType(KotlinMultiplatformAndroidLibraryTarget::class.java).all {
-                compileSdk = 36
+            targets.withType(KotlinMultiplatformAndroidLibraryTarget::class.java).configureEach { androidTarget ->
+                androidTarget.compileSdk = 36
             }
             iosArm64()
             iosSimulatorArm64()
