@@ -1,7 +1,7 @@
 # CB-Partner — Current Status
 
 **Status:** ACTIVE  
-**Last Updated:** 2026-09-22
+**Last Updated:** 2026-09-23
 
 ## Current Phase
 Phase 1 — Technical Foundation implementation.
@@ -16,17 +16,20 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTED — 014-03 verification pending.
+IMPLEMENTING — 014-06 implementation complete; verification pending.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-03 — Build Logic + Four Conventions — IMPLEMENTED; verification pending.
+014-06 — Platform Application Boundaries — IMPLEMENTED; verification pending.
 
-014-01 was verified and accepted. 014-02 was verified and explicitly accepted by the project owner on 2026-09-22.
+014-04 remains IMPLEMENTED; verification pending.
+
+014-05 has not started.
 
 ## What has been implemented
+
 014-01:
 - root Gradle settings/build configuration;
 - included `build-logic` boundary;
@@ -37,14 +40,36 @@ BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 014-02:
 - `gradle/libs.versions.toml` with central Kotlin, AGP, Compose versions and approved plugin aliases.
 
-No KMP target configuration, Compose configuration, convention implementation, runtime dependencies, or application source has been added.
+014-03:
+- four approved convention plugins;
+- intended module application of the conventions.
+
+014-04:
+- iOS ARM64;
+- iOS Simulator ARM64;
+- JVM;
+- standard KMP target/source-set configuration.
+
+014-06:
+- Android KMP target added through `com.android.kotlin.multiplatform.library`;
+- Android KMP `compileSdk = 36`;
+- Android application `compileSdk = 36`;
+- iOS and Desktop remain thin platform boundaries;
+- no business/application behavior was introduced.
 
 ## Verification State
+
 014-01 verification is complete and accepted.
 
-014-02 verification completed locally and was accepted by the project owner.
+014-02 verification is complete and accepted.
 
-014-03 implementation has started and the approved four convention plugins have been implemented. Its Trello card is IN PROGRESS. Local verification is still pending.
+014-03 verification is complete and accepted.
+
+014-04 verification remains pending and is now unblocked by the 014-06 Android configuration.
+
+014-06 implementation is complete. Local verification has not yet been run after the implementation.
+
+No claim is made that the Android SDK/build is locally available until the user's Gradle runner verifies it.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -56,6 +81,7 @@ No KMP target configuration, Compose configuration, convention implementation, r
 - ApplicationBootstrap/Store/Navigation/Koin implementation.
 - ViewModel or speculative architecture modules.
 - Unrelated refactoring.
+- 014-05 Compose configuration.
 - Runtime dependency wiring before its authorized consumer unit.
 
 The later startup vertical slice will use the actual backend API and exact response supplied by the project owner.
@@ -67,18 +93,20 @@ Workflow:
 **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
 
 Current Trello state:
-- **DONE:** Set Up Gradle Project Structure; Add Version Catalog.
-- **READY:** Set Up Gradle Build Conventions.
+- **DONE:** Set Up Gradle Project Structure; Add Version Catalog; Set Up Gradle Build Conventions.
+- **IN PROGRESS:** Configure Kotlin Multiplatform Targets; Set Up Platform App Modules.
 - **TO DO:** remaining approved foundation and architecture implementation work.
 - **BACKLOG:** future/uncommitted work.
 
 ## Blocker
 No architecture blocker.
 
-## Next Valid Action
-Verify 014-03 — Build Logic + Four Conventions — locally, then review/accept it before selecting 014-04.
+Current execution blocker: local verification has not yet been run after 014-06 implementation.
 
-The 014-02 acceptance gate is complete.
+## Next Valid Action
+Run the 014-06 local verification from the user's repository.
+
+After 014-06 verification, re-run the 014-04 verification gate. Do not start 014-05 until the applicable gate/review process authorizes it.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
