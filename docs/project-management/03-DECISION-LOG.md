@@ -84,6 +84,8 @@ No unit may silently change a frozen architecture decision.
 ## Current Documentation Checkpoint
 BASE-ARCH-014 implementation planning is complete and the plan is frozen. The durable implementation plan and living status document have been created.
 
+014-02 — Version Catalog was verified locally and explicitly accepted by the project owner on 2026-09-22. Acceptance authorizes progression to the next unit under the frozen plan; it does not authorize bypassing the required Trello READY/implementation preflight for 014-03.
+
 No application source code has been implemented.
 
-TRELLO-001 is now frozen and its authoritative board workflow is being synchronized.
+TRELLO-001 is frozen. Trello synchronization for the active implementation workflow is currently unavailable because the connector timed out during board/list operations; no Trello state change is being falsely claimed.
