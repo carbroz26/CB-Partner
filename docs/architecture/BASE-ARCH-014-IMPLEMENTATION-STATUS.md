@@ -19,7 +19,7 @@ Implementation is now at **014-03 — Build Logic + Four Conventions**. Source i
 |---|---|---|
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
-| 014-03 | Build Logic + Four Conventions | READY/PREFLIGHT |
+| 014-03 | Build Logic + Four Conventions | IMPLEMENTING |
 | 014-04 | KMP Target Configuration | PENDING |
 | 014-05 | Compose Configuration | PENDING |
 | 014-06 | Platform Application Boundaries | PENDING |
@@ -90,11 +90,10 @@ Branch: `feature/base-arch-014`
 - `a0e3d003bb3c47558ebd6ecbf86505e37972cdb4` — add version catalog
 
 ## Trello
-Card for 014-01: **Set Up Gradle Project Structure**. Trello synchronization was attempted after acceptance but the Trello connector timed out; no Trello state change is being falsely claimed.
+- **Set Up Gradle Project Structure** — 014-01, marked complete.
+- **Implement Build Logic Conventions** — 014-03, moved from READY to IN PROGRESS.
 
 ## Gate
 014-02 is ACCEPTED.
 
-014-03 is the next authorized unit, but its implementation preflight is currently blocked on required Trello execution tracking/READY-state synchronization because the Trello connector timed out during board/list operations. No 014-03 source changes have been made.
-
-Do not start 014-03 source implementation until the required execution-tracking preflight is satisfied.
+014-03 is now IMPLEMENTING under the active Trello card **Implement Build Logic Conventions**. No 014-03 source changes have been made yet.
