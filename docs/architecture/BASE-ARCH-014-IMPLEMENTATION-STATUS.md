@@ -12,14 +12,14 @@ The user accepted 014-01 and explicitly authorized continuation. Implementation 
 
 014-02 was verified locally and explicitly accepted by the project owner on 2026-09-22. Only the central version/plugin catalog was added for 014-02. No KMP targets, Compose configuration, convention implementation, application source, or runtime dependencies have been added.
 
-Implementation is now prepared for **014-03 — Build Logic + Four Conventions**. Source implementation has not started. The Trello card is in READY under the finalized simple work-board model.
+Implementation of **014-03 — Build Logic + Four Conventions** has started and the approved build-logic foundation/convention applications are implemented. Verification is still pending. The Trello card is IN PROGRESS.
 
 ## Implementation units
 | Unit | Description | State |
 |---|---|---|
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
-| 014-03 | Build Logic + Four Conventions | READY |
+| 014-03 | Build Logic + Four Conventions | IMPLEMENTED — VERIFICATION PENDING |
 | 014-04 | KMP Target Configuration | PENDING |
 | 014-05 | Compose Configuration | PENDING |
 | 014-06 | Platform Application Boundaries | PENDING |
@@ -60,6 +60,18 @@ No runtime library dependencies were added. No convention plugins were implement
 
 The selected Kotlin/AGP combination is within Kotlin 2.4.20's documented fully supported range; Gradle compatibility will be finalized with the wrapper/build setup and verified through the local Gradle runner. Exact current compatibility was checked against official Kotlin and Android documentation before selection.
 
+## 014-03 implementation
+
+Implemented the approved four convention types in the included `build-logic` build and applied them only to their intended modules:
+- `cbpartner.kmp` → `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, `:feature:dynamic`.
+- `cbpartner.compose` → `:feature:splash`, `:feature:dynamic`.
+- `cbpartner.android.application` → `:androidApp`.
+- `cbpartner.desktop.application` → `:desktopApp`.
+
+The convention plugins intentionally remain minimal. Target configuration, Compose source-set configuration, and platform application details remain in 014-04/014-05/014-06 as frozen by the implementation plan.
+
+Verification has not yet been run in the user's local environment, so 014-03 is not marked verified or accepted.
+
 ## 014-02 verification and acceptance
 Verification completed locally:
 - `gradle projects` → BUILD SUCCESSFUL.
@@ -91,9 +103,9 @@ Branch: `feature/base-arch-014`
 
 ## Trello
 - **Set Up Gradle Project Structure** — 014-01, marked complete.
-- **Set Up Gradle Build Conventions** — 014-03, READY.
+- **Set Up Gradle Build Conventions** — 014-03, IN PROGRESS.
 
 ## Gate
 014-02 is ACCEPTED.
 
-014-03 is READY under the Trello card **Set Up Gradle Build Conventions**. No 014-03 source changes have been made yet.
+014-03 is IMPLEMENTED with verification pending under the Trello card **Set Up Gradle Build Conventions**.
