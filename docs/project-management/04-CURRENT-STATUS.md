@@ -16,13 +16,13 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-001 — Frontend Trello Operating Model → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTING
+IMPLEMENTING — 014-01 VERIFIED, awaiting user acceptance.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-01 — Gradle Project Skeleton — IMPLEMENTING.
+014-01 — Gradle Project Skeleton — VERIFIED, awaiting user acceptance.
 
 ## What has been implemented
 The 014-01 skeleton has been created on `feature/base-arch-014`:
@@ -35,11 +35,17 @@ The 014-01 skeleton has been created on `feature/base-arch-014`:
 No later BASE-ARCH-014 unit has been implemented.
 
 ## Verification State
-Structural review is partial.
+014-01 local Gradle verification is complete.
 
-Gradle execution verification is pending because this tool session cannot execute the repository checkout/Gradle wrapper, and the repository did not yet contain a committed Gradle wrapper available for execution through this integration.
+Using `C:\\Gradle\\gradle-9.7.1\\bin\\gradle.bat` from `D:\\CarBroz\\CB-Partner`:
+- `gradle projects` → BUILD SUCCESSFUL;
+- `gradle tasks` → BUILD SUCCESSFUL;
+- approved modules are recognized;
+- included build `:build-logic` is recognized;
+- `iosApp` remains outside the Gradle project graph as intended;
+- Git working tree is clean and branch `feature/base-arch-014` is synchronized with origin.
 
-No build/test result is being claimed.
+This verification confirms project/settings loading and module recognition only. No KMP/Compose/platform compilation or tests are claimed.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -62,16 +68,14 @@ Workflow:
 **BACKLOG → READY → IN PROGRESS → DONE**
 
 Current cards:
-- **Set Up Gradle Project Structure** — IN PROGRESS — 014-01.
+- **Set Up Gradle Project Structure** — IN PROGRESS — 014-01 — VERIFIED, awaiting user acceptance.
 - **Define Frontend Trello Workflow** — DONE — TRELLO-001.
 
 ## Blocker
-No architecture blocker.
-
-Current verification dependency: an actual local checkout/Gradle runner is required to execute the 014-01 Gradle configuration and confirm module recognition.
+No blocker for 014-01 verification.
 
 ## Next Valid Action
-Complete 014-01 verification with an actual Gradle runner. If it passes, report acceptance and stop for user review before 014-02.
+User review/acceptance of 014-01.
 
 Do not start 014-02 automatically.
 
