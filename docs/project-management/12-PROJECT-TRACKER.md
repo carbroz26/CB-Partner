@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTED — 014-03 verification pending
-- Current implementation unit: 014-03 — Build Logic + Four Conventions
+- Workflow state: IMPLEMENTING — 014-04 blocked by frozen-plan staging conflict
+- Current implementation unit: 014-04 — KMP Target Configuration
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-- Blockers: None known
-- Last completed action: 014-03 Build Logic + Four Conventions implemented; Trello synchronized to IN PROGRESS
-- Next valid action: Verify 014-03 locally; do not start 014-04
+- Blockers: 014-04 cannot configure the approved Android target without compileSdk; compileSdk is explicitly deferred to 014-06
+- Last completed action: 014-03 accepted; 014-04 preflight completed and blocked before code change
+- Next valid action: Resolve the 014-04/014-06 compileSdk staging conflict; do not start 014-05
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
@@ -47,13 +47,13 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTED — VERIFICATION PENDING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-02 accepted; 014-03 implemented | feature/base-arch-014 | Set Up Gradle Build Conventions — IN PROGRESS | Local Gradle verification pending | Verify 014-03; do not start 014-04 |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-04 BLOCKED | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-02 accepted; 014-03 implemented | feature/base-arch-014 | Set Up Gradle Build Conventions — IN PROGRESS | Local Gradle verification pending | Verify 014-03; do not start 014-04 |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
 - Workflow: **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
 - **DONE:** Set Up Gradle Project Structure; Add Version Catalog.
-- **READY:** Set Up Gradle Build Conventions.
+- **IN PROGRESS:** Configure Kotlin Multiplatform Targets.
 - **TO DO:** remaining approved foundation and architecture implementation work.
 - **BACKLOG:** future/uncommitted work.
 - The old workflow-definition card is archived.
@@ -64,8 +64,8 @@
 |---|---|---|---|
 | 014-01 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; working tree clean | Project skeleton/module registration verified locally |
 | 014-02 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; Git clean and synchronized | Version Catalog verified and accepted by user on 2026-09-22 |
-| 014-03 | IMPLEMENTED — VERIFICATION PENDING | Not run | Build Logic + Four Conventions implemented; Trello card IN PROGRESS |
-| 014-04 | PENDING | Not run | KMP Target Configuration |
+| 014-03 | ACCEPTED | Build-logic build verified; accepted | Build Logic + Four Conventions |
+| 014-04 | BLOCKED — PLAN CONFLICT | Not run | Android target requires compileSdk, but compileSdk is explicitly deferred to 014-06 |
 | 014-05 | PENDING | Not run | Compose Configuration |
 | 014-06 | PENDING | Not run | Platform Application Boundaries |
 | 014-07 | PENDING | Not run | Dependency and Module Wiring |
