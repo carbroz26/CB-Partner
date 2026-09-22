@@ -1,0 +1,10 @@
+package com.carbroz.cbpartner.buildlogic
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+class AndroidApplicationConventionPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        target.pluginManager.apply("com.android.application")
+    }
+}
