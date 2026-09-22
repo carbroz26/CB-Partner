@@ -22,7 +22,7 @@ IMPLEMENTING — 014-03 preflight pending.
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-03 — Build Logic + Four Conventions — READY/implementation preflight pending.
+014-03 — Build Logic + Four Conventions — IMPLEMENTING.
 
 014-01 was verified and accepted. 014-02 was verified and explicitly accepted by the project owner on 2026-09-22.
 
@@ -44,7 +44,7 @@ No KMP target configuration, Compose configuration, convention implementation, r
 
 014-02 verification completed locally and was accepted by the project owner.
 
-014-03 has not started. Its implementation preflight is blocked only on required Trello execution tracking/READY-state synchronization.
+014-03 implementation has now started after the required Trello execution card was created in READY and moved to IN PROGRESS.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -73,7 +73,7 @@ Current card:
 No architecture blocker.
 
 ## Next Valid Action
-Complete 014-03 implementation preflight by establishing the required Trello READY/IN PROGRESS execution state. Do not modify source for 014-03 until that preflight is satisfied.
+Implement 014-03 — Build Logic + Four Conventions — one unit only, within the frozen plan and active Trello card.
 
 The 014-02 acceptance gate is complete.
 
