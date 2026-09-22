@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING — 014-06 IMPLEMENTED — VERIFICATION PENDING  
+**State:** VERIFIED — 014-01 THROUGH 014-06 VERIFIED  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -12,11 +12,11 @@
 
 014-03 — Build Logic + Four Conventions is **VERIFIED and accepted**.
 
-014-04 — KMP Target Configuration is **IMPLEMENTED — VERIFICATION PENDING**.
+014-04 — KMP Target Configuration is **VERIFIED and accepted**.
 
-014-06 — Platform Application Boundaries is now **IMPLEMENTED — VERIFICATION PENDING**. The owner explicitly approved Android `compileSdk = 36` for this unit.
+014-06 — Platform Application Boundaries is now **VERIFIED and accepted**. The owner explicitly approved Android `compileSdk = 36` for this unit.
 
-014-05 remains **NOT STARTED**.
+014-05 — Compose Configuration is **VERIFIED and accepted**.
 
 ## Implementation units
 | Unit | Description | State |
@@ -24,9 +24,9 @@
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
 | 014-03 | Build Logic + Four Conventions | ACCEPTED |
-| 014-04 | KMP Target Configuration | IMPLEMENTED — VERIFICATION PENDING |
-| 014-05 | Compose Configuration | PENDING |
-| 014-06 | Platform Application Boundaries | IMPLEMENTED — VERIFICATION PENDING |
+| 014-04 | KMP Target Configuration | ACCEPTED |
+| 014-05 | Compose Configuration | ACCEPTED |
+| 014-06 | Platform Application Boundaries | ACCEPTED |
 | 014-07 | Dependency and Module Wiring | PENDING |
 | 014-08 | Build/Test Baseline | PENDING |
 | 014-09 | Architecture Verification | PENDING |
@@ -57,13 +57,13 @@ The Android-KMP configuration follows the current Android/Kotlin guidance for th
 
 ## Verification state
 
-Remote source inspection confirms the intended 014-06 changes are present.
+Remote source inspection and local verification confirm the intended 014-04, 014-05, and 014-06 changes are present.
 
-Local Gradle verification has **not yet been run after the 014-06 implementation**. Therefore 014-06 is not marked VERIFIED or ACCEPTED.
+Local Gradle verification completed successfully on 2026-09-23. `gradle projects` and targeted JVM compilation both returned **BUILD SUCCESSFUL**.
 
-The next verification must run from the user's local repository. The first purpose is to confirm that the previous `:androidApp` `compileSdk` configuration blocker is removed and that the shared KMP projects configure with the Android target.
+The targeted JVM compilation verified `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, and `:feature:dynamic`. The Windows iOS simulator disabled-target warning is expected because simulator tests require macOS.
 
-014-04 remains IMPLEMENTED — VERIFICATION PENDING and should be re-verified after the 014-06 configuration is available.
+014-04, 014-05, and 014-06 are now VERIFIED and accepted.
 
 ## 014-03 implementation and acceptance
 
@@ -98,8 +98,6 @@ Branch: `feature/base-arch-014`
 - **Set Up Platform App Modules** — 014-06, IN PROGRESS / implementation complete, verification pending.
 
 ## Gate
-014-06 implementation is complete. Verification is pending.
+014-01 through 014-06 are VERIFIED and accepted.
 
-014-04 remains IMPLEMENTED with verification pending.
-
-014-05 has not started.
+014-07, 014-08, and 014-09 remain pending. No next implementation unit is started by this checkpoint.
