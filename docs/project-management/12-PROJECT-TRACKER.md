@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING
+- Workflow state: IMPLEMENTING — 014-01 VERIFIED, awaiting user acceptance
 - Current implementation unit: 014-01 — Gradle Project Skeleton
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-- Blockers: Gradle execution verification requires a local checkout/Gradle runner
-- Last completed action: TRELLO-001 frozen and Trello board synchronized; 014-01 skeleton implementation started
-- Next valid action: Verify 014-01 with an actual Gradle runner; do not begin 014-02 before 014-01 acceptance
+- Blockers: None for 014-01 verification
+- Last completed action: Local Gradle verification of 014-01 completed successfully
+- Next valid action: User review/acceptance of 014-01; do not begin 014-02 before acceptance
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
@@ -47,19 +47,19 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 implementing; no later unit started | feature/base-arch-014 | Set Up Gradle Project Structure — IN PROGRESS | Gradle runner verification | Verify 014-01 |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 verified; awaiting user acceptance; no later unit started | feature/base-arch-014 | Set Up Gradle Project Structure — IN PROGRESS | None | User review/acceptance of 014-01 |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
 - Workflow: **BACKLOG → READY → IN PROGRESS → DONE**
 - TRELLO-001 card: **Define Frontend Trello Workflow** — DONE.
-- BASE-ARCH-014 014-01 card: **Set Up Gradle Project Structure** — IN PROGRESS.
+- BASE-ARCH-014 014-01 card: **Set Up Gradle Project Structure** — IN PROGRESS pending user acceptance.
 - No automatic next-task transition is permitted.
 
 ## BASE-ARCH-014 Unit Register
 | Unit | State | Verification | Notes |
 |---|---|---|---|
-| 014-01 | IMPLEMENTING | Partial structural review; Gradle execution pending | Project skeleton/module registration created |
+| 014-01 | VERIFIED — awaiting user acceptance | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; working tree clean | Project skeleton/module registration verified locally |
 | 014-02 | PENDING | Not run | Version Catalog |
 | 014-03 | PENDING | Not run | Build Logic + Four Conventions |
 | 014-04 | PENDING | Not run | KMP Target Configuration |
@@ -68,6 +68,33 @@
 | 014-07 | PENDING | Not run | Dependency and Module Wiring |
 | 014-08 | PENDING | Not run | Build/Test Baseline |
 | 014-09 | PENDING | Not run | Architecture Verification |
+
+## Verification Record — 014-01
+Local verification was completed from `D:\CarBroz\CB-Partner` using:
+
+`C:\Gradle\gradle-9.7.1\bin\gradle.bat projects`
+
+Result:
+- BUILD SUCCESSFUL
+- Root project `CB-Partner` loaded.
+- `:androidApp`, `:core`, `:data`, `:desktopApp`, `:domain`, `:feature:splash`, `:feature:dynamic`, and `:navigation` recognized.
+- Included build `:build-logic` recognized.
+- `:feature` correctly appears as the nested-project aggregator.
+- `iosApp` remains outside the Gradle project graph as intended.
+
+Then:
+
+`C:\Gradle\gradle-9.7.1\bin\gradle.bat tasks`
+
+Result:
+- BUILD SUCCESSFUL
+
+Git verification:
+- Branch: `feature/base-arch-014`
+- Up to date with `origin/feature/base-arch-014`
+- Working tree clean.
+
+This is configuration/module-recognition verification only; it does not claim KMP, Compose, platform, test, or later-unit compilation.
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
