@@ -1,102 +1,59 @@
 # CB-Partner — Trello Workflow
 
-**Status:** PROPOSED
-**Scope:** Frontend Trello workspace only
+**Status:** FROZEN  
+**Scope:** Frontend Trello workspace only  
+**Frozen:** 2026-09-22  
+**Decision:** TRELLO-001 — Frontend Trello Operating Model
 
 ## Purpose
-Trello is the execution board. It answers what we are doing, why, status, and remaining work. It is not the source of truth for architecture or permanent decisions.
+Trello is the visual execution tracker for the CB-Partner frontend. It answers what work exists, what is ready, what is currently being worked on, and what is complete.
 
-## Lists
-1. BACKLOG
-2. DISCOVERY
-3. READY
-4. IN PROGRESS
-5. AI REVIEW
-6. DEV REVIEW
-7. TESTING
-8. BLOCKED
-9. DONE
+Trello is not the source of truth for architecture decisions, research conclusions, implementation contracts, detailed implementation plans, or source code. Those remain in project documentation and GitHub.
 
-## Card Types
-Feature, Bug, Technical Task, Research, Architecture, Documentation, Maintenance.
-
-## Card Template
-Goal
-Context
-Scope
-Out of Scope
-Frozen Decisions / ADRs
-Implementation Plan
-Acceptance Criteria
-Testing / Verification
-Dependencies / Blockers
-Branch
-Related Documents
-
-## Workflow
-BACKLOG → DISCOVERY → READY → IN PROGRESS → AI REVIEW → DEV REVIEW → TESTING → DONE.
-BLOCKED can be entered whenever progress is prevented by a real blocker.
-
-## Definition of Ready
-Requirement understood; required decisions resolved; scope explicit; acceptance criteria measurable; plan approved where required; dependencies identified.
-
-## Definition of Done
-Acceptance criteria pass; relevant checks pass; review complete; no unauthorized changes; documentation updated; Git work complete.
-
-## Rules
-- Never create a card for the entire application.
-- Split work into independently reviewable outcomes.
-- Link ADRs instead of duplicating architecture.
-- Mark blockers explicitly.
-- DONE means verified, not merely coded.
-
-**This document is PROPOSED until explicitly frozen.**
-## State Synchronization
-Trello is execution tracking, not the technical source of truth. Each meaningful implementation unit should link to its Tracker/module references and record branch, acceptance criteria, testing state, and completion/freeze state. Synchronize Trello when a unit is selected, implemented, accepted/frozen, blocked, or completed.
-
-## No Automatic Next Task
-After a task reaches its required freeze/completion state, stop. Do not automatically start the next Trello card.
-
-## Frontend Trello Board Ownership
-
-The authoritative frontend execution board is:
-
+## Authoritative Board
 - Board: **CB-Partner — Frontend**
 - Workspace: **CarBroz**
-- Board URL: https://trello.com/b/QcuvaDbi/cb-partner-frontend
+- URL: https://trello.com/b/QcuvaDbi/cb-partner-frontend
 
-The previous **CarBroz Test** board was temporary and must not be used for CB-Partner frontend execution tracking. Existing active cards should be migrated to the authoritative frontend board when applicable.
+The previous **CarBroz Test** board is non-authoritative and must not be used for CB-Partner frontend execution tracking.
 
-## AI Responsibility for Trello Execution Tracking
+## Board Lists
+**BACKLOG → READY → IN PROGRESS → DONE**
 
-For CB-Partner frontend work, the AI is responsible for maintaining Trello execution tracking as part of the project workflow. The AI must:
+### BACKLOG
+Known work that is not currently ready to start.
 
-- create the Trello card when a concrete implementation/research task reaches the point where execution tracking is required;
-- choose the card name using the project work-item identifier and concise task name;
-- populate the card with goal, context, scope, out of scope, frozen decisions/ADRs, implementation plan, acceptance criteria, testing/verification, dependencies/blockers, branch, and related documents when applicable;
-- place the card in the correct workflow list;
-- update the card/list state when the work transitions through READY, IN PROGRESS, AI REVIEW, DEV REVIEW, TESTING, BLOCKED, and DONE;
-- keep the branch and durable-document references synchronized with the card;
-- never create duplicate cards for the same active work item unless explicitly required;
-- stop after a work item reaches its required freeze/completion state and wait for the next authorized task.
+### READY
+Work that has passed the required preparation and authorization gates and may be started.
 
-The user remains the authority for project decisions, scope approval, architecture freezes, and implementation authorization. Trello maintenance is an execution-record responsibility of the AI and must not be treated as permission to make architectural or product decisions.
+### IN PROGRESS
+The currently active work.
 
-## Trello Board Standard
+### DONE
+The work item has completed its required acceptance, verification, review, documentation, and Git/process requirements. DONE does not mean merely “code was written.”
 
-The frontend board should use the following workflow lists:
+## What Is Not a Permanent List
+The following are not permanent workflow lists:
+- DISCOVERY
+- AI REVIEW
+- DEV REVIEW
+- TESTING
+- BLOCKED
 
-BACKLOG → DISCOVERY → READY → IN PROGRESS → AI REVIEW → DEV REVIEW → TESTING → DONE
+They are handled by the project operating process, card metadata, labels, checklists, comments, documents, and Tracker state as appropriate.
 
-BLOCKED may be used whenever progress is prevented by a real blocker.
+A dedicated list may be introduced later only if a real operational handoff or queue repeatedly requires it.
 
-## Trello Card Naming Convention
+## Blocked Work
+Blocked work remains in the list representing its actual workflow stage and receives a **Blocked** label plus a clear explanation of what is blocked, why it is blocked, and what dependency or decision is required.
 
-Trello card titles are for human-readable execution tracking. They should be understandable without knowing the internal architecture document or work-item numbering system.
+A BLOCKED list is not required initially.
 
-Use this pattern:
+## Card Naming
+Trello titles are human-readable and action-oriented.
 
-**<Direct Action>**
+Use:
+**<Direct Action or Outcome>**
 
 Examples:
 - Set Up Gradle Project Structure
@@ -109,7 +66,99 @@ Examples:
 - Add Build and Test Baseline
 - Verify Architecture Boundaries
 
-Do not use internal identifiers such as "BASE-ARCH-014 — 014-01" as the primary Trello card title. Internal identifiers belong in the card description, linked documents, branch names, and project Tracker.
+Do not use internal identifiers such as BASE-ARCH-014 — 014-01 as the primary title. Internal IDs belong in descriptions, linked documents, branches, and the Project Tracker.
 
-The AI is responsible for choosing clear, direct, task-oriented Trello titles for new cards. The title should describe the outcome/action a person is expected to perform, not the internal documentation hierarchy.
+## Card Content
+Cards should be lightweight enough to remain useful.
 
+Default structure:
+
+### What
+Short description of the work.
+
+### Done when
+Concrete acceptance criteria.
+
+### References
+Links/references to the relevant architecture decision, implementation plan, Tracker, GitHub branch/PR, or other durable record.
+
+Add context, scope, dependencies, or testing notes only when they materially help execution. Do not duplicate entire architecture documents or implementation plans inside Trello cards.
+
+## Checklists
+Use checklists for concrete execution steps when they make the card easier to complete.
+
+Do not use checklists as a replacement for architecture decisions, implementation plans, durable project status, or the Project Tracker.
+
+## Labels
+Use labels for meaningful metadata, not workflow states.
+
+Initial label vocabulary may include:
+- Architecture
+- Implementation
+- Research
+- Bug
+- Documentation
+- Blocked
+
+Create/use a label when it provides real value. Do not create labels for Ready, Testing, Frozen, AI Review, or similar workflow states.
+
+## Definition of READY
+A card is READY when, proportional to its size:
+- the work is understood;
+- scope is clear;
+- required architecture decisions are resolved;
+- required implementation plan exists;
+- dependencies are known;
+- acceptance criteria exist;
+- implementation authorization exists where required.
+
+Small tasks do not require an unnecessarily large planning ceremony.
+
+## Definition of DONE
+A card is DONE when:
+- the acceptance criteria pass;
+- required testing/checks pass;
+- required review is complete;
+- required durable documentation/status is updated;
+- Git/process requirements are complete for that work item;
+- no unauthorized changes remain.
+
+## Trello, GitHub, and Documentation
+- **Trello:** what work exists and its execution state.
+- **GitHub:** source code, branches, commits, pull requests, and code review.
+- **Project docs:** why/how, architecture decisions, implementation plans, operating rules, and durable status.
+- **Project Tracker:** durable project-level recovery and execution ledger.
+
+The same work item may be referenced across these systems, but information should not be unnecessarily duplicated.
+
+## Card Creation Rules
+Create a card for a meaningful independently trackable outcome, such as an implementation unit, meaningful bug, research task, architecture/process decision, significant documentation work, or meaningful technical maintenance.
+
+Do not create cards for individual classes/files, every commit, tiny corrections, every conversation/checklist item, or work that cannot be independently tracked.
+
+## AI Responsibility
+The AI is responsible for maintaining Trello execution tracking, including:
+- creating cards when meaningful tracked work begins;
+- choosing clear human-readable names;
+- maintaining concise descriptions and relevant checklists;
+- moving cards through the approved lists;
+- applying/removing relevant labels;
+- recording references to durable docs and GitHub work;
+- keeping Trello aligned with actual execution state;
+- marking work DONE only after its completion requirements are satisfied.
+
+Trello maintenance does not grant the AI authority to make product or architecture decisions.
+
+## User Responsibility
+The project owner retains authority over product decisions, architecture decisions, scope approval, freezes, implementation authorization, and reopening frozen decisions.
+
+## No Automatic Next Task
+When a work item reaches its required completion/freeze state, stop. Do not automatically start the next Trello card. The next task requires an explicit authorized continuation through the project operating workflow.
+
+## State Synchronization
+Synchronize Trello when a meaningful work item becomes READY, starts, becomes blocked, reaches review/verification milestones, is accepted, or is completed.
+
+The Project Tracker remains the durable recovery ledger.
+
+## Frozen Decision
+TRELLO-001 is the approved frontend Trello operating model. Changes to this model require a new discussion/research/decision cycle and explicit approval; do not silently alter the workflow.
