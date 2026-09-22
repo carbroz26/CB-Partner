@@ -16,36 +16,33 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-001 — Frontend Trello Operating Model → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTING — 014-01 VERIFIED, awaiting user acceptance.
+IMPLEMENTING — 014-02 in progress.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-01 — Gradle Project Skeleton — VERIFIED, awaiting user acceptance.
+014-02 — Version Catalog — IMPLEMENTING.
+
+014-01 was verified and accepted before continuation.
 
 ## What has been implemented
-The 014-01 skeleton has been created on `feature/base-arch-014`:
+014-01:
 - root Gradle settings/build configuration;
 - included `build-logic` boundary;
-- required shared/application module registrations;
-- placeholder build files for registered modules;
+- required module registrations;
+- placeholder build files;
 - root Gradle properties and ignore rules.
 
-No later BASE-ARCH-014 unit has been implemented.
+014-02:
+- `gradle/libs.versions.toml` with central Kotlin, AGP, Compose versions and approved plugin aliases.
+
+No KMP target configuration, Compose configuration, convention implementation, runtime dependencies, or application source has been added.
 
 ## Verification State
-014-01 local Gradle verification is complete.
+014-01 verification is complete and accepted.
 
-Using `C:\\Gradle\\gradle-9.7.1\\bin\\gradle.bat` from `D:\\CarBroz\\CB-Partner`:
-- `gradle projects` → BUILD SUCCESSFUL;
-- `gradle tasks` → BUILD SUCCESSFUL;
-- approved modules are recognized;
-- included build `:build-logic` is recognized;
-- `iosApp` remains outside the Gradle project graph as intended;
-- Git working tree is clean and branch `feature/base-arch-014` is synchronized with origin.
-
-This verification confirms project/settings loading and module recognition only. No KMP/Compose/platform compilation or tests are claimed.
+014-02 verification is pending local execution.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -57,7 +54,7 @@ This verification confirms project/settings loading and module recognition only.
 - ApplicationBootstrap/Store/Navigation/Koin implementation.
 - ViewModel or speculative architecture modules.
 - Unrelated refactoring.
-- Version catalog and convention implementation before their authorized units.
+- Runtime dependency wiring before its authorized consumer unit.
 
 The later startup vertical slice will use the actual backend API and exact response supplied by the project owner.
 
@@ -67,17 +64,16 @@ Authoritative board: **CB-Partner — Frontend**.
 Workflow:
 **BACKLOG → READY → IN PROGRESS → DONE**
 
-Current cards:
-- **Set Up Gradle Project Structure** — IN PROGRESS — 014-01 — VERIFIED, awaiting user acceptance.
-- **Define Frontend Trello Workflow** — DONE — TRELLO-001.
+Current card:
+- **Set Up Gradle Project Structure** — 014-01 accepted; Trello synchronization is pending connector recovery.
 
 ## Blocker
-No blocker for 014-01 verification.
+No architecture blocker.
 
 ## Next Valid Action
-User review/acceptance of 014-01.
+Run the 014-02 version-catalog verification locally.
 
-Do not start 014-02 automatically.
+Do not start 014-03 until 014-02 verification passes and the user accepts 014-02.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
