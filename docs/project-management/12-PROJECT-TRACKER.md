@@ -8,16 +8,16 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-04 implementation complete; verification pending
-- Current implementation unit: 014-04 — KMP Target Configuration
+- Workflow state: IMPLEMENTING — 014-06 implementation complete; verification pending
+- Current implementation unit: 014-06 — Platform Application Boundaries
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
-- Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
+- Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-- Blockers: None
-- Last completed action: 014-04 KMP target configuration implemented
-- Next valid action: Run 014-04 verification; do not start 014-05
-- Last updated: 2026-09-22
+- Blockers: Local verification pending
+- Last completed action: 014-06 Android/KMP platform boundary implementation with compileSdk 36
+- Next valid action: Run 014-06 verification; do not start 014-05
+- Last updated: 2026-09-23
 
 ## Base Architecture Register
 | ID | Unit | State | Durable Record | Implementation Authorization |
@@ -47,16 +47,15 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-04 VERIFICATION PENDING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-04 implemented; verification pending | feature/base-arch-014 | Configure Kotlin Multiplatform Targets — IN PROGRESS | Local verification pending | Verify 014-04; do not start 014-05 |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-06 VERIFICATION PENDING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-06 implemented; verification pending; 014-04 remains pending verification | feature/base-arch-014 | Set Up Platform App Modules — IN PROGRESS | Local verification pending | Verify 014-06, then re-verify 014-04 |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
 - Workflow: **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
-- **DONE:** Set Up Gradle Project Structure; Add Version Catalog.
-- **IN PROGRESS:** Configure Kotlin Multiplatform Targets.
+- **DONE:** Set Up Gradle Project Structure; Add Version Catalog; Set Up Gradle Build Conventions.
+- **IN PROGRESS:** Configure Kotlin Multiplatform Targets; Set Up Platform App Modules.
 - **TO DO:** remaining approved foundation and architecture implementation work.
 - **BACKLOG:** future/uncommitted work.
-- The old workflow-definition card is archived.
 - No automatic next-task transition is permitted.
 
 ## BASE-ARCH-014 Unit Register
@@ -65,22 +64,23 @@
 | 014-01 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; working tree clean | Project skeleton/module registration verified locally |
 | 014-02 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; Git clean and synchronized | Version Catalog verified and accepted by user on 2026-09-22 |
 | 014-03 | ACCEPTED | Build-logic build verified; accepted | Build Logic + Four Conventions |
-| 014-04 | IMPLEMENTED — VERIFICATION PENDING | Not run in this session | iOS ARM64, iOS Simulator ARM64, and JVM configured; Android compileSdk remains deferred to 014-06 |
-| 014-05 | PENDING | Not run | Compose Configuration |
-| 014-06 | PENDING | Not run | Platform Application Boundaries |
+| 014-04 | IMPLEMENTED — VERIFICATION PENDING | Blocked previously by missing Android compileSdk; now ready for re-verification after 014-06 | iOS ARM64, iOS Simulator ARM64, JVM; Android target/configuration now supplied by 014-06 |
+| 014-05 | PENDING | Not run | Compose Configuration; not started |
+| 014-06 | IMPLEMENTED — VERIFICATION PENDING | Remote implementation inspected; local verification not yet run | Android KMP target + Android application compileSdk 36; iOS/Desktop remain thin boundaries |
 | 014-07 | PENDING | Not run | Dependency and Module Wiring |
 | 014-08 | PENDING | Not run | Build/Test Baseline |
 | 014-09 | PENDING | Not run | Architecture Verification |
 
-## Verification Record — 014-01
-Local verification was completed from `D:\CarBroz\CB-Partner` using:
-`C:\Gradle\gradle-9.7.1\bin\gradle.bat projects`
-and:
-`C:\Gradle\gradle-9.7.1\bin\gradle.bat tasks`
+## Verification Record — 014-06
+Implementation completed on branch `feature/base-arch-014`.
 
-Both returned BUILD SUCCESSFUL. Approved modules and `:build-logic` were recognized, `iosApp` remained outside the Gradle graph, and the Git working tree was clean/synchronized.
+Changed source files:
+- `build-logic/src/main/kotlin/com/carbroz/cbpartner/buildlogic/KmpConventionPlugin.kt`
+- `build-logic/src/main/kotlin/com/carbroz/cbpartner/buildlogic/AndroidApplicationConventionPlugin.kt`
 
-014-01 was accepted by explicit user continuation authorization on 2026-09-22.
+Android `compileSdk = 36` is configured for both the shared Android-KMP target and the Android application convention.
+
+Local verification remains pending. No verification result is claimed until the user's local Gradle runner is executed.
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
