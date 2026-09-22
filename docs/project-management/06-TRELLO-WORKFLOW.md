@@ -57,7 +57,6 @@ Trello is execution tracking, not the technical source of truth. Each meaningful
 ## No Automatic Next Task
 After a task reaches its required freeze/completion state, stop. Do not automatically start the next Trello card.
 
-
 ## Frontend Trello Board Ownership
 
 The authoritative frontend execution board is:
@@ -90,3 +89,27 @@ The frontend board should use the following workflow lists:
 BACKLOG → DISCOVERY → READY → IN PROGRESS → AI REVIEW → DEV REVIEW → TESTING → DONE
 
 BLOCKED may be used whenever progress is prevented by a real blocker.
+
+## Trello Card Naming Convention
+
+Trello card titles are for human-readable execution tracking. They should be understandable without knowing the internal architecture document or work-item numbering system.
+
+Use this pattern:
+
+**<Direct Action>**
+
+Examples:
+- Set Up Gradle Project Structure
+- Add Version Catalog
+- Configure Build Conventions
+- Configure Kotlin Multiplatform Targets
+- Configure Compose Multiplatform
+- Set Up Platform App Modules
+- Wire Module Dependencies
+- Add Build and Test Baseline
+- Verify Architecture Boundaries
+
+Do not use internal identifiers such as "BASE-ARCH-014 — 014-01" as the primary Trello card title. Internal identifiers belong in the card description, linked documents, branch names, and project Tracker.
+
+The AI is responsible for choosing clear, direct, task-oriented Trello titles for new cards. The title should describe the outcome/action a person is expected to perform, not the internal documentation hierarchy.
+
