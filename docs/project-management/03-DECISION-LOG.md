@@ -88,4 +88,4 @@ BASE-ARCH-014 implementation planning is complete and the plan is frozen. The du
 
 No application source code has been implemented.
 
-TRELLO-001 is frozen. Trello synchronization for the active implementation workflow is currently unavailable because the connector timed out during board/list operations; no Trello state change is being falsely claimed.
+TRELLO-001 is frozen. The 014-01 Trello card is now marked complete, and the 014-03 execution card has been created and moved to IN PROGRESS on the authoritative frontend board.
