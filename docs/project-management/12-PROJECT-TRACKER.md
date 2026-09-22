@@ -11,15 +11,15 @@
 - Workflow state: PLAN_FROZEN → READY
 - Current implementation unit: 014-01 — Gradle Project Skeleton
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
-- Frozen implementation plan: `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
-- Implementation status: `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md`
-- Blockers: No architecture blocker; Trello execution card was not found
-- Last completed action: BASE-ARCH-014 implementation plan explicitly approved and frozen on 2026-09-22
-- Next valid action: Complete READY gate, establish/verify authorized feature branch and required execution tracking, then implement only 014-01
+- Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
+- Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
+- Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
+- Blockers: No architecture blocker
+- Last completed action: TRELLO-001 operating model approved/frozen on 2026-09-22 and board synchronization initiated
+- Next valid action: Complete READY gate, verify authorized feature branch and execution tracking, then implement only 014-01
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
-
 | ID | Unit | State | Durable Record | Implementation Authorization |
 |---|---|---|---|---|
 | BASE-ARCH-001 | Project and Gradle Module Structure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
@@ -37,16 +37,26 @@
 | BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Plan frozen; implementation authorized |
 
-## Work Item Register
+## Process Decision Register
+| ID | Decision | State | Durable Record | Owner Approval |
+|---|---|---|---|---|
+| TRELLO-001 | Frontend Trello Operating Model | DECISION_FROZEN | docs/project-management/06-TRELLO-WORKFLOW.md | 2026-09-22 |
 
+## Work Item Register
 | ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Trello | Blocker | Next Action |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | — | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | — | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | PLAN_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | READY; no source implementation started | Not established | — | — | No matching card found | Trello execution tracking if required | Complete READY gate, then 014-01 |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | PLAN_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | READY; no source implementation started | feature/base-arch-014 | — | — | Set Up Gradle Project Structure | None | Complete READY gate, then 014-01 |
+
+## Trello State
+- Authoritative board: **CB-Partner — Frontend**
+- Workflow: **BACKLOG → READY → IN PROGRESS → DONE**
+- TRELLO-001 card: **Define Frontend Trello Workflow** — being finalized as DONE after board/docs synchronization.
+- BASE-ARCH-014 014-01 card: **Set Up Gradle Project Structure** — READY.
+- No automatic next-task transition is permitted.
 
 ## BASE-ARCH-014 Unit Register
-
 | Unit | State | Verification | Notes |
 |---|---|---|---|
 | 014-01 | READY | Not run | Gradle Project Skeleton |
@@ -75,9 +85,9 @@ After a meaningful freeze or documentation checkpoint, update required records, 
 
 ## Documentation Authority
 The authoritative Base Architecture record is:
-`docs/architecture/BASE-ARCHITECTURE.md`
+docs/architecture/BASE-ARCHITECTURE.md
 
 The frozen BASE-ARCH-014 implementation contract is:
-`docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
+docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 
 Historical chat is not an implementation source.
