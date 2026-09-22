@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING — 014-04 BLOCKED  
+**State:** IMPLEMENTING — 014-04 READY  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -12,17 +12,17 @@ The user accepted 014-01 and explicitly authorized continuation. Implementation 
 
 014-02 was verified locally and explicitly accepted by the project owner on 2026-09-22. Only the central version/plugin catalog was added for 014-02. No KMP targets, Compose configuration, convention implementation, application source, or runtime dependencies have been added.
 
-Implementation of **014-03 — Build Logic + Four Conventions** has started and the approved build-logic foundation/convention applications are implemented. Verification is still pending. The Trello card is IN PROGRESS.
+Implementation of **014-03 — Build Logic + Four Conventions** was completed and accepted.
 
 ## Implementation units
 | Unit | Description | State |
 |---|---|---|
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
-| 014-03 | Build Logic + Four Conventions | IMPLEMENTED — VERIFICATION PENDING |
-| 014-04 | KMP Target Configuration | BLOCKED — PLAN CONFLICT |
+| 014-03 | Build Logic + Four Conventions | ACCEPTED |
+| 014-04 | KMP Target Configuration | READY TO IMPLEMENT |
 | 014-05 | Compose Configuration | PENDING |
-| 014-06 | Platform Application Boundaries | PENDING |
+| 014-06 | Platform Application Boundaries | PENDING — includes required Android compileSdk |
 | 014-07 | Dependency and Module Wiring | PENDING |
 | 014-08 | Build/Test Baseline | PENDING |
 | 014-09 | Architecture Verification | PENDING |
@@ -62,11 +62,7 @@ The selected Kotlin/AGP combination is within Kotlin 2.4.20's documented fully s
 
 ## 014-04 implementation
 
-Implementation preflight identified a frozen-plan staging conflict before source changes. The approved 014-04 target matrix includes Android, but the current Android KMP plugin requires `compileSdk` to be configured on the Android target. The user explicitly authorized 014-04 while explicitly prohibiting `compileSdk` and platform application configuration until 014-06. Therefore no code was changed. This requires a decision before implementation can safely continue.
-
-Research basis: current Kotlin/Android documentation requires `compileSdk` for the Android KMP target. See official Android KMP plugin documentation and Kotlin Multiplatform compatibility guidance.
-
-**Required resolution:** either authorize the minimum Android `compileSdk` configuration as part of 014-04, or change the frozen implementation sequencing so Android target configuration is completed in 014-06. No source change will be made until resolved.
+The 014-04/014-06 staging conflict was resolved by explicit project-owner instruction on 2026-09-22: keep the boundary and move only the required Android `compileSdk` configuration into 014-06. No other BASE-ARCH-014 decision or scope is changed. 014-04 is now ready to implement without configuring `compileSdk` or other platform application details.
 
 ## 014-03 implementation
 
@@ -78,7 +74,7 @@ Implemented the approved four convention types in the included `build-logic` bui
 
 The convention plugins intentionally remain minimal. Target configuration, Compose source-set configuration, and platform application details remain in 014-04/014-05/014-06 as frozen by the implementation plan.
 
-Verification has not yet been run in the user's local environment, so 014-03 is not marked verified or accepted.
+014-03 was verified through the build-logic build and accepted before 014-04.
 
 ## 014-02 verification and acceptance
 Verification completed locally:
@@ -116,4 +112,4 @@ Branch: `feature/base-arch-014`
 ## Gate
 014-02 is ACCEPTED.
 
-014-03 is accepted. 014-04 is blocked before implementation because the frozen staging boundary conflicts with the Android KMP target's required compileSdk configuration.
+014-03 is ACCEPTED. 014-04 is READY to implement under the resolved staging boundary. 014-06 will own the required Android `compileSdk` configuration.
