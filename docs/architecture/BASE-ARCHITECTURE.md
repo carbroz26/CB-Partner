@@ -1,10 +1,10 @@
 # CB-Partner — Base Architecture Decision Record
 
-**Status:** DOCUMENTED — DECISION-FROZEN RECORD THROUGH BASE-ARCH-012  
+**Status:** DOCUMENTED — DECISION-FROZEN RECORD THROUGH BASE-ARCH-014  
 **Scope:** Frontend repository only  
-**Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-013. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
+**Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-014. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
 
-> **Important:** BASE-ARCH-001–012 are decision-frozen. BASE-ARCH-001–003 are frozen foundation decisions; BASE-ARCH-004–012 build on those foundation decisions. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
+> **Important:** BASE-ARCH-001–014 are decision-frozen. BASE-ARCH-001–003 are frozen foundation decisions; BASE-ARCH-004–012 build on those foundation decisions. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
 
 ---
 
@@ -732,7 +732,128 @@ This decision freezes ownership only. It does NOT authorize application source i
 Implementation requires the separately frozen implementation plan defined by the project operating process.
 
 ---
-# 14. Cross-Architecture Rules Frozen Through 013
+---
+
+# BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
+
+**State:** DECISION_FROZEN  
+**Freeze state:** Frozen as the first Phase 1 Technical Foundation decision.
+
+## Decision
+
+The project will establish the minimum reproducible Gradle/Kotlin Multiplatform/Compose Multiplatform foundation required to operationalize the already-frozen CB-Partner architecture.
+
+The foundation uses an included build-logic build with a minimal, type-oriented convention-plugin strategy. Build logic centralizes repeated build mechanics; it does not become a second application-architecture framework.
+
+## Frozen foundation
+
+### 1. Included build
+
+build-logic/ is an included Gradle build used for convention plugins.
+
+### 2. Convention strategy
+
+Use the smallest practical set of type-oriented conventions based on genuine project/build responsibilities.
+
+Initial convention categories:
+- KMP shared-library convention.
+- Compose Multiplatform convention for modules that actually use Compose.
+- Android application convention for androidApp.
+- Desktop application convention for desktopApp.
+
+No convention is created solely because a library is used. Library-specific conventions for Ktor, Koin, Kermit, serialization, coroutines, Navigation, Store/MVI, bootstrap, SDUI, or other technologies are not part of the initial foundation unless a later concrete repeated build concern justifies one.
+
+### 3. Module-to-convention direction
+
+The initial intended mapping is:
+
+| Module | KMP shared convention | Compose convention | Application convention |
+|---|---:|---:|---|
+| :core | Yes | No | No |
+| :domain | Yes | No | No |
+| :data | Yes | No | No |
+| :navigation | Yes | Only if actually required | No |
+| :feature:splash | Yes | Yes | No |
+| :feature:dynamic | Yes | Yes | No |
+| :androidApp | No | As required | Android |
+| :iosApp | Platform entry boundary | As required | Dedicated iOS configuration |
+| :desktopApp | No | As required | Desktop |
+
+The exact implementation details and plugin IDs remain implementation-planning work.
+
+### 4. Dependency/version management
+
+Use gradle/libs.versions.toml as the central version catalog for dependency and plugin declarations.
+
+The version catalog owns dependency/plugin coordinates and version declarations. Convention plugins own build configuration. These responsibilities must not be conflated.
+
+The version catalog does not by itself constitute a complete dependency-resolution enforcement strategy; additional enforcement is deferred unless a concrete need requires it.
+
+### 5. KMP/platform configuration
+
+Use the current Kotlin Multiplatform/Android Gradle Plugin model rather than legacy KMP/Android configuration patterns.
+
+Shared modules may target Android, iOS and Desktop/JVM where their dependency graph requires those targets. A module is not required to target every platform merely for symmetry.
+
+Prefer the standard/default KMP source-set hierarchy. Custom intermediate source sets require a concrete shared-code/dependency justification.
+
+### 6. Compose boundary
+
+Compose configuration is a capability of modules that actually contain/use Compose UI.
+
+Core, Domain and Data remain free of Compose dependencies unless a later explicitly justified requirement changes their responsibilities.
+
+Do not create separate Compose conventions for individual features; one shared Compose convention is sufficient for the initial foundation.
+
+### 7. Testing/build baseline
+
+The foundation will provide only the common test/build configuration that is genuinely repeated across modules.
+
+The build baseline must support reliable compilation and applicable test execution, but it does not define the complete future integration/platform testing strategy.
+
+### 8. Complexity-control rules
+
+The initial foundation must NOT introduce:
+- a standalone build architecture module;
+- common, shared, platform, store, mvi, presentation-core, or di modules;
+- a large centralized build framework;
+- one convention plugin per library/technology;
+- speculative custom KMP source sets;
+- speculative platform abstractions.
+
+Existing BASE-ARCH-001 through BASE-ARCH-013 remain unchanged.
+
+## Explicitly deferred
+
+BASE-ARCH-014 does not decide:
+- exact Gradle/Kotlin/Compose/library/plugin versions;
+- exact convention plugin IDs/names and implementation classes;
+- exact build-logic internal source layout;
+- exact Android application configuration;
+- exact iOS/Xcode integration details;
+- exact Desktop packaging/distribution configuration;
+- exact Store API or StateFlow exposure;
+- exact Ktor/network implementation;
+- exact Koin module organization;
+- exact bootstrap API/output/DTO;
+- fake JSON structure;
+- complete testing/integration strategy;
+- SDUI internals or dynamic JSON;
+- business-specific architecture.
+
+These must be resolved only in the appropriate later planning/research units.
+
+## Implementation consequence
+
+BASE-ARCH-014 freezes the build/project foundation direction only. It does not authorize application source implementation.
+
+Before source implementation begins, the project operating process still requires a separately created and explicitly frozen implementation plan containing exact modules, plugin IDs, versions, convention implementation, dependency declarations, build tasks, verification commands, acceptance criteria, and prohibited changes.
+
+## Scope boundary
+
+The next implementation objective may use a minimal fake bootstrap response as an architecture-validation vertical slice after the foundation is established, but fake JSON is not part of BASE-ARCH-014 and must not become an architectural contract.
+
+# 15. Cross-Architecture Rules Frozen Through 014
 
 The following rules must be preserved by later architecture and implementation work. BASE-ARCH-001–003 are part of this frozen foundation:
 
@@ -793,7 +914,7 @@ DI → Core, Domain, Data, Feature, Navigation
 
 ---
 
-# 15. Explicit Base-Architecture Non-Goals
+# 16. Explicit Base-Architecture Non-Goals
 
 The following are intentionally NOT designed by BASE-ARCH-001–012:
 
@@ -816,7 +937,7 @@ The following are intentionally NOT designed by BASE-ARCH-001–012:
 
 ---
 
-# 16. Deferred-Decision Register
+# 17. Deferred-Decision Register
 
 The following items must NOT be silently invented during implementation:
 
@@ -838,7 +959,7 @@ When one becomes necessary, create the appropriate research/decision/plan unit b
 
 ---
 
-# 17. Implementation Contract
+# 18. Implementation Contract
 
 When Base Architecture is eventually complete, the implementation plan must translate this record into:
 
@@ -861,7 +982,7 @@ Until that implementation plan is explicitly frozen, **BASE-ARCH documentation i
 
 ---
 
-# 18. Current Status
+# 19. Current Status
 
 ```text
 BASE-ARCH-001 → DECISION_FROZEN
@@ -877,6 +998,7 @@ BASE-ARCH-010 → DECISION_FROZEN
 BASE-ARCH-011 → DECISION_FROZEN
 BASE-ARCH-012 → DECISION_FROZEN
 BASE-ARCH-013 → DECISION_FROZEN
+BASE-ARCH-014 → DECISION_FROZEN
 ```
 
 **Next architecture unit:** Determine the next Base Architecture unit only after the project owner explicitly authorizes it.
