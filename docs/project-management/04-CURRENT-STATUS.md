@@ -16,17 +16,17 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTING — 014-06 implementation complete; verification pending.
+VERIFIED — 014-01 through 014-06 verified.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-06 — Platform Application Boundaries — IMPLEMENTED; verification pending.
+BASE-ARCH-014 — verification/status checkpoint complete.
 
-014-04 remains IMPLEMENTED; verification pending.
+014-04, 014-05, and 014-06 are verified and accepted.
 
-014-05 has not started.
+014-07, 014-08, and 014-09 remain pending.
 
 ## What has been implemented
 
@@ -65,9 +65,9 @@ BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 014-03 verification is complete and accepted.
 
-014-04 verification remains pending and is now unblocked by the 014-06 Android configuration.
+014-04, 014-05, and 014-06 local verification is complete.
 
-014-06 implementation is complete. Local verification has not yet been run after the implementation.
+`gradle projects` and targeted JVM compilation both completed successfully. The Windows iOS simulator disabled-target warning is expected and does not block this verification.
 
 No claim is made that the Android SDK/build is locally available until the user's Gradle runner verifies it.
 
@@ -101,12 +101,10 @@ Current Trello state:
 ## Blocker
 No architecture blocker.
 
-Current execution blocker: local verification has not yet been run after 014-06 implementation.
+No current execution blocker.
 
 ## Next Valid Action
-Run the 014-06 local verification from the user's repository.
-
-After 014-06 verification, re-run the 014-04 verification gate. Do not start 014-05 until the applicable gate/review process authorizes it.
+Review this verification checkpoint and explicitly authorize the next BASE-ARCH-014 implementation unit. Do not automatically begin 014-07.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
