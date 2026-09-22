@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING — 014-04 READY  
+**State:** IMPLEMENTING — 014-04 IMPLEMENTED — VERIFICATION PENDING  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -20,7 +20,7 @@ Implementation of **014-03 — Build Logic + Four Conventions** was completed an
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
 | 014-03 | Build Logic + Four Conventions | ACCEPTED |
-| 014-04 | KMP Target Configuration | READY TO IMPLEMENT |
+| 014-04 | KMP Target Configuration | IMPLEMENTED — VERIFICATION PENDING |
 | 014-05 | Compose Configuration | PENDING |
 | 014-06 | Platform Application Boundaries | PENDING — includes required Android compileSdk |
 | 014-07 | Dependency and Module Wiring | PENDING |
@@ -62,7 +62,19 @@ The selected Kotlin/AGP combination is within Kotlin 2.4.20's documented fully s
 
 ## 014-04 implementation
 
-The 014-04/014-06 staging conflict was resolved by explicit project-owner instruction on 2026-09-22: keep the boundary and move only the required Android `compileSdk` configuration into 014-06. No other BASE-ARCH-014 decision or scope is changed. 014-04 is now ready to implement without configuring `compileSdk` or other platform application details.
+The 014-04/014-06 staging conflict was resolved by explicit project-owner instruction on 2026-09-22: keep the boundary and move only the required Android `compileSdk` configuration into 014-06. No other BASE-ARCH-014 decision or scope is changed.
+
+### 014-04 implementation record
+Implemented only the approved non-platform-specific KMP target configuration in `build-logic/src/main/kotlin/com/carbroz/cbpartner/buildlogic/KmpConventionPlugin.kt`.
+
+Configured targets:
+- `iosArm64`
+- `iosSimulatorArm64`
+- `jvm`
+
+The Android target remains intentionally deferred to 014-06 because its required `compileSdk` configuration belongs to that unit. The default KMP source-set hierarchy is used; no custom source sets were added.
+
+Verification has not been run in the user's local Gradle environment from this session. GitHub Actions has no workflow run associated with the implementation commit, so 014-04 is not marked VERIFIED or ACCEPTED.
 
 ## 014-03 implementation
 
@@ -107,9 +119,10 @@ Branch: `feature/base-arch-014`
 
 ## Trello
 - **Set Up Gradle Project Structure** — 014-01, marked complete.
-- **Set Up Gradle Build Conventions** — 014-03, IN PROGRESS.
+- **Set Up Gradle Build Conventions** — 014-03, completed/accepted.
+- **Configure Kotlin Multiplatform Targets** — 014-04, IN PROGRESS.
 
 ## Gate
 014-02 is ACCEPTED.
 
-014-03 is ACCEPTED. 014-04 is READY to implement under the resolved staging boundary. 014-06 will own the required Android `compileSdk` configuration.
+014-03 is ACCEPTED. 014-04 is IMPLEMENTED with verification pending. 014-06 will own the required Android `compileSdk` configuration.
