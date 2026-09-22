@@ -1,6 +1,6 @@
 # CB-Partner — Decision Log
 
-**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-014; implementation plan frozen for BASE-ARCH-014; TRELLO-001 frozen.
+**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-014; implementation plan frozen for BASE-ARCH-014; TRELLO-002 frozen.
 
 ## Purpose
 Durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
@@ -30,25 +30,33 @@ A decision is not accepted because AI recommends it. The project owner explicitl
 ## Reopening
 Use concrete evidence: changed requirements, incompatibility, security issue, unacceptable performance, maintenance problem, or incorrect assumption. Record evidence and impact before replacing a decision.
 
-## TRELLO-001 Freeze Record
-**Decision:** Frontend Trello Operating Model  
+## TRELLO-001 Freeze Record — Superseded
+**Decision:** Earlier Frontend Trello Operating Model  
+**State:** SUPERSEDED  
+**Superseded by:** TRELLO-002
+
+The earlier model was replaced because the project owner clarified that Trello should remain a simple human-readable work board rather than a process/document tracker. The historical decision is retained here; the current model is documented in `docs/project-management/06-TRELLO-WORKFLOW.md`.
+
+## TRELLO-002 Freeze Record
+**Decision:** Simple Frontend Work Board  
 **State:** DECISION_FROZEN  
 **Owner approval:** Explicitly approved by the project owner on 2026-09-22.  
 **Durable record:** docs/project-management/06-TRELLO-WORKFLOW.md
 
 ### Frozen model
 - One authoritative frontend board: **CB-Partner — Frontend**.
-- Workflow lists: **BACKLOG → READY → IN PROGRESS → DONE**.
-- DISCOVERY, AI REVIEW, DEV REVIEW, TESTING, and BLOCKED are not permanent lists.
-- Blocked work uses a Blocked label and explanation while remaining in its actual workflow stage.
-- Trello tracks execution state; GitHub tracks code/branches/PRs; project docs track decisions/plans; the Project Tracker tracks durable project state.
-- Cards use concise human-readable action/outcome names.
-- Card descriptions remain lightweight: What, Done when, References, with additional context only when useful.
-- Checklists are for concrete execution steps, not architecture records.
-- Labels describe meaningful metadata, not workflow states.
-- READY requires sufficient scope, decisions, plan/dependencies, acceptance criteria, and authorization where required.
-- DONE requires acceptance, required checks/review, documentation/status updates, and Git/process completion.
-- AI maintains execution tracking; the project owner retains decision, scope, freeze, and implementation authority.
+- Lists: **BACKLOG → TO DO → READY → IN PROGRESS → DONE**.
+- BACKLOG means possible/future work not yet committed.
+- TO DO is the complete list of approved work that has been decided to be done.
+- READY means approved and prepared work.
+- IN PROGRESS means work actually being performed.
+- DONE means work actually completed and verified.
+- Cards represent actual human-readable project work, not architecture IDs or documents.
+- Card structure is simple: title, short description, and concrete checklist/subtasks where useful.
+- Trello does not contain architecture history, AI workflow, Git details, implementation plans, or document references as required card content.
+- Project documentation remains responsible for architecture, decisions, technical constraints, implementation contracts, and AI/project process.
+- GitHub remains responsible for source code and Git workflow.
+- The AI maintains Trello execution state but does not invent project scope or architecture decisions.
 - No automatic start of the next task after DONE.
 
 This process decision does not change any frozen technical architecture decision.
@@ -88,4 +96,4 @@ BASE-ARCH-014 implementation planning is complete and the plan is frozen. The du
 
 No application source code has been implemented.
 
-TRELLO-001 is frozen. The 014-01 Trello card is now marked complete, and the 014-03 execution card has been created and moved to IN PROGRESS on the authoritative frontend board.
+TRELLO-001 is frozen. The Trello board has been migrated to the TRELLO-002 simple work model. 014-01 and 014-02 are represented as completed work; 014-03 is prepared in READY. Remaining approved work is represented as human-readable TO DO cards.
