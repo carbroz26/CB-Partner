@@ -8,8 +8,12 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 class KmpConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.pluginManager.apply("org.jetbrains.kotlin.multiplatform")
+        target.pluginManager.apply("com.android.kotlin.multiplatform.library")
 
         target.extensions.configure<KotlinMultiplatformExtension> {
+            android {
+                compileSdk = 36
+            }
             iosArm64()
             iosSimulatorArm64()
             jvm()
