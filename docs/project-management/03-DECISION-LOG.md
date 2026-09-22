@@ -1,53 +1,33 @@
 # CB-Partner — Decision Log
 
-**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-014
+**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-014; implementation plan frozen for BASE-ARCH-014.
 
 ## Purpose
-This is the durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
+Durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
 
 ## Decision Classes
-- Architecture: module boundaries, layers, Store contract, state flow.
-- Technology: libraries, frameworks, build tooling.
-- Product/technical contract: behavior affecting implementation.
-- API integration: authentication, mapping, errors, client behavior.
-- Quality/security: testing, privacy, reliability, release.
-- Process: AI and development governance.
+- Architecture
+- Technology
+- Product/technical contract
+- API integration
+- Quality/security
+- Process
 
 ## Status
-PROPOSED → ACCEPTED or REJECTED.
+PROPOSED → ACCEPTED or REJECTED.  
 ACCEPTED → SUPERSEDED only through the reopening process.
 
 ## Architecture Decision Record
-
-The detailed Base Architecture research/freeze record is maintained in:
-
+Detailed Base Architecture research/freeze record:
 `docs/architecture/BASE-ARCHITECTURE.md`
 
-That document is the durable implementation input for BASE-ARCH-001 through BASE-ARCH-012 and records research state, accepted/frozen decisions, rejected alternatives, deferred decisions, scope exclusions, and implementation consequences.
-
 ## Base Architecture Status
-
-- BASE-ARCH-001 → DECISION_FROZEN
-- BASE-ARCH-002 → DECISION_FROZEN
-- BASE-ARCH-003 → DECISION_FROZEN
-- BASE-ARCH-004 → DECISION_FROZEN
-- BASE-ARCH-005 → DECISION_FROZEN
-- BASE-ARCH-006 → DECISION_FROZEN
-- BASE-ARCH-007 → DECISION_FROZEN
-- BASE-ARCH-008 → DECISION_FROZEN
-- BASE-ARCH-009 → DECISION_FROZEN
-- BASE-ARCH-010 → DECISION_FROZEN
-- BASE-ARCH-011 → DECISION_FROZEN
-- BASE-ARCH-012 → DECISION_FROZEN
-- BASE-ARCH-013 → DECISION_FROZEN
-- BASE-ARCH-014 → DECISION_FROZEN
+BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 
 ## Acceptance
-
 A decision is not accepted because AI recommends it. The project owner explicitly accepts it, then it becomes frozen.
 
 ## Reopening
-
 Use concrete evidence: changed requirements, incompatibility, security issue, unacceptable performance, maintenance problem, or incorrect assumption. Record evidence and impact before replacing a decision.
 
 ## BASE-ARCH-014 Freeze Record
@@ -55,15 +35,33 @@ Use concrete evidence: changed requirements, incompatibility, security issue, un
 **Decision:** Minimum Gradle/KMP/Compose/Build-Logic Foundation  
 **State:** DECISION_FROZEN  
 **Owner approval:** Explicitly approved by the project owner on 2026-09-22.  
-**Implementation authorization:** Not granted by this architecture freeze.
+**Implementation plan:** `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`  
+**Implementation plan state:** PLAN_FROZEN  
+**Implementation authorization:** Granted through the approved unit-by-unit implementation workflow.
 
-**Scope:** Operationalize the frozen module architecture with the minimum reproducible build foundation.  
-**Core principle:** Centralize repeated build mechanics; do not turn build-logic into a second application-architecture framework.
+### Frozen foundation direction
+- Included `build-logic`.
+- Minimal type-oriented convention strategy.
+- Central version catalog.
+- Current KMP/AGP configuration.
+- Default KMP source-set hierarchy unless concrete justification exists.
+- Compose only where consumed.
+- Minimal repeated testing/build baseline.
+- Initial targets: Android, iosArm64, iosSimulatorArm64, JVM.
+- Initial conventions: KMP shared-library, Compose Multiplatform, Android application, Desktop application.
+- Foundation-required dependencies only; runtime architecture libraries are introduced when their real implementation unit has a consumer.
+- No fake bootstrap or fake JSON.
+- Later startup vertical slice uses the actual backend API and exact response supplied by the project owner.
+
+### Implementation gate
+The plan is frozen, but implementation remains unit-by-unit:
+014-01 Gradle Project Skeleton → 014-02 Version Catalog → 014-03 Build Logic → 014-04 KMP Targets → 014-05 Compose → 014-06 Platform Boundaries → 014-07 Dependency Wiring → 014-08 Build/Test Baseline → 014-09 Architecture Verification.
+
+No unit may silently change a frozen architecture decision.
 
 ## Current Documentation Checkpoint
+BASE-ARCH-014 implementation planning is complete and the plan is frozen. The durable implementation plan and living status document have been created.
 
-BASE-ARCH-013 is formally accepted and decision-frozen. Option A (direct Domain-facing ApplicationBootstrap contract) was selected by the project owner. The initial bootstrap does not require a separate use-case/repository abstraction chain.
+No application source code has been implemented.
 
-BASE-ARCH-014 is formally accepted and decision-frozen. The project owner approved the minimum Gradle/KMP/Compose/build-logic foundation: an included build-logic build, minimal type-oriented conventions, central version catalog, current KMP/AGP configuration, default source-set hierarchy unless justified, Compose only where consumed, and a minimal repeated testing/build baseline. Exact versions, plugin IDs, implementation details and other explicitly deferred items remain open for implementation planning.
-
-**Repository source implementation remains unauthorized at this checkpoint.**
+No Trello card matching BASE-ARCH-014 was found during freeze preparation, so no card identifier is recorded or invented. Required execution tracking must be resolved before implementation if the workflow requires a card.
