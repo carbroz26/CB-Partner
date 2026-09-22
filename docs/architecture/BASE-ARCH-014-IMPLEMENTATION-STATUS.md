@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING  
+**State:** IMPLEMENTING — 014-04 BLOCKED  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -20,7 +20,7 @@ Implementation of **014-03 — Build Logic + Four Conventions** has started and 
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
 | 014-03 | Build Logic + Four Conventions | IMPLEMENTED — VERIFICATION PENDING |
-| 014-04 | KMP Target Configuration | PENDING |
+| 014-04 | KMP Target Configuration | BLOCKED — PLAN CONFLICT |
 | 014-05 | Compose Configuration | PENDING |
 | 014-06 | Platform Application Boundaries | PENDING |
 | 014-07 | Dependency and Module Wiring | PENDING |
@@ -59,6 +59,14 @@ Plugin aliases:
 No runtime library dependencies were added. No convention plugins were implemented.
 
 The selected Kotlin/AGP combination is within Kotlin 2.4.20's documented fully supported range; Gradle compatibility will be finalized with the wrapper/build setup and verified through the local Gradle runner. Exact current compatibility was checked against official Kotlin and Android documentation before selection.
+
+## 014-04 implementation
+
+Implementation preflight identified a frozen-plan staging conflict before source changes. The approved 014-04 target matrix includes Android, but the current Android KMP plugin requires `compileSdk` to be configured on the Android target. The user explicitly authorized 014-04 while explicitly prohibiting `compileSdk` and platform application configuration until 014-06. Therefore no code was changed. This requires a decision before implementation can safely continue.
+
+Research basis: current Kotlin/Android documentation requires `compileSdk` for the Android KMP target. See official Android KMP plugin documentation and Kotlin Multiplatform compatibility guidance.
+
+**Required resolution:** either authorize the minimum Android `compileSdk` configuration as part of 014-04, or change the frozen implementation sequencing so Android target configuration is completed in 014-06. No source change will be made until resolved.
 
 ## 014-03 implementation
 
@@ -108,4 +116,4 @@ Branch: `feature/base-arch-014`
 ## Gate
 014-02 is ACCEPTED.
 
-014-03 is IMPLEMENTED with verification pending under the Trello card **Set Up Gradle Build Conventions**.
+014-03 is accepted. 014-04 is blocked before implementation because the frozen staging boundary conflicts with the Android KMP target's required compileSdk configuration.
