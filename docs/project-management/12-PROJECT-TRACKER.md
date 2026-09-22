@@ -15,7 +15,7 @@
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
 - Blockers: No architecture blocker
-- Last completed action: TRELLO-001 operating model approved/frozen on 2026-09-22 and board synchronization initiated
+- Last completed action: TRELLO-001 operating model approved/frozen on 2026-09-22; Trello board and durable docs synchronized
 - Next valid action: Complete READY gate, verify authorized feature branch and execution tracking, then implement only 014-01
 - Last updated: 2026-09-22
 
@@ -52,7 +52,7 @@
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
 - Workflow: **BACKLOG → READY → IN PROGRESS → DONE**
-- TRELLO-001 card: **Define Frontend Trello Workflow** — being finalized as DONE after board/docs synchronization.
+- TRELLO-001 card: **Define Frontend Trello Workflow** — DONE.
 - BASE-ARCH-014 014-01 card: **Set Up Gradle Project Structure** — READY.
 - No automatic next-task transition is permitted.
 
