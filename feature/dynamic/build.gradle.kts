@@ -1,1 +1,4 @@
-// KMP + Compose configuration is introduced in 014-04/014-05.
+plugins {
+    id("cbpartner.kmp")
+    id("cbpartner.compose")
+}
