@@ -13,16 +13,16 @@ Implement the frozen BASE-ARCH-014 minimum Gradle/KMP/Compose/build-logic founda
 BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 
 ## Process State
-TRELLO-001 — Frontend Trello Operating Model → DECISION_FROZEN.
+TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTING — 014-03 preflight pending.
+READY — 014-03 prepared for implementation.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-03 — Build Logic + Four Conventions — IMPLEMENTING.
+014-03 — Build Logic + Four Conventions — READY.
 
 014-01 was verified and accepted. 014-02 was verified and explicitly accepted by the project owner on 2026-09-22.
 
@@ -44,7 +44,7 @@ No KMP target configuration, Compose configuration, convention implementation, r
 
 014-02 verification completed locally and was accepted by the project owner.
 
-014-03 implementation has now started after the required Trello execution card was created in READY and moved to IN PROGRESS.
+014-03 implementation has not started. Its Trello card is prepared in READY under the finalized simple work-board model.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -64,16 +64,19 @@ The later startup vertical slice will use the actual backend API and exact respo
 Authoritative board: **CB-Partner — Frontend**.
 
 Workflow:
-**BACKLOG → READY → IN PROGRESS → DONE**
+**BACKLOG → TO DO → READY → IN PROGRESS → DONE**
 
-Current card:
-- **Set Up Gradle Project Structure** — 014-01 accepted; Trello synchronization is pending connector recovery.
+Current Trello state:
+- **DONE:** Set Up Gradle Project Structure; Add Version Catalog.
+- **READY:** Set Up Gradle Build Conventions.
+- **TO DO:** remaining approved foundation and architecture implementation work.
+- **BACKLOG:** future/uncommitted work.
 
 ## Blocker
 No architecture blocker.
 
 ## Next Valid Action
-Implement 014-03 — Build Logic + Four Conventions — one unit only, within the frozen plan and active Trello card.
+Implement 014-03 — Build Logic + Four Conventions — one unit only, within the frozen plan and READY Trello card, when execution is explicitly continued.
 
 The 014-02 acceptance gate is complete.
 
