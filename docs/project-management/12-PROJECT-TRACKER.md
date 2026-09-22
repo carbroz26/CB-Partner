@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-04 ready
+- Workflow state: IMPLEMENTING — 014-04 implementation complete; verification pending
 - Current implementation unit: 014-04 — KMP Target Configuration
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
 - Blockers: None
-- Last completed action: 014-04/014-06 staging conflict resolved; 014-04 is ready to implement
-- Next valid action: Implement 014-04 only; do not start 014-05
+- Last completed action: 014-04 KMP target configuration implemented
+- Next valid action: Run 014-04 verification; do not start 014-05
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-04 READY | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-03 accepted; 014-04 ready | feature/base-arch-014 | Configure Kotlin Multiplatform Targets — IN PROGRESS | None | Implement 014-04; do not start 014-05 |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-04 VERIFICATION PENDING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-04 implemented; verification pending | feature/base-arch-014 | Configure Kotlin Multiplatform Targets — IN PROGRESS | Local verification pending | Verify 014-04; do not start 014-05 |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -65,7 +65,7 @@
 | 014-01 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; working tree clean | Project skeleton/module registration verified locally |
 | 014-02 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; Git clean and synchronized | Version Catalog verified and accepted by user on 2026-09-22 |
 | 014-03 | ACCEPTED | Build-logic build verified; accepted | Build Logic + Four Conventions |
-| 014-04 | READY | Not run | Android compileSdk is explicitly deferred to 014-06; no other staging change |
+| 014-04 | IMPLEMENTED — VERIFICATION PENDING | Not run in this session | iOS ARM64, iOS Simulator ARM64, and JVM configured; Android compileSdk remains deferred to 014-06 |
 | 014-05 | PENDING | Not run | Compose Configuration |
 | 014-06 | PENDING | Not run | Platform Application Boundaries |
 | 014-07 | PENDING | Not run | Dependency and Module Wiring |
