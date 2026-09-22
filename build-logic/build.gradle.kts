@@ -1,6 +1,6 @@
 plugins {
     `java-gradle-plugin`
-    kotlin("jvm") version "2.4.20"
+    alias(libs.plugins.kotlinJvm)
 }
 
 repositories {
@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:9.3.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.20")
-    implementation("org.jetbrains.compose:compose-gradle-plugin:1.12.0")
+    implementation("com.android.tools.build:gradle:${libs.versions.agp.get()}")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${libs.versions.kotlin.get()}")
+    implementation("org.jetbrains.compose:compose-gradle-plugin:${libs.versions.composeMultiplatform.get()}")
 }
 
 gradlePlugin {
