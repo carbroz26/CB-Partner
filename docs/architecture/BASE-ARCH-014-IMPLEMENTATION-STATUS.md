@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING — 014-04 IMPLEMENTED — VERIFICATION PENDING  
+**State:** IMPLEMENTING — 014-06 IMPLEMENTED — VERIFICATION PENDING  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -8,11 +8,15 @@
 ## Current state
 014-01 — Gradle Project Skeleton is **VERIFIED and accepted**.
 
-The user accepted 014-01 and explicitly authorized continuation. Implementation has now advanced to **014-02 — Version Catalog**.
+014-02 — Version Catalog is **VERIFIED and accepted**.
 
-014-02 was verified locally and explicitly accepted by the project owner on 2026-09-22. Only the central version/plugin catalog was added for 014-02. No KMP targets, Compose configuration, convention implementation, application source, or runtime dependencies have been added.
+014-03 — Build Logic + Four Conventions is **VERIFIED and accepted**.
 
-Implementation of **014-03 — Build Logic + Four Conventions** was completed and accepted.
+014-04 — KMP Target Configuration is **IMPLEMENTED — VERIFICATION PENDING**.
+
+014-06 — Platform Application Boundaries is now **IMPLEMENTED — VERIFICATION PENDING**. The owner explicitly approved Android `compileSdk = 36` for this unit.
+
+014-05 remains **NOT STARTED**.
 
 ## Implementation units
 | Unit | Description | State |
@@ -22,84 +26,54 @@ Implementation of **014-03 — Build Logic + Four Conventions** was completed an
 | 014-03 | Build Logic + Four Conventions | ACCEPTED |
 | 014-04 | KMP Target Configuration | IMPLEMENTED — VERIFICATION PENDING |
 | 014-05 | Compose Configuration | PENDING |
-| 014-06 | Platform Application Boundaries | PENDING — includes required Android compileSdk |
+| 014-06 | Platform Application Boundaries | IMPLEMENTED — VERIFICATION PENDING |
 | 014-07 | Dependency and Module Wiring | PENDING |
 | 014-08 | Build/Test Baseline | PENDING |
 | 014-09 | Architecture Verification | PENDING |
 
-## 014-01 verification and acceptance
-Local verification completed from `D:\\CarBroz\\CB-Partner` with:
-`C:\\Gradle\\gradle-9.7.1\\bin\\gradle.bat`
+## 014-06 implementation record
 
-- `gradle projects` → BUILD SUCCESSFUL.
-- `gradle tasks` → BUILD SUCCESSFUL.
-- Approved modules recognized.
-- Included build `:build-logic` recognized.
-- `iosApp` remains outside the Gradle graph as intended.
-- Working tree clean.
-- Branch `feature/base-arch-014` synchronized with origin.
+Authorized scope:
+- Android platform boundary
+- Desktop platform boundary
+- iOS platform boundary
+- required Android KMP `compileSdk`
+- thin platform application boundaries
+- no business/application behavior
 
-User acceptance was subsequently received through explicit continuation authorization.
+Implemented:
+- `build-logic/src/main/kotlin/com/carbroz/cbpartner/buildlogic/KmpConventionPlugin.kt`
+  - applies `com.android.kotlin.multiplatform.library`
+  - configures the Android KMP target
+  - sets `compileSdk = 36`
+  - preserves `iosArm64`, `iosSimulatorArm64`, and `jvm`
+- `build-logic/src/main/kotlin/com/carbroz/cbpartner/buildlogic/AndroidApplicationConventionPlugin.kt`
+  - configures the Android application convention
+  - sets `compileSdk = 36`
 
-## 014-02 implementation
-Created:
-- `gradle/libs.versions.toml`
+No minSdk, namespace, build variants, runtime dependencies, application behavior, Compose configuration, DI, Store, Navigation implementation, backend, or business architecture was added.
 
-Selected project versions for the current 014-02 foundation:
-- Kotlin/Kotlin Gradle Plugin: `2.4.20`
-- Android Gradle Plugin: `9.3.0`
-- Compose Multiplatform plugin: `1.12.0`
+The Android-KMP configuration follows the current Android/Kotlin guidance for the `com.android.kotlin.multiplatform.library` plugin and its `kotlin { android { ... } }` DSL. Official guidance confirms the plugin is the supported Android target integration for KMP libraries, and the current compatibility range includes the project's Kotlin 2.4.20 / AGP 9.3.x combination. citeturn2search0turn0search1
 
-Plugin aliases:
-- `org.jetbrains.kotlin.multiplatform`
-- `com.android.kotlin.multiplatform.library`
-- `com.android.application`
-- `org.jetbrains.compose`
+## Verification state
 
-No runtime library dependencies were added. No convention plugins were implemented.
+Remote source inspection confirms the intended 014-06 changes are present.
 
-The selected Kotlin/AGP combination is within Kotlin 2.4.20's documented fully supported range; Gradle compatibility will be finalized with the wrapper/build setup and verified through the local Gradle runner. Exact current compatibility was checked against official Kotlin and Android documentation before selection.
+Local Gradle verification has **not yet been run after the 014-06 implementation**. Therefore 014-06 is not marked VERIFIED or ACCEPTED.
 
-## 014-04 implementation
+The next verification must run from the user's local repository. The first purpose is to confirm that the previous `:androidApp` `compileSdk` configuration blocker is removed and that the shared KMP projects configure with the Android target.
 
-The 014-04/014-06 staging conflict was resolved by explicit project-owner instruction on 2026-09-22: keep the boundary and move only the required Android `compileSdk` configuration into 014-06. No other BASE-ARCH-014 decision or scope is changed.
+014-04 remains IMPLEMENTED — VERIFICATION PENDING and should be re-verified after the 014-06 configuration is available.
 
-### 014-04 implementation record
-Implemented only the approved non-platform-specific KMP target configuration in `build-logic/src/main/kotlin/com/carbroz/cbpartner/buildlogic/KmpConventionPlugin.kt`.
+## 014-03 implementation and acceptance
 
-Configured targets:
-- `iosArm64`
-- `iosSimulatorArm64`
-- `jvm`
+Implemented and accepted:
+- `cbpartner.kmp`
+- `cbpartner.compose`
+- `cbpartner.android.application`
+- `cbpartner.desktop.application`
 
-The Android target remains intentionally deferred to 014-06 because its required `compileSdk` configuration belongs to that unit. The default KMP source-set hierarchy is used; no custom source sets were added.
-
-Verification has not been run in the user's local Gradle environment from this session. GitHub Actions has no workflow run associated with the implementation commit, so 014-04 is not marked VERIFIED or ACCEPTED.
-
-## 014-03 implementation
-
-Implemented the approved four convention types in the included `build-logic` build and applied them only to their intended modules:
-- `cbpartner.kmp` → `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, `:feature:dynamic`.
-- `cbpartner.compose` → `:feature:splash`, `:feature:dynamic`.
-- `cbpartner.android.application` → `:androidApp`.
-- `cbpartner.desktop.application` → `:desktopApp`.
-
-The convention plugins intentionally remain minimal. Target configuration, Compose source-set configuration, and platform application details remain in 014-04/014-05/014-06 as frozen by the implementation plan.
-
-014-03 was verified through the build-logic build and accepted before 014-04.
-
-## 014-02 verification and acceptance
-Verification completed locally:
-- `gradle projects` → BUILD SUCCESSFUL.
-- `gradle tasks` → BUILD SUCCESSFUL.
-- Git working tree clean.
-- local `HEAD` equals `origin/feature/base-arch-014` at `2e7d5d83c3b9137e3b286a60d52e2f7eee55d3a1`.
-
-The version catalog is successfully loaded by Gradle. Actual convention-plugin consumption of the aliases is intentionally deferred to 014-03, where the four approved conventions are implemented and verified.
-
-The project owner explicitly accepted 014-02 on 2026-09-22.
-
-No KMP/Compose/platform compilation is claimed at this stage.
+The conventions remain minimal and type-oriented.
 
 ## Explicitly excluded
 - authentication, booking, payment, dashboard
@@ -110,19 +84,22 @@ No KMP/Compose/platform compilation is claimed at this stage.
 - ViewModel or speculative architecture modules
 - runtime dependency wiring before its authorized consumer unit
 - unrelated refactoring
+- 014-05 Compose configuration
 
 ## Git
 Branch: `feature/base-arch-014`
 
-014-02 source commit:
-- `a0e3d003bb3c47558ebd6ecbf86505e37972cdb4` — add version catalog
+014-06 implementation commits:
+- `ca651a7e62d949110b2454ea94a0e540f171a26f` — configure Android KMP platform boundary
+- `bc0cfa85198abac8cda3adc524fafe055085267a` — configure Android application compile sdk
 
 ## Trello
-- **Set Up Gradle Project Structure** — 014-01, marked complete.
-- **Set Up Gradle Build Conventions** — 014-03, completed/accepted.
-- **Configure Kotlin Multiplatform Targets** — 014-04, IN PROGRESS.
+- **Configure Kotlin Multiplatform Targets** — 014-04, IN PROGRESS / verification pending.
+- **Set Up Platform App Modules** — 014-06, IN PROGRESS / implementation complete, verification pending.
 
 ## Gate
-014-02 is ACCEPTED.
+014-06 implementation is complete. Verification is pending.
 
-014-03 is ACCEPTED. 014-04 is IMPLEMENTED with verification pending. 014-06 will own the required Android `compileSdk` configuration.
+014-04 remains IMPLEMENTED with verification pending.
+
+014-05 has not started.
