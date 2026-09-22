@@ -62,6 +62,8 @@ Use concrete evidence: changed requirements, incompatibility, security issue, un
 
 ## Current Documentation Checkpoint
 
-BASE-ARCH-013 is formally accepted and decision-frozen. Option A (direct Domain-facing ApplicationBootstrap contract) was selected by the project owner. The initial bootstrap does not require a separate use-case/repository abstraction chain.\n\nBASE-ARCH-014 is formally accepted and decision-frozen. The project owner approved the minimum Gradle/KMP/Compose/build-logic foundation: an included build-logic build, minimal type-oriented conventions, central version catalog, current KMP/AGP configuration, default source-set hierarchy unless justified, Compose only where consumed, and a minimal repeated testing/build baseline. Exact versions, plugin IDs, implementation details and other explicitly deferred items remain open for implementation planning.
+BASE-ARCH-013 is formally accepted and decision-frozen. Option A (direct Domain-facing ApplicationBootstrap contract) was selected by the project owner. The initial bootstrap does not require a separate use-case/repository abstraction chain.
+
+BASE-ARCH-014 is formally accepted and decision-frozen. The project owner approved the minimum Gradle/KMP/Compose/build-logic foundation: an included build-logic build, minimal type-oriented conventions, central version catalog, current KMP/AGP configuration, default source-set hierarchy unless justified, Compose only where consumed, and a minimal repeated testing/build baseline. Exact versions, plugin IDs, implementation details and other explicitly deferred items remain open for implementation planning.
 
 **Repository source implementation remains unauthorized at this checkpoint.**
