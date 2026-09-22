@@ -6,19 +6,17 @@
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
 
 ## Current state
-Implementation unit 014-01 has completed local Gradle verification on `feature/base-arch-014`.
+014-01 — Gradle Project Skeleton is **VERIFIED and accepted**.
 
-The Gradle project skeleton and module registration were created and verified with Gradle 9.7.1 using the local checkout at `D:\\CarBroz\\CB-Partner`.
+The user accepted 014-01 and explicitly authorized continuation. Implementation has now advanced to **014-02 — Version Catalog**.
 
-014-01 is now **VERIFIED — awaiting user acceptance**.
-
-No later BASE-ARCH-014 unit has been implemented.
+014-02 is currently **IMPLEMENTING**. Only the central version/plugin catalog has been added so far. No KMP targets, Compose configuration, convention implementation, application source, or runtime dependencies have been added.
 
 ## Implementation units
 | Unit | Description | State |
 |---|---|---|
-| 014-01 | Gradle Project Skeleton | VERIFIED — awaiting user acceptance |
-| 014-02 | Version Catalog | PENDING |
+| 014-01 | Gradle Project Skeleton | ACCEPTED |
+| 014-02 | Version Catalog | IMPLEMENTING |
 | 014-03 | Build Logic + Four Conventions | PENDING |
 | 014-04 | KMP Target Configuration | PENDING |
 | 014-05 | Compose Configuration | PENDING |
@@ -27,78 +25,70 @@ No later BASE-ARCH-014 unit has been implemented.
 | 014-08 | Build/Test Baseline | PENDING |
 | 014-09 | Architecture Verification | PENDING |
 
-## 014-01 changes
-Created:
-- root `settings.gradle.kts`
-- root `build.gradle.kts`
-- root `gradle.properties`
-- root `.gitignore`
-- included-build boundary under `build-logic/`
-- registered `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, `:feature:dynamic`, `:androidApp`, `:desktopApp`
-- placeholder module build files only; no KMP/Compose/convention implementation yet
-- `iosApp/.gitkeep` to establish the platform-entry directory
-
-## Intentionally not included
-- Version catalog
-- convention plugins
-- KMP targets
-- Compose configuration
-- platform application implementation
-- runtime dependencies
-- application source
-- bootstrap/API/JSON
-- authentication, booking, payment, SDUI, ViewModel, Store/MVI modules
-
-Those belong to later authorized units or separate work.
-
-## Verification
-Local Gradle verification completed successfully from the project checkout at `D:\\CarBroz\\CB-Partner`.
-
-Gradle runner:
+## 014-01 verification and acceptance
+Local verification completed from `D:\\CarBroz\\CB-Partner` with:
 `C:\\Gradle\\gradle-9.7.1\\bin\\gradle.bat`
 
-Verified:
 - `gradle projects` → BUILD SUCCESSFUL.
-- Root project `CB-Partner` loaded successfully.
-- Approved Gradle modules recognized:
-  - `:androidApp`
-  - `:core`
-  - `:data`
-  - `:desktopApp`
-  - `:domain`
-  - `:feature:splash`
-  - `:feature:dynamic`
-  - `:navigation`
-- Included build `:build-logic` recognized successfully.
-- `:feature` appears as the expected Gradle aggregator for the nested feature modules.
-- `iosApp` is not a Gradle project, as intended for the iOS platform-entry boundary.
 - `gradle tasks` → BUILD SUCCESSFUL.
-- Git working tree is clean.
-- Branch `feature/base-arch-014` is up to date with `origin/feature/base-arch-014`.
+- Approved modules recognized.
+- Included build `:build-logic` recognized.
+- `iosApp` remains outside the Gradle graph as intended.
+- Working tree clean.
+- Branch `feature/base-arch-014` synchronized with origin.
 
-This verification confirms project/settings loading and module recognition only. It does not claim KMP compilation, Compose compilation, platform builds, tests, or later-unit behavior.
+User acceptance was subsequently received through explicit continuation authorization.
 
-## Version selection research note
-Current official compatibility was rechecked before implementation. Kotlin 2.4.20 is the current stable Kotlin release. Its fully supported AGP range ends at 9.3.1, while AGP 9.3 requires Gradle 9.5.0 or newer. Therefore the implementation will not introduce AGP 9.4 with Kotlin 2.4.20. Exact version declarations belong to 014-02.
+## 014-02 implementation
+Created:
+- `gradle/libs.versions.toml`
+
+Selected project versions for the current 014-02 foundation:
+- Kotlin/Kotlin Gradle Plugin: `2.4.20`
+- Android Gradle Plugin: `9.3.0`
+- Compose Multiplatform plugin: `1.12.0`
+
+Plugin aliases:
+- `org.jetbrains.kotlin.multiplatform`
+- `com.android.kotlin.multiplatform.library`
+- `com.android.application`
+- `org.jetbrains.compose`
+
+No runtime library dependencies were added. No convention plugins were implemented.
+
+The selected Kotlin/AGP combination is within Kotlin 2.4.20's documented fully supported range; Gradle compatibility will be finalized with the wrapper/build setup and verified through the local Gradle runner. Exact current compatibility was checked against official Kotlin and Android documentation before selection.
+
+## 014-02 verification status
+Pending local verification.
+
+Required next verification:
+- load the version catalog through Gradle;
+- confirm the build continues to configure successfully;
+- confirm plugin aliases/versions are syntactically valid and resolvable;
+- keep all later units untouched.
+
+No KMP/Compose/platform compilation is claimed at this stage.
+
+## Explicitly excluded
+- authentication, booking, payment, dashboard
+- SDUI internals/dynamic JSON
+- real backend bootstrap implementation
+- fake bootstrap/JSON/backend
+- ApplicationBootstrap/Store/Navigation/Koin implementation
+- ViewModel or speculative architecture modules
+- runtime dependency wiring before its authorized consumer unit
+- unrelated refactoring
 
 ## Git
 Branch: `feature/base-arch-014`
 
-Source implementation commits:
-- `70510fca6408b0278611b5b52480fee84483e7a1` — root settings
-- `694451d39ce6f2a792bb4d2aae232ff6af242237` — root build configuration
-- `c4546096686226f53cde3a442d4f29b76c5afb67` — Gradle properties
-- `1db3f975c5c724ca9c932b3ef33aba9cf12b5a7f` — gitignore
-- `5a0fb12b87320841321fb4717ef2ec2be66afa14` — build-logic settings
-- `07a3d60b138c979c4e246d51accfa22088762181` — build-logic build
-- `aebb8c9cec55aa64c7b2ff3bf0624fc3a5e30701` through `610344e63c2f0d17a8147014420acfb69147c3ab` — module registration files
-
-Verification result was performed locally after these source changes.
+014-02 source commit:
+- `a0e3d003bb3c47558ebd6ecbf86505e37972cdb4` — add version catalog
 
 ## Trello
-Card: **Set Up Gradle Project Structure** — IN PROGRESS, awaiting user acceptance of 014-01.
+Card for 014-01: **Set Up Gradle Project Structure**. Trello synchronization was attempted after acceptance but the Trello connector timed out; no Trello state change is being falsely claimed.
 
 ## Gate
-014-01 verification is complete. The workflow is stopped at the user review/acceptance gate.
+014-02 is IMPLEMENTING pending local verification.
 
-Do not start 014-02 until the user explicitly accepts 014-01 and authorizes continuation under the frozen implementation plan.
+Do not start 014-03 until 014-02 verification passes and the user accepts 014-02 / authorizes continuation.
