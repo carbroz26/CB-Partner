@@ -1,1 +1,3 @@
-// KMP configuration is introduced in 014-04.
+plugins {
+    id("cbpartner.kmp")
+}
