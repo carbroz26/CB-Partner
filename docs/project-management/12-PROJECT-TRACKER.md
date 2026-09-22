@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-02 in progress
-- Current implementation unit: 014-02 — Version Catalog
+- Workflow state: IMPLEMENTING — 014-03 preflight pending
+- Current implementation unit: 014-03 — Build Logic + Four Conventions
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
 - Blockers: None known
-- Last completed action: 014-01 accepted; 014-02 version catalog created
-- Next valid action: Verify 014-02 locally; do not begin 014-03 before acceptance
+- Last completed action: 014-02 verified and explicitly accepted by the project owner
+- Next valid action: Complete 014-03 Trello/READY implementation preflight; do not start source implementation until the execution card/state is synchronized
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-02 in progress; 014-01 accepted | feature/base-arch-014 | Set Up Gradle Project Structure — Trello sync pending connector recovery | None | Verify 014-02 locally |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-02 accepted; 014-03 preflight pending | feature/base-arch-014 | 014-03 execution tracking pending Trello connector recovery | Trello sync | Establish 014-03 READY/IN PROGRESS execution state before coding |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -60,8 +60,8 @@
 | Unit | State | Verification | Notes |
 |---|---|---|---|
 | 014-01 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; working tree clean | Project skeleton/module registration verified locally |
-| 014-02 | IMPLEMENTING | Local verification pending | Version Catalog |
-| 014-03 | PENDING | Not run | Build Logic + Four Conventions |
+| 014-02 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; Git clean and synchronized | Version Catalog verified and accepted by user on 2026-09-22 |
+| 014-03 | READY/PREFLIGHT | Not run | Build Logic + Four Conventions; implementation not started pending Trello execution tracking |
 | 014-04 | PENDING | Not run | KMP Target Configuration |
 | 014-05 | PENDING | Not run | Compose Configuration |
 | 014-06 | PENDING | Not run | Platform Application Boundaries |
