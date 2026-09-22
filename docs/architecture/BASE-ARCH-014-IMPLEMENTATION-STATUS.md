@@ -8,7 +8,9 @@
 ## Current state
 Implementation unit 014-01 has completed local Gradle verification on `feature/base-arch-014`.
 
-The Gradle project skeleton and module registration have been created and verified with Gradle 9.7.1 using the local checkout.
+The Gradle project skeleton and module registration were created and verified with Gradle 9.7.1 using the local checkout at `D:\\CarBroz\\CB-Partner`.
+
+014-01 is now **VERIFIED — awaiting user acceptance**.
 
 No later BASE-ARCH-014 unit has been implemented.
 
@@ -50,13 +52,13 @@ Created:
 Those belong to later authorized units or separate work.
 
 ## Verification
-Local Gradle verification completed successfully from the project checkout at `D:\CarBroz\CB-Partner`.
+Local Gradle verification completed successfully from the project checkout at `D:\\CarBroz\\CB-Partner`.
 
 Gradle runner:
-`C:\Gradle\gradle-9.7.1\bin\gradle.bat`
+`C:\\Gradle\\gradle-9.7.1\\bin\\gradle.bat`
 
 Verified:
-- `gradle projects` → BUILD SUCCESSFUL
+- `gradle projects` → BUILD SUCCESSFUL.
 - Root project `CB-Partner` loaded successfully.
 - Approved Gradle modules recognized:
   - `:androidApp`
@@ -71,7 +73,8 @@ Verified:
 - `:feature` appears as the expected Gradle aggregator for the nested feature modules.
 - `iosApp` is not a Gradle project, as intended for the iOS platform-entry boundary.
 - `gradle tasks` → BUILD SUCCESSFUL.
-- Git working tree is clean and branch is synchronized with `origin/feature/base-arch-014`.
+- Git working tree is clean.
+- Branch `feature/base-arch-014` is up to date with `origin/feature/base-arch-014`.
 
 This verification confirms project/settings loading and module recognition only. It does not claim KMP compilation, Compose compilation, platform builds, tests, or later-unit behavior.
 
@@ -93,7 +96,7 @@ Source implementation commits:
 Verification result was performed locally after these source changes.
 
 ## Trello
-Card: **Set Up Gradle Project Structure** — IN PROGRESS pending user acceptance of 014-01.
+Card: **Set Up Gradle Project Structure** — IN PROGRESS, awaiting user acceptance of 014-01.
 
 ## Gate
 014-01 verification is complete. The workflow is stopped at the user review/acceptance gate.
