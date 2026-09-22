@@ -1,41 +1,73 @@
 # CB-Partner — Current Status
 
-**Status:** PROPOSED
-**Last Updated:** 2026-09-16
+**Status:** ACTIVE  
+**Last Updated:** 2026-09-22
 
 ## Current Phase
-Phase 0 — Project Constitution and Architecture Preparation.
+Phase 1 — Technical Foundation implementation.
 
 ## Current Objective
-Establish stable documentation and AI-development controls before implementation begins.
+Implement the frozen BASE-ARCH-014 minimum Gradle/KMP/Compose/build-logic foundation through the approved unit-by-unit workflow.
 
-## Active Work
-Review and freeze governance documents, then research and freeze the technical foundation.
+## Base Architecture State
+BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 
-## Frozen Decisions
-None yet.
+## Current Workflow State
+PLAN_FROZEN → READY
 
-## Active Task
-Documentation review.
+## Current Work Item
+BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
-## Next Milestone
-Freeze the project operating system and supporting workflow documents.
+## Implementation Plan
+Frozen implementation plan:
+`docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
+
+Living implementation status:
+`docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md`
+
+## Implementation Authorization
+The project owner explicitly approved the BASE-ARCH-014 implementation plan on 2026-09-22. Implementation is authorized through the unit-by-unit gates.
+
+No application source implementation has started.
+
+## Current Implementation Unit
+014-01 — Gradle Project Skeleton — READY.
+
+## Frozen Implementation Scope
+- Gradle project skeleton/module registration.
+- Included `build-logic`.
+- Minimal type-oriented conventions.
+- Version catalog.
+- KMP targets: Android, iosArm64, iosSimulatorArm64, JVM.
+- Compose only where consumed.
+- Thin Android/Desktop/iOS application boundaries.
+- Foundation-required dependency wiring.
+- Minimal build/test baseline.
+- Architecture verification.
+
+## Explicitly Excluded
+- Authentication, OTP, booking, payment, dashboard.
+- SDUI internals/dynamic JSON.
+- Real backend bootstrap implementation.
+- Fake bootstrap.
+- Fake JSON.
+- Fake backend/API.
+- ApplicationBootstrap/Store/Navigation/Koin implementation.
+- ViewModel or speculative architecture modules.
+- Unrelated refactoring.
+
+The later startup vertical slice will use the actual backend API and exact response supplied by the project owner.
 
 ## Blockers
-None currently recorded.
+No architecture blocker.
 
-## Primary Risk
-Architecture/process drift caused by implementing too much before decisions are frozen.
+Execution tracking: no open Trello card matching BASE-ARCH-014 was found during plan-freeze preparation. No card ID is being invented. Trello execution tracking must be resolved before implementation if the workflow requires a card.
 
-## Last Known-Good Checkpoint
-None yet.
+## Next Valid Action
+READY gate: inspect actual Git branch/status, establish and record the authorized feature/task branch, confirm required execution tracking, then begin only 014-01.
 
-## Update Rule
-Update when phase, objective, blocker, frozen decision, or next milestone materially changes. Historical detail belongs in Git and checkpoint records.
+## Recovery
+A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
 
-**This document is PROPOSED until explicitly frozen.**
-## Persisted Workflow State
-Current status is the human-readable summary. The Project Tracker is the detailed execution ledger. Both must agree with relevant Module Status and Git/Trello state. If they disagree, reconcile before material work.
-
-## Current Documentation Phase
-No application source implementation has been authorized. The next objective is to finish and freeze the project operating/documentation system, then begin base-architecture research and planning.
+## Post-freeze rule
+Do not automatically start implementation. The next action is the READY gate and then 014-01 only when that gate is satisfied.

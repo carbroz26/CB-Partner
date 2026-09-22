@@ -1,62 +1,83 @@
 # CB-Partner — Project Tracker
 
-**Status:** PROPOSED
-**Scope:** Frontend repository only
-**Purpose:** Single execution ledger for recovering and tracking the current project state across AI sessions.
-
-## How to Use
-AI_START_HERE.md is the router. This tracker is the persisted state. Detailed technical truth remains in Decision Log, Architecture, Module Implementation Plans and Module Status documents. Trello tracks execution externally; Git tracks implementation history.
+**Status:** ACTIVE  
+**Scope:** Frontend repository only  
+**Purpose:** Single execution ledger for recovering and tracking current project state across AI sessions.
 
 ## Current Project State
-- Phase: 0 — Documentation and process preparation
-- Current module: None
-- Current work item: Documentation system review
-- Workflow state: DOCUMENTATION_REVIEW
-- Current implementation unit: None
-- Frozen decisions: None
-- Blockers: None
-- Last completed action: Workflow/Git control documents updated
-- Next valid action: Review and freeze the documentation operating system
-- Last updated: 2026-09-16
+- Phase: Base Architecture implementation preparation
+- Current module: Base Architecture
+- Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
+- Workflow state: PLAN_FROZEN → READY
+- Current implementation unit: 014-01 — Gradle Project Skeleton
+- Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
+- Frozen implementation plan: `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
+- Implementation status: `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md`
+- Blockers: No architecture blocker; Trello execution card was not found
+- Last completed action: BASE-ARCH-014 implementation plan explicitly approved and frozen on 2026-09-22
+- Next valid action: Complete READY gate, establish/verify authorized feature branch and required execution tracking, then implement only 014-01
+- Last updated: 2026-09-22
 
-## State Vocabulary
-DISCUSS → RESEARCH → DECIDE → DECISION_FROZEN → PLAN → PLAN_FROZEN → READY → IMPLEMENTING → IMPLEMENTED → VERIFIED → COMMITTED → PUSHED → PR_OPEN → REVIEWED → ACCEPTED → CODE_FROZEN → MERGED → SYNCED → CHECKPOINTED → COMPLETE
+## Base Architecture Register
 
-A state transition must satisfy its gate. Never skip a state merely because the code appears finished.
+| ID | Unit | State | Durable Record | Implementation Authorization |
+|---|---|---|---|---|
+| BASE-ARCH-001 | Project and Gradle Module Structure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-002 | Module Responsibilities and Dependency Graph | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-003 | Gradle Module Granularity | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-004 | Core Architecture and Technical Infrastructure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-005 | Navigation and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-006 | Dependency Injection and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-007 | Feature and Pure Store Architecture | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-008 | Application Bootstrap and Startup Flow | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-009 | Application Root and Platform Composition Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-010 | Application Startup Lifecycle and Initialization Ordering | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Plan frozen; implementation authorized |
 
 ## Work Item Register
-| ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Tag | Trello | Blocker | Next Action |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| DOC-001 | Project Operating System | Documentation system | DOCUMENTATION_REVIEW | 00-PROJECT-OPERATING-SYSTEM | — | — | — | — | — | — | None | Review/freeze documents |
 
-## Module Register
-| Module | Plan | Status | Current Unit | State | Branch | Frozen Units | Pending Units | Last Commit | Trello |
-|---|---|---|---|---|---|---|---|---|---|
+| ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Trello | Blocker | Next Action |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | — | — | None | Complete |
+| BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | — | — | None | Continue only through separately authorized implementation work |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | PLAN_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | READY; no source implementation started | Not established | — | — | No matching card found | Trello execution tracking if required | Complete READY gate, then 014-01 |
 
-## Mandatory Transition Records
-When a decision freezes: Decision Log + relevant plan + Tracker.
-When a plan freezes: plan + Tracker + Trello.
-When a unit is selected: Module Status + Tracker + Trello.
-When code changes: Module Status + Tracker.
-When tests run: Module Status + Tracker + result.
-When reviewed/accepted: Module Status + Tracker.
-When merged: Tracker + relevant status + Git state.
-When synced locally: Tracker when applicable.
-When a checkpoint is created: Checkpoints + Current Status + Tracker.
+## BASE-ARCH-014 Unit Register
+
+| Unit | State | Verification | Notes |
+|---|---|---|---|
+| 014-01 | READY | Not run | Gradle Project Skeleton |
+| 014-02 | PENDING | Not run | Version Catalog |
+| 014-03 | PENDING | Not run | Build Logic + Four Conventions |
+| 014-04 | PENDING | Not run | KMP Target Configuration |
+| 014-05 | PENDING | Not run | Compose Configuration |
+| 014-06 | PENDING | Not run | Platform Application Boundaries |
+| 014-07 | PENDING | Not run | Dependency and Module Wiring |
+| 014-08 | PENDING | Not run | Build/Test Baseline |
+| 014-09 | PENDING | Not run | Architecture Verification |
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
 2. Read this Tracker.
 3. Read Current Status.
-4. Identify current module/work item and state.
-5. Read the relevant module Plan and Status.
-6. Inspect Git branch/status/log and relevant Trello card.
+4. Identify current module/work item/state.
+5. Read the relevant frozen implementation plan and status.
+6. Inspect Git branch/status/log and relevant Trello state.
 7. Reconcile contradictions before continuing.
 8. Determine exactly one next valid action.
-9. Do not implement unless the state and authorization permit it.
-
-## Change History
-Do not erase history. Record material state transitions and references in the owning status documents and Git history.
+9. Do not implement unless state and authorization permit it.
 
 ## Freeze Rule
-After a meaningful freeze, update all required records, report the frozen state, return one next prompt and stop. Do not automatically select the next unit.
+After a meaningful freeze or documentation checkpoint, update required records, report state, return one next prompt, and stop. Do not automatically start the next unit.
+
+## Documentation Authority
+The authoritative Base Architecture record is:
+`docs/architecture/BASE-ARCHITECTURE.md`
+
+The frozen BASE-ARCH-014 implementation contract is:
+`docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
+
+Historical chat is not an implementation source.
