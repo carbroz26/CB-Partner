@@ -96,4 +96,4 @@ BASE-ARCH-014 implementation planning is complete and the plan is frozen. The du
 
 No application source code has been implemented.
 
-TRELLO-001 is frozen. The Trello board has been migrated to the TRELLO-002 simple work model. 014-01 and 014-02 are represented as completed work; 014-03 is prepared in READY. Remaining approved work is represented as human-readable TO DO cards.
+TRELLO-002 is frozen. TRELLO-001 is superseded. The Trello board has been migrated to the TRELLO-002 simple work model. 014-01 and 014-02 are represented as completed work; 014-03 is prepared in READY. Remaining approved work is represented as human-readable TO DO cards.
