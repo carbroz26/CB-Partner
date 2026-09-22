@@ -1,5 +1,6 @@
 package com.carbroz.cbpartner.buildlogic
 
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -11,7 +12,7 @@ class KmpConventionPlugin : Plugin<Project> {
         target.pluginManager.apply("com.android.kotlin.multiplatform.library")
 
         target.extensions.configure<KotlinMultiplatformExtension> {
-            android {
+            targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
                 compileSdk = 36
             }
             iosArm64()
