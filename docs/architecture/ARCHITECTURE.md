@@ -1,6 +1,6 @@
 # CB-Partner — Frontend Architecture
 
-**Status:** DECISION-FROZEN ARCHITECTURE RECORD THROUGH BASE-ARCH-012  
+**Status:** DECISION-FROZEN ARCHITECTURE RECORD THROUGH BASE-ARCH-014  
 **Scope:** Frontend repository only
 
 ## Purpose
@@ -23,7 +23,7 @@ See:
 
 `docs/architecture/BASE-ARCHITECTURE.md`
 
-This record documents BASE-ARCH-001 through BASE-ARCH-013. All thirteen units are decision-frozen; 001–003 are the frozen foundation decisions.
+This record documents BASE-ARCH-001 through BASE-ARCH-014. All fourteen units are decision-frozen; 001–003 are the original frozen foundation decisions, and 014 freezes the minimum Gradle/KMP/Compose/build-logic foundation.
 
 ## Frozen Architecture Through BASE-ARCH-012
 
@@ -51,7 +51,7 @@ This record documents BASE-ARCH-001 through BASE-ARCH-013. All thirteen units ar
 
 ## Current Scope
 
-BASE-ARCH-001–012 are decision-frozen. BASE-ARCH-001–003 are the frozen foundation decisions for structure, responsibilities/dependencies, and module granularity.
+BASE-ARCH-001–014 are decision-frozen. BASE-ARCH-001–003 are the frozen foundation decisions for structure, responsibilities/dependencies, and module granularity. BASE-ARCH-014 freezes the minimum Gradle/KMP/Compose/build-logic foundation. Exact implementation APIs, versions, plugin IDs, and other deferred details remain open until implementation planning.
 
 ## Implementation Rule
 
