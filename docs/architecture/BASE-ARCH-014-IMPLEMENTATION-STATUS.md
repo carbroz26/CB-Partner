@@ -12,14 +12,14 @@ The user accepted 014-01 and explicitly authorized continuation. Implementation 
 
 014-02 was verified locally and explicitly accepted by the project owner on 2026-09-22. Only the central version/plugin catalog was added for 014-02. No KMP targets, Compose configuration, convention implementation, application source, or runtime dependencies have been added.
 
-Implementation is now at **014-03 — Build Logic + Four Conventions**. Source implementation has not started because the required Trello execution-tracking/READY preflight could not be synchronized while the Trello connector timed out.
+Implementation is now prepared for **014-03 — Build Logic + Four Conventions**. Source implementation has not started. The Trello card is in READY under the finalized simple work-board model.
 
 ## Implementation units
 | Unit | Description | State |
 |---|---|---|
 | 014-01 | Gradle Project Skeleton | ACCEPTED |
 | 014-02 | Version Catalog | ACCEPTED |
-| 014-03 | Build Logic + Four Conventions | IMPLEMENTING |
+| 014-03 | Build Logic + Four Conventions | READY |
 | 014-04 | KMP Target Configuration | PENDING |
 | 014-05 | Compose Configuration | PENDING |
 | 014-06 | Platform Application Boundaries | PENDING |
@@ -91,9 +91,9 @@ Branch: `feature/base-arch-014`
 
 ## Trello
 - **Set Up Gradle Project Structure** — 014-01, marked complete.
-- **Implement Build Logic Conventions** — 014-03, moved from READY to IN PROGRESS.
+- **Set Up Gradle Build Conventions** — 014-03, READY.
 
 ## Gate
 014-02 is ACCEPTED.
 
-014-03 is now IMPLEMENTING under the active Trello card **Implement Build Logic Conventions**. No 014-03 source changes have been made yet.
+014-03 is READY under the Trello card **Set Up Gradle Build Conventions**. No 014-03 source changes have been made yet.
