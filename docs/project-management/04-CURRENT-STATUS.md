@@ -5,15 +5,15 @@
 
 ## Current Phase
 
-Phase 0 — Project Constitution and Base Architecture Preparation.
+Phase 1 — Technical Foundation preparation.
 
 ## Current Objective
 
-Make the completed Base Architecture research and frozen decisions durable and internally consistent before beginning implementation.
+Establish the durable Base Architecture foundation required for implementation while preserving the mandatory implementation-plan gate.
 
 ## Active Work
 
-BASE-ARCH-001 through BASE-ARCH-013 are now documented and decision-frozen.
+BASE-ARCH-001 through BASE-ARCH-014 are now documented and decision-frozen.
 
 ## Base Architecture State
 
@@ -30,6 +30,7 @@ BASE-ARCH-001 through BASE-ARCH-013 are now documented and decision-frozen.
 - BASE-ARCH-011 → DECISION_FROZEN
 - BASE-ARCH-012 → DECISION_FROZEN
 - BASE-ARCH-013 → DECISION_FROZEN
+- BASE-ARCH-014 → DECISION_FROZEN
 
 ## Authoritative Record
 
@@ -37,7 +38,7 @@ The durable Base Architecture record is:
 
 `docs/architecture/BASE-ARCHITECTURE.md`
 
-It contains the research focus, conclusions, accepted/frozen decisions, rejected alternatives, deferred decisions, implementation consequences, cross-architecture rules, non-goals and current status for BASE-ARCH-001 through BASE-ARCH-013.
+It contains the research focus, conclusions, accepted/frozen decisions, rejected alternatives, deferred decisions, implementation consequences, cross-architecture rules, non-goals and current status for BASE-ARCH-001 through BASE-ARCH-014.
 
 ## Implementation Authorization
 
@@ -51,7 +52,7 @@ DECISION_FROZEN — COMPLETE
 
 ## Current Work Item
 
-BASE-ARCH-013 — Application Bootstrap Data Flow & Layer Ownership — DECISION_FROZEN.
+BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation — DECISION_FROZEN.
 
 ## Blockers
 
@@ -59,11 +60,11 @@ None.
 
 ## Next Valid Action
 
-BASE-ARCH-013 is decision-frozen. Do not begin the next architecture unit until the project owner explicitly authorizes it.
+BASE-ARCH-014 is decision-frozen. Do not begin source implementation or another architecture unit automatically. The next implementation step requires a separately created and explicitly frozen implementation plan.
 
 ## Last Completed Action
 
-User selected Option A for BASE-ARCH-013 and the decision was frozen and synchronized across the durable architecture/status records on the `docs/base-architecture-record` branch.
+User approved the researched minimum Gradle/KMP/Compose/build-logic foundation and BASE-ARCH-014 was frozen and synchronized across the durable architecture/status records on the `docs/base-architecture-record` branch.
 
 ## Primary Risk
 
