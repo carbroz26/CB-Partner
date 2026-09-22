@@ -35,8 +35,11 @@
 | BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 | BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
 
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | fc48b402 | — | — | — | None | Create and freeze implementation plan before source implementation |\n\n## Work Item Register
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | fc48b402 | — | — | — | None | Create and freeze implementation plan before source implementation |
 
+## Work Item Register
+
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | fc48b402 | — | — | — | None | Create and freeze implementation plan before source implementation |
 | ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Tag | Trello | Blocker | Next Action |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | d02cb569 | — | — | — | None | Complete |
@@ -57,7 +60,7 @@
 After a meaningful freeze or documentation checkpoint, update all required records, report the state, return one next prompt and stop. Do not automatically start the next architecture unit.
 
 ## Documentation Authority
-The authoritative Base Architecture record for completed work through BASE-ARCH-012 is:
+The authoritative Base Architecture record for completed work through BASE-ARCH-014 is:
 
 docs/architecture/BASE-ARCHITECTURE.md
 
