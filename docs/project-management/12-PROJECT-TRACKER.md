@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-03 in progress
+- Workflow state: READY — 014-03 prepared for implementation
 - Current implementation unit: 014-03 — Build Logic + Four Conventions
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-001 — Frontend Trello Operating Model
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
 - Blockers: None known
-- Last completed action: 014-02 verified and explicitly accepted by the project owner
-- Next valid action: Implement 014-03 Build Logic + Four Conventions; do not start 014-04
+- Last completed action: Trello workflow finalized and board synchronized; 014-02 verified and explicitly accepted by the project owner
+- Next valid action: Implement 014-03 Build Logic + Four Conventions when the user starts execution; do not start 014-04
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
@@ -40,20 +40,23 @@
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
 |---|---|---|---|---|
-| TRELLO-001 | Frontend Trello Operating Model | DECISION_FROZEN | docs/project-management/06-TRELLO-WORKFLOW.md | 2026-09-22 |
+| TRELLO-002 | Simple Frontend Work Board | DECISION_FROZEN | docs/project-management/06-TRELLO-WORKFLOW.md | 2026-09-22 |
 
 ## Work Item Register
 | ID | Module/Feature | Unit | State | Plan | Status | Branch | Trello | Blocker | Next Action |
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-02 accepted; 014-03 preflight pending | feature/base-arch-014 | Implement Build Logic Conventions — IN PROGRESS | None | Implement and verify 014-03 |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | READY | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-02 accepted; 014-03 prepared | feature/base-arch-014 | Set Up Gradle Build Conventions — READY | None | Implement and verify 014-03 when execution begins |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
-- Workflow: **BACKLOG → READY → IN PROGRESS → DONE**
-- TRELLO-001 card: **Define Frontend Trello Workflow** — DONE.
-- BASE-ARCH-014 014-01 card: **Set Up Gradle Project Structure** — Trello synchronization pending connector recovery after acceptance.
+- Workflow: **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
+- **DONE:** Set Up Gradle Project Structure; Add Version Catalog.
+- **READY:** Set Up Gradle Build Conventions.
+- **TO DO:** remaining approved foundation and architecture implementation work.
+- **BACKLOG:** future/uncommitted work.
+- The old workflow-definition card is archived.
 - No automatic next-task transition is permitted.
 
 ## BASE-ARCH-014 Unit Register
@@ -61,7 +64,7 @@
 |---|---|---|---|
 | 014-01 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; working tree clean | Project skeleton/module registration verified locally |
 | 014-02 | ACCEPTED | `gradle projects` and `gradle tasks` both BUILD SUCCESSFUL; Git clean and synchronized | Version Catalog verified and accepted by user on 2026-09-22 |
-| 014-03 | IMPLEMENTING | Not run | Build Logic + Four Conventions; Trello card active |
+| 014-03 | READY | Not run | Build Logic + Four Conventions; Trello card prepared |
 | 014-04 | PENDING | Not run | KMP Target Configuration |
 | 014-05 | PENDING | Not run | Compose Configuration |
 | 014-06 | PENDING | Not run | Platform Application Boundaries |
