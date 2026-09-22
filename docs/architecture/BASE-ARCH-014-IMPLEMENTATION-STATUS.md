@@ -6,14 +6,16 @@
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
 
 ## Current state
-Implementation unit 014-01 is in progress on `feature/base-arch-014`.
+Implementation unit 014-01 has completed local Gradle verification on `feature/base-arch-014`.
 
-The Gradle project skeleton and module registration have been created. No later BASE-ARCH-014 unit has been implemented.
+The Gradle project skeleton and module registration have been created and verified with Gradle 9.7.1 using the local checkout.
+
+No later BASE-ARCH-014 unit has been implemented.
 
 ## Implementation units
 | Unit | Description | State |
 |---|---|---|
-| 014-01 | Gradle Project Skeleton | IMPLEMENTING |
+| 014-01 | Gradle Project Skeleton | VERIFIED — awaiting user acceptance |
 | 014-02 | Version Catalog | PENDING |
 | 014-03 | Build Logic + Four Conventions | PENDING |
 | 014-04 | KMP Target Configuration | PENDING |
@@ -47,12 +49,31 @@ Created:
 
 Those belong to later authorized units or separate work.
 
-## Current verification
-Structural review: **PARTIAL — files and module registrations created.**
+## Verification
+Local Gradle verification completed successfully from the project checkout at `D:\CarBroz\CB-Partner`.
 
-Gradle execution verification is **PENDING** because this environment cannot execute the repository checkout/Gradle wrapper and the repository currently has no committed Gradle wrapper available to run from this tool session.
+Gradle runner:
+`C:\Gradle\gradle-9.7.1\bin\gradle.bat`
 
-No build or test result is being claimed.
+Verified:
+- `gradle projects` → BUILD SUCCESSFUL
+- Root project `CB-Partner` loaded successfully.
+- Approved Gradle modules recognized:
+  - `:androidApp`
+  - `:core`
+  - `:data`
+  - `:desktopApp`
+  - `:domain`
+  - `:feature:splash`
+  - `:feature:dynamic`
+  - `:navigation`
+- Included build `:build-logic` recognized successfully.
+- `:feature` appears as the expected Gradle aggregator for the nested feature modules.
+- `iosApp` is not a Gradle project, as intended for the iOS platform-entry boundary.
+- `gradle tasks` → BUILD SUCCESSFUL.
+- Git working tree is clean and branch is synchronized with `origin/feature/base-arch-014`.
+
+This verification confirms project/settings loading and module recognition only. It does not claim KMP compilation, Compose compilation, platform builds, tests, or later-unit behavior.
 
 ## Version selection research note
 Current official compatibility was rechecked before implementation. Kotlin 2.4.20 is the current stable Kotlin release. Its fully supported AGP range ends at 9.3.1, while AGP 9.3 requires Gradle 9.5.0 or newer. Therefore the implementation will not introduce AGP 9.4 with Kotlin 2.4.20. Exact version declarations belong to 014-02.
@@ -69,11 +90,12 @@ Source implementation commits:
 - `07a3d60b138c979c4e246d51accfa22088762181` — build-logic build
 - `aebb8c9cec55aa64c7b2ff3bf0624fc3a5e30701` through `610344e63c2f0d17a8147014420acfb69147c3ab` — module registration files
 
-These are sequential file-creation commits produced through the repository integration.
+Verification result was performed locally after these source changes.
 
 ## Trello
-Card: **Set Up Gradle Project Structure** — IN PROGRESS.
+Card: **Set Up Gradle Project Structure** — IN PROGRESS pending user acceptance of 014-01.
 
-## Next valid action
-Do not start 014-02 yet. First complete 014-01 verification with an actual local checkout/Gradle runner, including project/settings loading and module recognition. If verification passes, report the changed files and move 014-01 to review/acceptance before proceeding.
+## Gate
+014-01 verification is complete. The workflow is stopped at the user review/acceptance gate.
 
+Do not start 014-02 until the user explicitly accepts 014-01 and authorizes continuation under the frozen implementation plan.
