@@ -1,1 +1,3 @@
-// Desktop application configuration is introduced in 014-06.
+plugins {
+    id("cbpartner.desktop.application")
+}
