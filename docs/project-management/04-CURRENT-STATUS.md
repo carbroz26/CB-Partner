@@ -16,13 +16,13 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-READY — 014-03 prepared for implementation.
+IMPLEMENTED — 014-03 verification pending.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-03 — Build Logic + Four Conventions — READY.
+014-03 — Build Logic + Four Conventions — IMPLEMENTED; verification pending.
 
 014-01 was verified and accepted. 014-02 was verified and explicitly accepted by the project owner on 2026-09-22.
 
@@ -44,7 +44,7 @@ No KMP target configuration, Compose configuration, convention implementation, r
 
 014-02 verification completed locally and was accepted by the project owner.
 
-014-03 implementation has not started. Its Trello card is prepared in READY under the finalized simple work-board model.
+014-03 implementation has started and the approved four convention plugins have been implemented. Its Trello card is IN PROGRESS. Local verification is still pending.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -76,7 +76,7 @@ Current Trello state:
 No architecture blocker.
 
 ## Next Valid Action
-Implement 014-03 — Build Logic + Four Conventions — one unit only, within the frozen plan and READY Trello card, when execution is explicitly continued.
+Verify 014-03 — Build Logic + Four Conventions — locally, then review/accept it before selecting 014-04.
 
 The 014-02 acceptance gate is complete.
 
