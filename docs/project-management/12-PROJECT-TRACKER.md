@@ -2,66 +2,82 @@
 
 **Status:** ACTIVE  
 **Scope:** Frontend repository only  
-**Purpose:** Single execution ledger for recovering and tracking the current project state across AI sessions.
+**Purpose:** Single execution ledger for recovering and tracking current project state across AI sessions.
 
 ## Current Project State
-- Phase: Base Architecture decision/freeze checkpoint
+- Phase: Base Architecture implementation preparation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: DECISION_FROZEN
-- Current implementation unit: None
+- Workflow state: PLAN_FROZEN → READY
+- Current implementation unit: 014-01 — Gradle Project Skeleton
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
-- Researched units: BASE-ARCH-014 within Phase 1 Technical Foundation
-- Blockers: None
-- Last completed action: User approved the researched minimum Gradle/KMP/Compose/build-logic foundation and BASE-ARCH-014 was formally frozen and synchronized across architecture/status records
-- Next valid action: Stop after the BASE-ARCH-014 freeze; do not begin implementation or another architecture unit until the separately required implementation plan is created and frozen or a new objective is explicitly authorized
+- Frozen implementation plan: `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
+- Implementation status: `docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md`
+- Blockers: No architecture blocker; Trello execution card was not found
+- Last completed action: BASE-ARCH-014 implementation plan explicitly approved and frozen on 2026-09-22
+- Next valid action: Complete READY gate, establish/verify authorized feature branch and required execution tracking, then implement only 014-01
 - Last updated: 2026-09-22
 
 ## Base Architecture Register
 
 | ID | Unit | State | Durable Record | Implementation Authorization |
 |---|---|---|---|---|
-| BASE-ARCH-001 | Project and Gradle Module Structure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-002 | Module Responsibilities and Dependency Graph | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-003 | Gradle Module Granularity | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-004 | Core Architecture and Technical Infrastructure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-005 | Navigation and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-006 | Dependency Injection and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-007 | Feature and Pure Store Architecture | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-008 | Application Bootstrap and Startup Flow | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-009 | Application Root and Platform Composition Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-010 | Application Startup Lifecycle and Initialization Ordering | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-| BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No |
-
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | fc48b402 | — | — | — | None | Create and freeze implementation plan before source implementation |
+| BASE-ARCH-001 | Project and Gradle Module Structure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-002 | Module Responsibilities and Dependency Graph | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-003 | Gradle Module Granularity | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-004 | Core Architecture and Technical Infrastructure | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-005 | Navigation and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-006 | Dependency Injection and Application Composition | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-007 | Feature and Pure Store Architecture | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-008 | Application Bootstrap and Startup Flow | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-009 | Application Root and Platform Composition Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-010 | Application Startup Lifecycle and Initialization Ordering | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
+| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Plan frozen; implementation authorized |
 
 ## Work Item Register
 
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | fc48b402 | — | — | — | None | Create and freeze implementation plan before source implementation |
-| ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Tag | Trello | Blocker | Next Action |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ARCH-DOC-001 | Base Architecture | Durable documentation through BASE-ARCH-012 | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | d02cb569 | — | — | — | None | Complete |
-| BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized | docs/base-architecture-record | d02cb569 | — | — | — | None | Await next architecture unit authorization |
+| ID | Module/Feature | Unit | State | Plan | Status | Branch | Commit | PR | Trello | Blocker | Next Action |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | — | — | None | Complete |
+| BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | — | — | None | Continue only through separately authorized implementation work |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | PLAN_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | READY; no source implementation started | Not established | — | — | No matching card found | Trello execution tracking if required | Complete READY gate, then 014-01 |
+
+## BASE-ARCH-014 Unit Register
+
+| Unit | State | Verification | Notes |
+|---|---|---|---|
+| 014-01 | READY | Not run | Gradle Project Skeleton |
+| 014-02 | PENDING | Not run | Version Catalog |
+| 014-03 | PENDING | Not run | Build Logic + Four Conventions |
+| 014-04 | PENDING | Not run | KMP Target Configuration |
+| 014-05 | PENDING | Not run | Compose Configuration |
+| 014-06 | PENDING | Not run | Platform Application Boundaries |
+| 014-07 | PENDING | Not run | Dependency and Module Wiring |
+| 014-08 | PENDING | Not run | Build/Test Baseline |
+| 014-09 | PENDING | Not run | Architecture Verification |
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
 2. Read this Tracker.
 3. Read Current Status.
-4. Identify current module/work item and state.
-5. Read the relevant architecture record.
-6. Inspect Git branch/status/log and relevant Trello card.
+4. Identify current module/work item/state.
+5. Read the relevant frozen implementation plan and status.
+6. Inspect Git branch/status/log and relevant Trello state.
 7. Reconcile contradictions before continuing.
 8. Determine exactly one next valid action.
-9. Do not implement unless the state and authorization permit it.
+9. Do not implement unless state and authorization permit it.
 
 ## Freeze Rule
-After a meaningful freeze or documentation checkpoint, update all required records, report the state, return one next prompt and stop. Do not automatically start the next architecture unit.
+After a meaningful freeze or documentation checkpoint, update required records, report state, return one next prompt, and stop. Do not automatically start the next unit.
 
 ## Documentation Authority
-The authoritative Base Architecture record for completed work through BASE-ARCH-014 is:
+The authoritative Base Architecture record is:
+`docs/architecture/BASE-ARCHITECTURE.md`
 
-docs/architecture/BASE-ARCHITECTURE.md
+The frozen BASE-ARCH-014 implementation contract is:
+`docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md`
 
 Historical chat is not an implementation source.
