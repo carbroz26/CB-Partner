@@ -16,17 +16,17 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-VERIFIED — 014-01 through 014-06 verified.
+IMPLEMENTING — 014-07 Dependency and Module Wiring.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-BASE-ARCH-014 — verification/status checkpoint complete.
-
 014-04, 014-05, and 014-06 are verified and accepted.
 
-014-07, 014-08, and 014-09 remain pending.
+014-07 is authorized and implementation is in progress.
+
+014-08 and 014-09 remain pending.
 
 ## What has been implemented
 
@@ -101,10 +101,10 @@ Current Trello state:
 ## Blocker
 No architecture blocker.
 
-No current execution blocker.
+014-07 local verification is pending.
 
 ## Next Valid Action
-Review this verification checkpoint and explicitly authorize the next BASE-ARCH-014 implementation unit. Do not automatically begin 014-07.
+Run the 014-07 local verification and report the complete result. Do not start 014-08 until 014-07 is verified and accepted.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
