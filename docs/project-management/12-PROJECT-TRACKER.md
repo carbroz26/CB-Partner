@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-09 Architecture Verification
-- Current implementation unit: 014-09 — Architecture Verification (in progress)
+- Workflow state: FINAL ACCEPTANCE GATE — BASE-ARCH-014
+- Current implementation unit: BASE-ARCH-014 final owner acceptance / code-freeze checkpoint
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-- Blockers: 014-09 fresh verification pending after platform-boundary clarification
-- Last completed action: Owner-approved clarification that platform application boundary ≠ Gradle module boundary
-- Next valid action: Complete fresh 014-09 Architecture Verification; do not modify source code during verification
+- Blockers: None identified
+- Last completed action: Fresh 014-09 architecture verification and Gradle 9.7.1/T01 verification completed
+- Next valid action: Owner review/acceptance of complete BASE-ARCH-014, then code-freeze/document/merge preparation
 - Last updated: 2026-09-23
 
 ## Base Architecture Register
@@ -35,7 +35,7 @@
 | BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
-| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; implementation authorized |
+| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTATION_VERIFIED | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; final owner acceptance pending |
 
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-09 | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-08 verified; 014-09 in progress | feature/base-arch-014 | Set Up Platform App Modules — IN PROGRESS | None identified | Complete 014-09 Architecture Verification |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | FINAL ACCEPTANCE GATE | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; final owner acceptance pending | feature/base-arch-014 | Set Up Platform App Modules — DONE; Verify Project Architecture — DONE | None identified | Owner acceptance of complete BASE-ARCH-014, then code freeze/document/merge preparation |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -70,7 +70,7 @@
 | 014-06 | ACCEPTED | `gradle projects` and targeted JVM compilation both BUILD SUCCESSFUL | Android KMP target + Android application compileSdk 36; iOS/Desktop remain thin boundaries |
 | 014-07 | ACCEPTED | Dependency reports and JVM compilation BUILD SUCCESSFUL | Foundation module dependency wiring only |
 | 014-08 | VERIFIED | `gradle projects`, `-p build-logic build`, six `jvmTest` tasks, and six JVM compilation tasks all BUILD SUCCESSFUL | No source changes; Windows iOS simulator warning is expected host limitation |
-| 014-09 | IN PROGRESS | Formal architecture verification in progress | Module structure, dependency direction, Compose boundary, prohibited structures, and scope compliance |
+| 014-09 | VERIFIED | Fresh repository architecture verification completed | Platform boundaries, dependency direction, Compose boundary, prohibited structures, scope compliance, and iOS/Xcode boundary verified; Windows host limitation recorded |
 
 ## Verification Record — 014-08 — 2026-09-23
 
@@ -162,7 +162,7 @@ Scope:
 
 ## BASE-ARCH-014-09 Architecture Verification — 2026-09-23
 
-**Review state:** REQUIRED finding — not accepted.
+**Review state:** VERIFIED — F02 resolved; final BASE-ARCH-014 owner acceptance pending.
 
 Formal verification completed after the 014-08 records were reconciled and after following `AI_START_HERE.md` routing.
 
@@ -191,7 +191,7 @@ The previous finding that treated the absence of `:iosApp` from Gradle as a disc
 
 ## BASE-ARCH-014-09 F02 Resolution — 2026-09-23
 
-**State:** VERIFIED — pending owner acceptance.
+**State:** VERIFIED — F02 resolved; final 014-09 owner acceptance remains part of the BASE-ARCH-014 final gate.
 
 The owner authorized creation of the native iOS/Xcode application boundary after fresh 014-09 identified BASE-ARCH-014-09-F02.
 
@@ -214,7 +214,7 @@ Windows host limitation: native Xcode/macOS build verification could not be exec
 
 ## BASE-ARCH-014-T01 — Gradle Wrapper + Git/Build Workflow — 2026-09-23
 
-**State:** IMPLEMENTING
+**State:** VERIFIED
 **Owner authorization:** Explicitly granted on 2026-09-23.
 
 Scope:
@@ -226,7 +226,7 @@ Documentation portion completed:
 - `AI_START_HERE.md` updated;
 - `docs/project-management/11-TERMINAL-GIT-COMMANDS.md` expanded.
 
-Wrapper generation remains pending because the current Windows environment has no system Gradle and the repository has no Wrapper yet. The next action is to provision a compatible Gradle 9.7.1 executable and generate the official Wrapper; do not hand-create the Wrapper JAR.
+Official Gradle 9.7.1 Wrapper generation and verification are complete. The wrapper is committed in `0630982`, and the Wrapper-based baseline passed. No hand-created or fake Wrapper was used.
 
 
 ## BASE-ARCH-014-T01 — Gradle 9.7.1 Authority Update — 2026-09-23
@@ -238,3 +238,20 @@ Wrapper generation remains pending because the current Windows environment has n
 - AI_START_HERE.md and 11-TERMINAL-GIT-COMMANDS.md route Gradle setup/commands to the dedicated document.
 - 9.5.0 is superseded historical context, not the selected project version.
 - Remaining: provision Gradle 9.7.1 on Windows, generate the official Wrapper, verify it, rerun the build/test baseline, and record actual results.
+
+
+## BASE-ARCH-014 Final Implementation Verification Checkpoint — 2026-09-23
+
+**State:** IMPLEMENTATION VERIFIED — OWNER ACCEPTANCE PENDING
+
+Actual repository state on `feature/base-arch-014` has been reconciled with the execution records:
+
+- 014-01 through 014-07 → ACCEPTED.
+- 014-08 → VERIFIED.
+- 014-09 → VERIFIED; F02 resolved.
+- T01 → VERIFIED; Gradle 9.7.1 Wrapper and Wrapper-based baseline verified.
+- Native iOS/Xcode application boundary exists under `iosApp/`; no `:iosApp` Gradle module exists.
+- Working implementation branch: `feature/base-arch-014`.
+- No architecture blocker identified.
+
+The repository is now at the final owner acceptance/code-freeze gate. No new implementation unit starts automatically.
