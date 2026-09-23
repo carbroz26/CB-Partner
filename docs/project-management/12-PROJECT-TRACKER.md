@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-08 Build/Test Baseline
-- Current implementation unit: 014-08 — Build/Test Baseline (authorized; in progress)
+- Workflow state: IMPLEMENTING — 014-09 Architecture Verification
+- Current implementation unit: 014-09 — Architecture Verification (in progress)
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-- Blockers: None
-- Last completed action: Verified and accepted 014-07 dependency/module wiring and established CP-003 checkpoint
-- Next valid action: Execute and record 014-08 Build/Test Baseline verification; do not start 014-09
+- Blockers: None identified
+- Last completed action: Verified 014-08 Build/Test Baseline successfully
+- Next valid action: Complete 014-09 Architecture Verification; do not modify source code during review unless a concrete violation is found and separately authorized
 - Last updated: 2026-09-23
 
 ## Base Architecture Register
@@ -35,7 +35,7 @@
 | BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
-| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Plan frozen; implementation authorized |
+| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | DECISION_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; implementation authorized |
 
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-08 | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-07 verified and accepted; 014-08 and 014-09 pending | feature/base-arch-014 | Set Up Platform App Modules — IN PROGRESS | None | Review checkpoint; authorize next unit explicitly |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-09 | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-08 verified; 014-09 in progress | feature/base-arch-014 | Set Up Platform App Modules — IN PROGRESS | None identified | Complete 014-09 Architecture Verification |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -69,8 +69,22 @@
 | 014-05 | ACCEPTED | `gradle projects` and targeted JVM compilation both BUILD SUCCESSFUL | Compose Configuration verified through actual feature module configuration/compilation |
 | 014-06 | ACCEPTED | `gradle projects` and targeted JVM compilation both BUILD SUCCESSFUL | Android KMP target + Android application compileSdk 36; iOS/Desktop remain thin boundaries |
 | 014-07 | ACCEPTED | Dependency reports and JVM compilation BUILD SUCCESSFUL | Foundation module dependency wiring only |
-| 014-08 | IMPLEMENTING | Verification pending | Build/Test Baseline |
-| 014-09 | PENDING | Not run | Architecture Verification |
+| 014-08 | VERIFIED | `gradle projects`, `-p build-logic build`, six `jvmTest` tasks, and six JVM compilation tasks all BUILD SUCCESSFUL | No source changes; Windows iOS simulator warning is expected host limitation |
+| 014-09 | IN PROGRESS | Formal architecture verification in progress | Module structure, dependency direction, Compose boundary, prohibited structures, and scope compliance |
+
+## Verification Record — 014-08 — 2026-09-23
+
+Authorized baseline verification completed successfully on the project owner's Windows environment.
+
+Commands:
+- `gradle projects` → **BUILD SUCCESSFUL**; 5 actionable tasks.
+- `gradle -p build-logic build` → **BUILD SUCCESSFUL**; 6 actionable tasks, all up-to-date.
+- `gradle :core:jvmTest :domain:jvmTest :data:jvmTest :navigation:jvmTest :feature:splash:jvmTest :feature:dynamic:jvmTest` → **BUILD SUCCESSFUL**; 28 actionable tasks.
+- `gradle :core:compileKotlinJvm :domain:compileKotlinJvm :data:compileKotlinJvm :navigation:compileKotlinJvm :feature:splash:compileKotlinJvm :feature:dynamic:compileKotlinJvm` → **BUILD SUCCESSFUL**; 15 actionable tasks.
+
+The `iosSimulatorArm64Test` disabled-target warning is expected on Windows because simulator tests require macOS. No suppression configuration was added.
+
+No source-code changes were required for 014-08.
 
 ## Verification Record — 014-06
 Implementation completed on branch `feature/base-arch-014`.
@@ -105,7 +119,6 @@ The frozen BASE-ARCH-014 implementation contract is:
 docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 
 Historical chat is not an implementation source.
-
 
 ## BASE-ARCH-014-07 Acceptance Checkpoint — 2026-09-23
 
