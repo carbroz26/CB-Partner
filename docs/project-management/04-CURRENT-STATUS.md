@@ -134,3 +134,16 @@ No source-code changes were required for 014-08.
 **Current state:** 014-08 VERIFIED; 014-09 Architecture Verification IN PROGRESS.
 
 **Next action:** perform formal 014-09 architecture verification. Do not introduce implementation changes during review.
+
+
+## 014-09 Architecture Verification — 2026-09-23
+
+**State:** REVIEW — REQUIRED finding; not accepted.
+
+Formal verification after 014-08 reconciliation confirmed the approved dependency direction, Compose boundary, absence of ViewModel/prohibited modules, and absence of business/SDUI/fake-bootstrap scope expansion.
+
+A required discrepancy was found: the frozen foundation expects an `iosApp/` platform application boundary, but the current branch contains no discoverable `iosApp` project/directory, `settings.gradle.kts` does not register `:iosApp`, and `gradle projects` does not list it.
+
+No code was changed during this review. The discrepancy must be resolved or explicitly re-decided before 014-09 can be accepted.
+
+**Next valid action:** discuss/resolve the iOS application boundary discrepancy. Do not silently implement it as part of review.
