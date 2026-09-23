@@ -210,3 +210,31 @@ Frozen constraints preserved:
 Fresh verification confirms the iOS application boundary now exists and the complete inspected repository conforms to the clarified BASE-ARCH-014 platform-boundary rule. No new finding was identified.
 
 Windows host limitation: native Xcode/macOS build verification could not be executed. Repository-level Xcode boundary verification was completed.
+
+
+## BASE-ARCH-014-T01 — Gradle Wrapper + Git/Build Workflow — 2026-09-23
+
+**State:** IMPLEMENTING
+**Owner authorization:** Explicitly granted on 2026-09-23.
+
+Scope:
+- add official Gradle Wrapper targeting Gradle 9.7.1;
+- make clone → build → test → commit → push → PR → merge → sync operationally documented;
+- route AI sessions through the exact terminal/Git command document.
+
+Documentation portion completed:
+- `AI_START_HERE.md` updated;
+- `docs/project-management/11-TERMINAL-GIT-COMMANDS.md` expanded.
+
+Wrapper generation remains pending because the current Windows environment has no system Gradle and the repository has no Wrapper yet. The next action is to provision a compatible Gradle 9.7.1 executable and generate the official Wrapper; do not hand-create the Wrapper JAR.
+
+
+## BASE-ARCH-014-T01 — Gradle 9.7.1 Authority Update — 2026-09-23
+
+**State:** IMPLEMENTING
+
+- Authoritative CB-Partner Gradle version: **9.7.1**.
+- Dedicated Gradle source of truth: docs/build/GRADLE-SETUP-AND-WORKFLOW.md.
+- AI_START_HERE.md and 11-TERMINAL-GIT-COMMANDS.md route Gradle setup/commands to the dedicated document.
+- 9.5.0 is superseded historical context, not the selected project version.
+- Remaining: provision Gradle 9.7.1 on Windows, generate the official Wrapper, verify it, rerun the build/test baseline, and record actual results.
