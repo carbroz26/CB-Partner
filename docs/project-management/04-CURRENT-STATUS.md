@@ -7,7 +7,7 @@
 Phase 1 — Technical Foundation implementation.
 
 ## Current Objective
-Implement the frozen BASE-ARCH-014 minimum Gradle/KMP/Compose/build-logic foundation through the approved unit-by-unit workflow.
+Implement and verify the frozen BASE-ARCH-014 minimum Gradle/KMP/Compose/build-logic foundation through the approved unit-by-unit workflow.
 
 ## Base Architecture State
 BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
@@ -16,17 +16,17 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-CHECKPOINTED — 014-07 Dependency and Module Wiring accepted.
+IMPLEMENTING — 014-09 Architecture Verification in progress.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-04, 014-05, and 014-06 are verified and accepted.
+014-01 through 014-07 are verified and accepted.
 
-014-07 is verified and accepted.
+014-08 Build/Test Baseline is **VERIFIED**.
 
-014-08 is authorized and in progress. 014-09 remains pending.
+014-09 Architecture Verification is **IN PROGRESS**.
 
 ## What has been implemented
 
@@ -57,19 +57,28 @@ BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 - iOS and Desktop remain thin platform boundaries;
 - no business/application behavior was introduced.
 
+## 014-08 Verification
+
+The authorized Build/Test Baseline was executed successfully on 2026-09-23:
+
+- `gradle projects` → **BUILD SUCCESSFUL**; approved project hierarchy and included `:build-logic` confirmed.
+- `gradle -p build-logic build` → **BUILD SUCCESSFUL**.
+- Shared JVM tests for `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, and `:feature:dynamic` → **BUILD SUCCESSFUL**; 28 actionable tasks.
+- Shared JVM compilation for the same six modules → **BUILD SUCCESSFUL**; 15 actionable tasks.
+
+The Windows iOS simulator disabled-target warning is expected because iOS simulator tests require macOS. No suppression property was added.
+
+014-08 required no source-code changes.
+
 ## Verification State
 
-014-01 verification is complete and accepted.
+014-01 through 014-07 verification is complete and accepted.
 
-014-02 verification is complete and accepted.
+014-08 Build/Test Baseline verification is complete and verified.
 
-014-03 verification is complete and accepted.
+014-09 Architecture Verification is now the active verification gate.
 
-014-04, 014-05, and 014-06 local verification is complete.
-
-`gradle projects` and targeted JVM compilation both completed successfully. The Windows iOS simulator disabled-target warning is expected and does not block this verification.
-
-No claim is made that the Android SDK/build is locally available until the user's Gradle runner verifies it.
+No architecture blocker is currently identified.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -81,7 +90,6 @@ No claim is made that the Android SDK/build is locally available until the user'
 - ApplicationBootstrap/Store/Navigation/Koin implementation.
 - ViewModel or speculative architecture modules.
 - Unrelated refactoring.
-- 014-05 Compose configuration.
 - Runtime dependency wiring before its authorized consumer unit.
 
 The later startup vertical slice will use the actual backend API and exact response supplied by the project owner.
@@ -99,40 +107,30 @@ Current Trello state:
 - **BACKLOG:** future/uncommitted work.
 
 ## Blocker
-No architecture blocker.
-
-014-07 verification and acceptance are complete.
+No architecture blocker identified for 014-08.
 
 ## Next Valid Action
-Record the acceptance checkpoint and obtain separate explicit authorization before starting 014-08.
+Complete the formal BASE-ARCH-014-09 Architecture Verification against the reconciled repository state. Do not modify source code as part of the verification unless a concrete violation is found and separately authorized.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
 
 
-## 014-07 Acceptance Checkpoint — 2026-09-23
+## 014-08 Verification Checkpoint — 2026-09-23
 
-**Current workflow state:** CHECKPOINTED — 014-07 accepted.
+**State:** VERIFIED
 
-014-07 Dependency and Module Wiring has been verified and accepted against the frozen implementation plan.
+The project owner authorized 014-08 and the actual baseline commands completed successfully.
 
-Verification:
-- Five foundation dependency reports completed successfully.
-- Targeted JVM compilation of all six shared modules completed successfully.
-- Android KMP namespace configuration is resolved under 014-06.
-- No scope expansion or prohibited architecture was introduced.
+Verification evidence:
+- Project hierarchy and included build verified with `gradle projects`.
+- Build logic verified with `gradle -p build-logic build`.
+- Six shared `jvmTest` tasks completed successfully.
+- Six shared JVM compilation tasks completed successfully.
+- Windows iOS simulator disabled-target warning recorded as expected host limitation.
 
-014-06 now includes the recorded deterministic Android KMP namespace convention. This is a platform-boundary correction only and does not change the 014-07 dependency graph.
+No source-code changes were required for 014-08.
 
-**Current implementation state:** 014-07 complete and accepted; 014-08 authorized and in progress.
+**Current state:** 014-08 VERIFIED; 014-09 Architecture Verification IN PROGRESS.
 
-**Next valid action:** Execute and record the 014-08 Build/Test Baseline verification. Do not start 014-09.
-
-
-## 014-08 Authorization — 2026-09-23
-
-The project owner explicitly authorized BASE-ARCH-014-08 — Build/Test Baseline.
-
-Scope is limited to minimal shared testing/build verification and recording actual commands/results. No architecture expansion or unrelated code changes are authorized.
-
-**State:** IMPLEMENTING — verification pending.
+**Next action:** perform formal 014-09 architecture verification. Do not introduce implementation changes during review.
