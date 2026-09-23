@@ -210,3 +210,41 @@ Until that fresh verification is completed, 014-09 remains **IN PROGRESS** and i
 
 **Source-code changes during this clarification:** None.
 **Implementation scope:** Documentation/freeze-record clarification only.
+
+
+## 014-09 iOS Boundary Implementation and Fresh Verification — 2026-09-23
+
+**State:** VERIFIED — F02 RESOLVED; final 014-09 acceptance remains subject to project-owner review.
+
+The project owner explicitly authorized implementation of the missing native iOS/Xcode application boundary identified as BASE-ARCH-014-09-F02.
+
+### Implemented
+- iosApp/CB-Partner.xcodeproj/project.pbxproj — minimal native Xcode application project.
+- iosApp/CB-Partner.xcodeproj/project.xcworkspace/contents.xcworkspacedata — native Xcode workspace metadata.
+- iosApp/CBPartnerApp.swift — minimal UIKit application entry point with no business/application behavior.
+- Removed iosApp/.gitkeep because the real native boundary now exists.
+
+### Explicitly not implemented
+- No :iosApp Gradle project.
+- No iOS Gradle convention plugin.
+- No backend/bootstrap implementation.
+- No Compose/Navigation/Koin/Store integration.
+- No business or SDUI implementation.
+
+### Fresh 014-09 verification
+Verified against the clarified frozen architecture:
+- iosApp/ now contains an actual Xcode project boundary rather than only .gitkeep.
+- :iosApp remains absent from settings.gradle.kts, as required.
+- No iOS Gradle convention exists in build-logic.
+- Android and Desktop remain Gradle application boundaries.
+- Shared Gradle module hierarchy remains unchanged.
+- The previously reported F02 condition is resolved.
+- The authorized 014-08 build/test baseline remains successful.
+
+### Host limitation
+The current verification host is Windows. A native Xcode build cannot be executed on this host because Xcode/macOS is required. Therefore iOS project-file/build validation is limited to repository/source-structure verification in this gate. No claim of an Xcode build success is made.
+
+### Verification conclusion
+BASE-ARCH-014-09-F02 is RESOLVED. No new architecture violation was identified during the fresh repository verification.
+
+Source implementation was limited to the authorized iOS/Xcode application boundary.
