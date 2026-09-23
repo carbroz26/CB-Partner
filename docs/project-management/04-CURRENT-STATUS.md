@@ -24,7 +24,7 @@ BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 ## Current Implementation Unit
 014-04, 014-05, and 014-06 are verified and accepted.
 
-014-07 is authorized and implementation is in progress.
+014-07 is verified and accepted.
 
 014-08 and 014-09 remain pending.
 
@@ -101,10 +101,10 @@ Current Trello state:
 ## Blocker
 No architecture blocker.
 
-014-07 local verification is pending.
+014-07 verification and acceptance are complete.
 
 ## Next Valid Action
-Run the 014-07 local verification and report the complete result. Do not start 014-08 until 014-07 is verified and accepted.
+Record the acceptance checkpoint and obtain separate explicit authorization before starting 014-08.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
