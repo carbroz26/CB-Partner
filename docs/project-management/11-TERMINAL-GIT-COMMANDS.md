@@ -127,22 +127,22 @@ macOS/Linux:
     ./gradlew --version
     ./gradlew projects
 
-Current CB-Partner target: Gradle 9.5.0. The repository uses AGP 9.3.0, for which Android Developers documents Gradle 9.5.0 as the minimum/default compatible version.
+Current CB-Partner target: Gradle 9.7.1. The repository uses AGP 9.3.0, for which Android Developers documents Gradle 9.7.1 as the minimum/default compatible version.
 
 ## 13. BASE-ARCH-014-T01 — Add Gradle Wrapper
-Authorized scope: add the official Gradle Wrapper using Gradle 9.5.0.
+Authorized scope: add the official Gradle Wrapper using Gradle 9.7.1.
 
-When a compatible system Gradle 9.5.0 executable is available:
-    gradle :wrapper --gradle-version 9.5.0 --distribution-type bin
+When a compatible system Gradle 9.7.1 executable is available:
+    gradle :wrapper --gradle-version 9.7.1 --distribution-type bin
 
 Then verify:
     .\gradlew.bat --version
-    .\gradlew.bat :wrapper --gradle-version 9.5.0
+    .\gradlew.bat :wrapper --gradle-version 9.7.1
     .\gradlew.bat --version
 
 Commit all generated Wrapper files. Do not hand-create or substitute the Wrapper JAR.
 
-Current blocker: this Windows environment has no system gradle and the repository has no Wrapper yet. A compatible Gradle 9.5.0 executable must be provisioned before the official Wrapper can be generated.
+Current blocker: this Windows environment has no system gradle and the repository has no Wrapper yet. A compatible Gradle 9.7.1 executable must be provisioned before the official Wrapper can be generated.
 
 ## 14. Build Health Check
     .\gradlew.bat --version
@@ -233,3 +233,12 @@ Then run the applicable build/test commands.
 CLONE → VERIFY REPOSITORY + WRAPPER → FETCH → SWITCH/CREATE AUTHORIZED BRANCH → PULL/UPDATE → IMPLEMENT → BUILD + TEST → DIFF + REVIEW → COMMIT → PUSH → PR/REVIEW → MERGE TO DEVELOPMENT → INTEGRATION VERIFY → RELEASE REVIEW → MERGE TO MAIN → FETCH + SYNC LOCAL → BUILD + TEST AGAIN.
 
 This operational reference complements AI_START_HERE.md and the project operating system. Architecture decisions remain authoritative in the architecture documents.
+
+## 23. Gradle Single Source of Truth
+All Gradle installation, version policy, Wrapper generation, Windows setup, build/test commands, troubleshooting, upgrade procedure, and version history are maintained in:
+
+`docs/build/GRADLE-SETUP-AND-WORKFLOW.md`
+
+**Authoritative CB-Partner Gradle version: 9.7.1.**
+
+This document is the operational command reference; the Gradle document is the detailed setup/version authority. If the two conflict, stop and reconcile them before continuing.
