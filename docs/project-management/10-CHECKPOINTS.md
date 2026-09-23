@@ -81,3 +81,36 @@ BASE-ARCH-014-07 — Dependency and Module Wiring accepted and checkpointed.
 For recovery, start from this checkpoint commit on feature/base-arch-014, then read AI_START_HERE.md, the Project Tracker, Current Status, BASE-ARCH-014 implementation plan/status, and the architecture record before any further action.
 
 **Checkpoint result:** stable and ready for a separate 014-08 authorization gate.
+
+
+## CP-004 — BASE-ARCH-014 Foundation Freeze
+
+**State:** ESTABLISHED
+**Date:** 2026-09-23
+**Git branch:** `feature/base-arch-014`
+
+### Milestone
+BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation — owner accepted and code frozen.
+
+### Completed work
+- 014-01 through 014-07 accepted.
+- 014-08 build/test baseline verified.
+- 014-09 architecture verification completed; F02 resolved.
+- T01 Gradle 9.7.1 Wrapper and Wrapper-based baseline verified.
+- Native iOS/Xcode application boundary established without a `:iosApp` Gradle module.
+
+### Verification
+Shared JVM tests and compilation passed; build-logic and project hierarchy checks passed. Windows iOS simulator/Xcode execution remains a host limitation.
+
+### Known limitations
+- Native Xcode/macOS build verification has not been executed on the Windows host.
+- No new BASE-ARCH-014 implementation work is permitted after this freeze.
+
+### Documentation state
+Tracker, Current Status, Decision Log, and BASE-ARCH-014 implementation status record owner acceptance and code freeze.
+
+### Recovery
+Start from the frozen `feature/base-arch-014` branch state, then read `AI_START_HERE.md`, Tracker, Current Status, BASE-ARCH-014 plan/status, and architecture records before any new action.
+
+### Next action
+Prepare PR/merge from `feature/base-arch-014` to `development`.
