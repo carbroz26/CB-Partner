@@ -218,3 +218,10 @@ Actual repository state has been reconciled:
 - No architecture blocker identified.
 
 The project is now at the final BASE-ARCH-014 owner acceptance/code-freeze gate. No automatic next-unit start.
+
+
+## BASE-ARCH-014 CODE FREEZE — 2026-09-23
+
+**State:** FROZEN
+
+The project owner explicitly accepted BASE-ARCH-014. The verified implementation is now frozen on `feature/base-arch-014`. No additional implementation is authorized under this work item. Next workflow step is freeze documentation/checkpoint and merge preparation.
