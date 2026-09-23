@@ -47,13 +47,13 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CODE FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; final owner acceptance pending | feature/base-arch-014 | Set Up Platform App Modules — DONE; Verify Project Architecture — DONE | None identified | Owner acceptance of complete BASE-ARCH-014, then code freeze/document/merge preparation |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CODE FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; owner accepted; implementation frozen | feature/base-arch-014 | Set Up Platform App Modules — DONE; Verify Project Architecture — DONE | None identified | Prepare PR from feature/base-arch-014 to development |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
 - Workflow: **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
 - **DONE:** Set Up Gradle Project Structure; Add Version Catalog; Set Up Gradle Build Conventions.
-- **IN PROGRESS:** Set Up Platform App Modules.
+- **IN PROGRESS:** none for BASE-ARCH-014.
 - **Completed verification:** Configure Kotlin Multiplatform Targets; 014-05 Compose Configuration; 014-06 Platform Application Boundaries.
 - **TO DO:** remaining approved foundation and architecture implementation work.
 - **BACKLOG:** future/uncommitted work.
@@ -271,3 +271,20 @@ Frozen verification state:
 - No architecture blocker identified.
 
 No further implementation changes are permitted under BASE-ARCH-014. Any new change must be handled as a new approved work item under the project workflow.
+
+
+## BASE-ARCH-014 Post-Freeze Checkpoint — 2026-09-23
+
+**State:** FROZEN — MERGE PREPARATION
+
+BASE-ARCH-014 is owner-accepted and code-frozen on `feature/base-arch-014`.
+
+Verified/frozen:
+- 014-01 through 014-07 → ACCEPTED.
+- 014-08 → VERIFIED.
+- 014-09 → VERIFIED; F02 resolved.
+- T01 → VERIFIED; Gradle 9.7.1 Wrapper and Wrapper-based baseline verified.
+- Native iOS/Xcode application boundary exists under `iosApp/`; no `:iosApp` Gradle module.
+- No architecture blocker identified.
+
+No further implementation changes are permitted under BASE-ARCH-014. The next workflow action is PR/merge preparation from `feature/base-arch-014` to `development`.
