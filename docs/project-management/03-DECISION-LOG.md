@@ -147,3 +147,23 @@ This clarification preserves application-boundary symmetry while allowing each p
 
 ### 014-09 consequence
 The previous 014-09 finding that treated the absence of `:iosApp` from the Gradle hierarchy as a discrepancy is superseded by this clarification. A fresh 014-09 verification must instead verify the actual `iosApp/` native/Xcode application boundary.
+
+
+## BASE-ARCH-014-09 F02 Resolution Record — 2026-09-23
+
+**Finding:** BASE-ARCH-014-09-F02 — missing native iOS/Xcode application boundary.
+**State:** RESOLVED / VERIFIED.
+**Owner authorization:** Explicitly granted on 2026-09-23.
+
+The repository previously contained only iosApp/.gitkeep. The authorized correction established the native Xcode application boundary under iosApp/ without creating a Gradle :iosApp project or an iOS Gradle convention.
+
+The fresh 014-09 verification confirmed:
+- native Xcode project boundary exists;
+- iOS remains outside the Gradle module hierarchy;
+- Android and Desktop retain their Gradle application boundaries;
+- shared module structure and frozen dependency direction remain unchanged;
+- no prohibited architecture or business/SDUI scope was introduced.
+
+The Windows verification host cannot execute Xcode/macOS builds. That limitation is recorded as an environment limitation, not as a repository architecture failure.
+
+No new architecture finding was identified.
