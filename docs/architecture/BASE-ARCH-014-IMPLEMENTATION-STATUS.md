@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING — 014-07 IN PROGRESS  
+**State:** CHECKPOINTED — 014-07 ACCEPTED  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -29,7 +29,7 @@
 | 014-04 | KMP Target Configuration | ACCEPTED |
 | 014-05 | Compose Configuration | ACCEPTED |
 | 014-06 | Platform Application Boundaries | ACCEPTED |
-| 014-07 | Dependency and Module Wiring | IMPLEMENTING |
+| 014-07 | Dependency and Module Wiring | ACCEPTED |
 | 014-08 | Build/Test Baseline | PENDING |
 | 014-09 | Architecture Verification | PENDING |
 
@@ -102,7 +102,7 @@ Branch: `feature/base-arch-014`
 ## Gate
 014-01 through 014-06 are VERIFIED and accepted.
 
-014-07 implementation is authorized and in progress. 014-08 and 014-09 remain pending.
+014-07 is verified and accepted. 014-08 and 014-09 remain pending. 014-08 requires separate explicit authorization.
 
 Implementation scope for 014-07 is limited to frozen foundation module dependencies; no runtime library, DI, Store, Navigation implementation, bootstrap, business, or SDUI work is introduced.
 
