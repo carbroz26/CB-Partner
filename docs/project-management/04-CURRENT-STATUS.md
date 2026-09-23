@@ -16,7 +16,7 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTING — 014-07 Dependency and Module Wiring.
+CHECKPOINTED — 014-07 Dependency and Module Wiring accepted.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
