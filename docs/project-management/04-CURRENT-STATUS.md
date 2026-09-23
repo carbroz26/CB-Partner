@@ -26,7 +26,7 @@ BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 014-08 Build/Test Baseline is **VERIFIED**.
 
-014-09 Architecture Verification is **IN PROGRESS**.
+014-09 Architecture Verification is **VERIFIED**.
 
 ## What has been implemented
 
@@ -78,7 +78,7 @@ The Windows iOS simulator disabled-target warning is expected because iOS simula
 
 014-09 Architecture Verification is the active verification gate.
 
-The previous iOS discrepancy has been clarified by the owner-approved platform-boundary decision: `iosApp/` is an Xcode application boundary, not a Gradle module. Fresh 014-09 verification is still pending against this clarified rule.
+The previous iOS discrepancy has been resolved by the owner-approved platform-boundary decision: `iosApp/` is an Xcode application boundary, not a Gradle module. Fresh 014-09 verification completed successfully against this clarified rule.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -102,15 +102,16 @@ Workflow:
 
 Current Trello state:
 - **DONE:** Set Up Gradle Project Structure; Add Version Catalog; Set Up Gradle Build Conventions.
-- **IN PROGRESS:** Configure Kotlin Multiplatform Targets; Set Up Platform App Modules.
-- **TO DO:** remaining approved foundation and architecture implementation work.
+- **IN PROGRESS:** none for BASE-ARCH-014.
+- **DONE:** Configure Kotlin Multiplatform Targets; Set Up Platform App Modules; Verify Project Architecture.
+- **TO DO:** remaining approved foundation and architecture implementation work; no automatic start.
 - **BACKLOG:** future/uncommitted work.
 
 ## Blocker
-No architecture blocker identified for 014-08.
+No architecture blocker identified for BASE-ARCH-014.
 
 ## Next Valid Action
-Complete the formal BASE-ARCH-014-09 Architecture Verification against the clarified platform-boundary rule. Verify the actual `iosApp/` native/Xcode boundary; do not treat absence of `:iosApp` from Gradle as a violation. Do not modify source code as part of verification.
+Owner review/acceptance of the complete BASE-ARCH-014 implementation, followed by code freeze, documentation checkpoint, and merge preparation. Do not start the next architecture item automatically.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
@@ -202,3 +203,18 @@ Current blocker: the user's Windows environment has no system `gradle`, and the 
 The earlier 9.5.0 target has been superseded. The repository now has one dedicated Gradle source of truth at docs/build/GRADLE-SETUP-AND-WORKFLOW.md, and AI_START_HERE.md routes Gradle setup and command questions to it.
 
 Documentation/routing is complete. The remaining T01 work is Windows provisioning, official Wrapper generation, Wrapper verification, and rerunning the baseline through gradlew.bat.
+
+
+## BASE-ARCH-014 Final Verification Checkpoint — 2026-09-23
+
+**State:** IMPLEMENTATION VERIFIED — OWNER ACCEPTANCE PENDING
+
+Actual repository state has been reconciled:
+- 014-01 through 014-07 accepted.
+- 014-08 verified.
+- 014-09 verified; F02 resolved.
+- T01 verified; Gradle 9.7.1 Wrapper and Wrapper-based baseline passed.
+- iOS/Xcode boundary exists under `iosApp/`; no `:iosApp` Gradle module.
+- No architecture blocker identified.
+
+The project is now at the final BASE-ARCH-014 owner acceptance/code-freeze gate. No automatic next-unit start.
