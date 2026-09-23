@@ -8,7 +8,7 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: IMPLEMENTING — 014-07 in progress
+- Workflow state: CHECKPOINTED — 014-07 accepted
 - Current implementation unit: 014-07 — Dependency and Module Wiring
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
@@ -16,7 +16,7 @@
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
 - Blockers: None
 - Last completed action: Authorized and implemented initial 014-07 foundation module dependency wiring
-- Next valid action: Run 014-07 local verification; do not start 014-08
+- Next valid action: Obtain explicit authorization for 014-08; do not start it automatically
 - Last updated: 2026-09-23
 
 ## Base Architecture Register
@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTING — 014-07 | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-06 verified; 014-07 through 014-09 pending | feature/base-arch-014 | Set Up Platform App Modules — IN PROGRESS | None | Review checkpoint; authorize next unit explicitly |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CHECKPOINTED — 014-07 ACCEPTED | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-07 verified and accepted; 014-08 and 014-09 pending | feature/base-arch-014 | Set Up Platform App Modules — IN PROGRESS | None | Review checkpoint; authorize next unit explicitly |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -68,7 +68,7 @@
 | 014-04 | ACCEPTED | Blocked previously by missing Android compileSdk; now ready for re-verification after 014-06 | iOS ARM64, iOS Simulator ARM64, JVM; Android target/configuration now supplied by 014-06 |
 | 014-05 | ACCEPTED | `gradle projects` and targeted JVM compilation both BUILD SUCCESSFUL | Compose Configuration verified through actual feature module configuration/compilation |
 | 014-06 | ACCEPTED | `gradle projects` and targeted JVM compilation both BUILD SUCCESSFUL | Android KMP target + Android application compileSdk 36; iOS/Desktop remain thin boundaries |
-| 014-07 | IMPLEMENTING | Pending local verification | Foundation module dependency wiring only |
+| 014-07 | ACCEPTED | Dependency reports and JVM compilation BUILD SUCCESSFUL | Foundation module dependency wiring only |
 | 014-08 | PENDING | Not run | Build/Test Baseline |
 | 014-09 | PENDING | Not run | Architecture Verification |
 
