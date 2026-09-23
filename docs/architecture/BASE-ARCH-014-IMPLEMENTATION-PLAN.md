@@ -150,3 +150,40 @@ After BASE-ARCH-014 is implemented, verified, accepted and frozen, the next sepa
 
 ## Plan freeze
 **PLAN_FROZEN.** Explicit owner approval received 2026-09-22. On 2026-09-22, the project owner explicitly resolved the 014-04/014-06 staging conflict by keeping the boundary and moving only the required Android `compileSdk` configuration into 014-06. No other BASE-ARCH-014 decision is changed. Implementation remains authorized through the unit-by-unit gates.
+
+## 014-07 Acceptance Record — 2026-09-23
+
+**State:** ACCEPTED
+
+Implementation was reviewed against the frozen 014-07 unit contract.
+
+Verified implementation:
+- :domain → :core
+- :data → :domain, :core
+- :navigation → :core
+- :feature:splash → :domain, :core, :navigation
+- :feature:dynamic → :domain, :core, :navigation
+
+Verification performed on the project owner's Windows environment:
+- All five commonMainImplementation dependency reports completed with **BUILD SUCCESSFUL**.
+- JVM compilation completed successfully for :core, :domain, :data, :navigation, :feature:splash, and :feature:dynamic.
+- The Android KMP namespace configuration required for Gradle task/configuration discovery was resolved under the already-approved 014-06 platform boundary.
+- No runtime library, DI, Store/MVI, Navigation implementation, bootstrap, business, SDUI, fake backend, or fake JSON work was introduced.
+
+The (n) marker in the dependency reports was observed because commonMainImplementation is a non-resolvable configuration; the declared project dependencies were present in each report.
+
+**Acceptance result:** 014-07 satisfies its frozen implementation-plan scope and verification requirements. 014-08 remains separately gated and is not started by this acceptance.
+
+## 014-06 Namespace Boundary Record — 2026-09-23
+
+The deterministic Android KMP namespace convention is part of the 014-06 platform boundary.
+
+The namespace is centrally derived by KmpConventionPlugin from the Gradle module path using com.carbroz.cbpartner as the base:
+- :core → com.carbroz.cbpartner.core
+- :domain → com.carbroz.cbpartner.domain
+- :data → com.carbroz.cbpartner.data
+- :navigation → com.carbroz.cbpartner.navigation
+- :feature:splash → com.carbroz.cbpartner.feature.splash
+- :feature:dynamic → com.carbroz.cbpartner.feature.dynamic
+
+Individual KMP module build files do not duplicate namespace configuration. This correction does not change the 014-07 dependency graph or any other BASE-ARCH-014 decision.
