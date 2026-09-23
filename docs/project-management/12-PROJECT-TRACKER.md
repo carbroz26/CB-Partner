@@ -187,3 +187,26 @@ The previous finding that treated the absence of `:iosApp` from Gradle as a disc
 **Documentation state:** clarification complete.
 **Source changes:** none.
 **Next action:** perform fresh 014-09 architecture verification against the clarified rule.
+
+
+## BASE-ARCH-014-09 F02 Resolution — 2026-09-23
+
+**State:** VERIFIED — pending owner acceptance.
+
+The owner authorized creation of the native iOS/Xcode application boundary after fresh 014-09 identified BASE-ARCH-014-09-F02.
+
+Implemented under iosApp/:
+- native Xcode project;
+- Xcode workspace metadata;
+- minimal UIKit application entry point;
+- placeholder .gitkeep removed.
+
+Frozen constraints preserved:
+- no :iosApp Gradle project;
+- no iOS Gradle convention plugin;
+- no business/application architecture;
+- no Store, Navigation, Koin, bootstrap, backend, or SDUI implementation.
+
+Fresh verification confirms the iOS application boundary now exists and the complete inspected repository conforms to the clarified BASE-ARCH-014 platform-boundary rule. No new finding was identified.
+
+Windows host limitation: native Xcode/macOS build verification could not be executed. Repository-level Xcode boundary verification was completed.
