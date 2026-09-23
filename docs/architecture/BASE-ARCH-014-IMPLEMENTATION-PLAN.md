@@ -21,7 +21,7 @@ Establish the minimum reproducible Gradle/Kotlin Multiplatform/Compose Multiplat
 - architecture/dependency verification
 - durable documentation/status updates
 
-Initial modules:
+Initial Gradle modules:
 ```
 :core
 :domain
@@ -30,11 +30,17 @@ Initial modules:
 :feature:splash
 :feature:dynamic
 :androidApp
-:iosApp
 :desktopApp
 ```
 
 `build-logic` is an included Gradle build, not an architecture module.
+
+Platform application boundaries are:
+- `androidApp/` → Gradle application project `:androidApp`.
+- `desktopApp/` → Gradle application project `:desktopApp`.
+- `iosApp/` → native Xcode/iOS application boundary; **no `:iosApp` Gradle project**.
+
+Application-boundary symmetry is required; Gradle-module symmetry is not.
 
 ## Out of scope
 Authentication, OTP, booking, payment, dashboard, business workflows, SDUI internals, dynamic JSON, template/component/registry/renderer/action systems, real bootstrap/API implementation, backend DTOs/contracts, fake bootstrap, fake JSON, fake backend, ApplicationBootstrap implementation, Splash Store, Navigation implementation, Koin application graph, ViewModel, `:store`, `:mvi`, `:presentation-core`, `:di`, `:common`, `:shared`, unrelated refactoring/upgrades.
@@ -69,7 +75,12 @@ Wire only dependencies genuinely required by the foundation. Frozen runtime libr
 Compose is authorized for `:feature:splash` and `:feature:dynamic`. `:navigation` may use Compose only if its actual implementation requires it. `:core`, `:domain`, and `:data` remain Compose-free.
 
 ## Platform boundaries
-`:androidApp` and `:desktopApp` remain thin entry points. `:iosApp` is the iOS/Xcode boundary; no artificial symmetric iOS convention is required. Platform apps contain no duplicated business/application architecture.
+All three supported platforms have explicit application boundaries, but those boundaries are represented by their native build systems:
+- `:androidApp` is the Android Gradle application boundary.
+- `:desktopApp` is the Desktop Gradle application boundary.
+- `iosApp/` is the native iOS/Xcode application boundary and is **not** a Gradle module.
+
+No artificial iOS Gradle convention is required or permitted merely for symmetry. Platform apps contain no duplicated business/application architecture.
 
 ## Dependency direction
 Preserve:
@@ -108,7 +119,7 @@ Apply the approved non-platform-specific KMP target configuration and standard s
 Apply Compose only to actual Compose modules. Verify Compose modules configure/compile and Core/Domain/Data remain Compose-free.
 
 ### 014-06 — Platform Application Boundaries
-Configure Android, Desktop and iOS boundaries, including the minimum Android KMP `compileSdk` configuration required by the approved Android target. This `compileSdk` configuration is the only Android configuration moved from the 014-04 staging boundary; no other 014-04/014-06 scope is changed. Verify platform builds/integration where environment permits; report iOS limitations honestly.
+Configure the Android, Desktop and iOS **application boundaries** using their appropriate platform build systems. Android uses Gradle project `:androidApp`; Desktop uses Gradle project `:desktopApp`; iOS uses `iosApp/` as the native Xcode boundary and does not introduce `:iosApp`. Include the minimum Android KMP `compileSdk` configuration required by the approved Android target. This `compileSdk` configuration is the only Android configuration moved from the 014-04 staging boundary; no other 014-04/014-06 scope is changed. Verify platform builds/integration where environment permits; report iOS limitations honestly.
 
 ### 014-07 — Dependency and Module Wiring
 Wire only foundation-required dependencies and preserve the frozen graph. Verify dependency boundaries.

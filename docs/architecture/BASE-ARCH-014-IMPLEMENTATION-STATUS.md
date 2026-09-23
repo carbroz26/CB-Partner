@@ -148,7 +148,7 @@ Branch: `feature/base-arch-014`
 
 014-09 — Architecture Verification is **IN PROGRESS**.
 
-The next action is the formal 014-09 architecture verification against the reconciled repository state. No code changes are authorized by this verification step.
+The next action is the formal 014-09 architecture verification against the clarified platform-boundary rule. No source-code changes are authorized by the verification step itself.
 
 ## 014-07 Verification and Acceptance — 2026-09-23
 
@@ -190,24 +190,23 @@ The authorized verification completed successfully as recorded above. 014-08 is 
 
 ## 014-09 Architecture Verification — 2026-09-23
 
-**Review state:** REQUIRED ACTION FOUND — not accepted
+**Review state:** DOCUMENTATION CLARIFICATION COMPLETED — fresh verification pending
 
-Formal architecture verification was performed after reconciling the 014-08 verification records and following `AI_START_HERE.md` review routing.
+The project owner explicitly froze Option A: every supported platform has an application boundary, but not every application boundary is a Gradle module.
 
-### Verified
-- Approved Gradle project hierarchy is present for `:androidApp`, `:core`, `:data`, `:desktopApp`, `:domain`, `:feature:splash`, `:feature:dynamic`, and `:navigation`.
-- `:build-logic` is included and the four approved convention plugins are present.
-- Frozen foundation dependency direction is preserved in the inspected build files.
-- Compose convention is applied only to `:feature:splash` and `:feature:dynamic`; `:core`, `:domain`, and `:data` remain Compose-free in the inspected source/build configuration.
-- No ViewModel or prohibited architecture modules were found in repository search.
-- No business-specific authentication, booking, payment, dashboard, SDUI internals, fake bootstrap, fake JSON, or fake backend implementation was found in the inspected repository state.
-- 014-08 build/test baseline passed as recorded above.
+### Clarified platform-boundary rule
+- Android: `androidApp/` → Gradle application project `:androidApp`.
+- Desktop: `desktopApp/` → Gradle application project `:desktopApp`.
+- iOS: `iosApp/` → native Xcode application boundary; **no `:iosApp` Gradle project**.
+- No synthetic iOS Gradle module or iOS convention plugin may be introduced merely for symmetry.
 
-### REQUIRED finding
-The frozen BASE-ARCH-001/014 foundation expects an `iosApp/` platform application boundary. The current branch has no `iosApp` project/directory discoverable in repository search, `settings.gradle.kts` does not register an `:iosApp` Gradle project, and `gradle projects` does not list an `:iosApp` project.
+### Documentation changes completed
+The frozen architecture record, BASE-ARCH-014 implementation plan, and this implementation-status record were clarified so that platform application boundaries and Gradle modules are explicitly distinguished. The stale expectation that `:iosApp` must appear in the Gradle project hierarchy has been removed.
 
-This is not being silently fixed during review. It requires clarification/implementation under the approved 014-06 platform-boundary scope before 014-09 can be accepted, unless the project owner explicitly confirms that the iOS/Xcode boundary is intentionally deferred and reopens/updates the relevant frozen scope.
+### Fresh verification requirement
+014-09 must now be rerun against the clarified rule. The verification must check the actual iOS application boundary itself (native/Xcode boundary), rather than treating the absence of `:iosApp` from Gradle as a violation.
 
-**Finding classification:** REQUIRED
-**Architecture verification result:** NOT ACCEPTED / BLOCKED pending resolution of the iOS application boundary discrepancy.
-**No source code was changed during 014-09 review.**
+Until that fresh verification is completed, 014-09 remains **IN PROGRESS** and is not accepted.
+
+**Source-code changes during this clarification:** None.
+**Implementation scope:** Documentation/freeze-record clarification only.

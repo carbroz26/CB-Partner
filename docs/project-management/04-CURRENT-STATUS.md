@@ -76,9 +76,9 @@ The Windows iOS simulator disabled-target warning is expected because iOS simula
 
 014-08 Build/Test Baseline verification is complete and verified.
 
-014-09 Architecture Verification is now the active verification gate.
+014-09 Architecture Verification is the active verification gate.
 
-No architecture blocker is currently identified.
+The previous iOS discrepancy has been clarified by the owner-approved platform-boundary decision: `iosApp/` is an Xcode application boundary, not a Gradle module. Fresh 014-09 verification is still pending against this clarified rule.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
@@ -110,7 +110,7 @@ Current Trello state:
 No architecture blocker identified for 014-08.
 
 ## Next Valid Action
-Complete the formal BASE-ARCH-014-09 Architecture Verification against the reconciled repository state. Do not modify source code as part of the verification unless a concrete violation is found and separately authorized.
+Complete the formal BASE-ARCH-014-09 Architecture Verification against the clarified platform-boundary rule. Verify the actual `iosApp/` native/Xcode boundary; do not treat absence of `:iosApp` from Gradle as a violation. Do not modify source code as part of verification.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
@@ -138,12 +138,19 @@ No source-code changes were required for 014-08.
 
 ## 014-09 Architecture Verification — 2026-09-23
 
-**State:** REVIEW — REQUIRED finding; not accepted.
+**State:** DOCUMENTATION CLARIFICATION COMPLETE — FRESH VERIFICATION PENDING
 
-Formal verification after 014-08 reconciliation confirmed the approved dependency direction, Compose boundary, absence of ViewModel/prohibited modules, and absence of business/SDUI/fake-bootstrap scope expansion.
+The project owner explicitly froze the platform-boundary rule: every supported platform has an application boundary, but not every application boundary is a Gradle module.
 
-A required discrepancy was found: the frozen foundation expects an `iosApp/` platform application boundary, but the current branch contains no discoverable `iosApp` project/directory, `settings.gradle.kts` does not register `:iosApp`, and `gradle projects` does not list it.
+The clarified mapping is:
+- Android: `androidApp/` → `:androidApp` Gradle application.
+- Desktop: `desktopApp/` → `:desktopApp` Gradle application.
+- iOS: `iosApp/` → native Xcode application boundary; no `:iosApp` Gradle project.
 
-No code was changed during this review. The discrepancy must be resolved or explicitly re-decided before 014-09 can be accepted.
+The architecture record and BASE-ARCH-014 plan/status documentation were updated to remove the stale expectation that `:iosApp` must appear in the Gradle hierarchy.
 
-**Next valid action:** discuss/resolve the iOS application boundary discrepancy. Do not silently implement it as part of review.
+The prior 014-09 finding is therefore superseded. A fresh verification is required to inspect the actual `iosApp/` native/Xcode application boundary. Absence of `:iosApp` from `gradle projects` is expected and is not itself a violation.
+
+No source code was changed during the clarification.
+
+**Next valid action:** perform fresh BASE-ARCH-014-09 Architecture Verification against the clarified rule.

@@ -14,9 +14,9 @@
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
-- Blockers: None identified
-- Last completed action: Verified 014-08 Build/Test Baseline successfully
-- Next valid action: Complete 014-09 Architecture Verification; do not modify source code during review unless a concrete violation is found and separately authorized
+- Blockers: 014-09 fresh verification pending after platform-boundary clarification
+- Last completed action: Owner-approved clarification that platform application boundary ≠ Gradle module boundary
+- Next valid action: Complete fresh 014-09 Architecture Verification; do not modify source code during verification
 - Last updated: 2026-09-23
 
 ## Base Architecture Register
@@ -175,10 +175,15 @@ Verified:
 - absence of business-specific/SDUI/fake-bootstrap scope expansion;
 - 014-08 build/test baseline successful.
 
-### REQUIRED finding
-The frozen foundation expects an `iosApp/` platform application boundary, but the current branch has no discoverable `iosApp` project/directory. `settings.gradle.kts` does not register `:iosApp`, and the successful `gradle projects` output does not list it.
+### Platform Boundary Clarification
+The owner approved and froze the rule that every supported platform has an application boundary, but not every application boundary is a Gradle module.
 
-**Finding:** REQUIRED
-**014-09 result:** NOT ACCEPTED / BLOCKED pending resolution.
-**Source changes during review:** None.
-**Next action:** resolve whether the iOS/Xcode application boundary is required now under 014-06 or whether the frozen scope must be explicitly reopened/updated. Do not silently create the boundary during review.
+- Android: `androidApp/` → `:androidApp` Gradle application.
+- Desktop: `desktopApp/` → `:desktopApp` Gradle application.
+- iOS: `iosApp/` → native Xcode application boundary; no `:iosApp` Gradle project.
+
+The previous finding that treated the absence of `:iosApp` from Gradle as a discrepancy is superseded. Fresh 014-09 verification must inspect the actual iOS/Xcode boundary instead.
+
+**Documentation state:** clarification complete.
+**Source changes:** none.
+**Next action:** perform fresh 014-09 architecture verification against the clarified rule.

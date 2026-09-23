@@ -125,3 +125,25 @@ The Android KMP namespace requirement is owned by the 014-06 platform boundary. 
 This correction resolved the Android KMP configuration failure without changing the 014-07 dependency decision, module boundaries, target matrix, or other BASE-ARCH-014 decisions.
 
 The detailed namespace mapping is recorded in docs/architecture/BASE-ARCHITECTURE.md and the BASE-ARCH-014 implementation records.
+
+
+## BASE-ARCH-014-09 Platform Boundary Clarification — 2026-09-23
+
+**Decision:** Platform application boundary is distinct from Gradle module boundary.
+**State:** DECISION_FROZEN
+**Owner approval:** Explicitly approved by the project owner on 2026-09-23.
+**Durable records:** docs/architecture/BASE-ARCHITECTURE.md; docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md; docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
+
+### Frozen rule
+Every supported platform has an explicit application boundary, but not every platform application boundary is a Gradle module.
+
+- Android: `androidApp/` is the platform application boundary and Gradle project `:androidApp`.
+- Desktop: `desktopApp/` is the platform application boundary and Gradle project `:desktopApp`.
+- iOS: `iosApp/` is the platform application boundary owned by Xcode and is not a Gradle project.
+
+Therefore `:iosApp` must not be added to `settings.gradle.kts`, and no synthetic iOS Gradle convention is to be created merely for platform symmetry.
+
+This clarification preserves application-boundary symmetry while allowing each platform to use its native build-system boundary. It does not reopen or change the selected KMP, Clean Architecture, MVI/UDF, Pure Store, no-ViewModel, multi-module, Navigation, DI, or dependency-direction decisions.
+
+### 014-09 consequence
+The previous 014-09 finding that treated the absence of `:iosApp` from the Gradle hierarchy as a discrepancy is superseded by this clarification. A fresh 014-09 verification must instead verify the actual `iosApp/` native/Xcode application boundary.
