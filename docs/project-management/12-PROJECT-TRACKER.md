@@ -8,15 +8,15 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation
-- Workflow state: FINAL ACCEPTANCE GATE — BASE-ARCH-014
-- Current implementation unit: BASE-ARCH-014 final owner acceptance / code-freeze checkpoint
+- Workflow state: CODE FROZEN — BASE-ARCH-014
+- Current implementation unit: BASE-ARCH-014 frozen implementation; no changes without new approved work item
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-014
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - Frozen implementation plan: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 - Implementation status: docs/architecture/BASE-ARCH-014-IMPLEMENTATION-STATUS.md
 - Blockers: None identified
 - Last completed action: Fresh 014-09 architecture verification and Gradle 9.7.1/T01 verification completed
-- Next valid action: Owner review/acceptance of complete BASE-ARCH-014, then code-freeze/document/merge preparation
+- Next valid action: Document freeze checkpoint and prepare merge to development
 - Last updated: 2026-09-23
 
 ## Base Architecture Register
@@ -35,7 +35,7 @@
 | BASE-ARCH-011 | Application Startup Failure, Retry and Recovery Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-012 | Application Startup State and Bootstrap Contract | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
 | BASE-ARCH-013 | Application Bootstrap Data Flow and Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | No separate plan |
-| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTATION_VERIFIED | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; final owner acceptance pending |
+| BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTATION_VERIFIED | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; owner acceptance complete; implementation frozen |
 
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | ARCH-DOC-001 | Base Architecture | Durable architecture documentation | COMPLETE | docs/architecture/BASE-ARCHITECTURE.md | Complete | docs/base-architecture-record | — | None | Complete |
 | BASE-ARCH-013 | Base Architecture | Application Bootstrap Data Flow & Layer Ownership | DECISION_FROZEN | docs/architecture/BASE-ARCHITECTURE.md | Decision frozen; implementation not authorized by this record | docs/base-architecture-record | — | None | Continue only through separately authorized implementation work |
-| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | FINAL ACCEPTANCE GATE | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; final owner acceptance pending | feature/base-arch-014 | Set Up Platform App Modules — DONE; Verify Project Architecture — DONE | None identified | Owner acceptance of complete BASE-ARCH-014, then code freeze/document/merge preparation |
+| BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CODE FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; final owner acceptance pending | feature/base-arch-014 | Set Up Platform App Modules — DONE; Verify Project Architecture — DONE | None identified | Owner acceptance of complete BASE-ARCH-014, then code freeze/document/merge preparation |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -255,3 +255,19 @@ Actual repository state on `feature/base-arch-014` has been reconciled with the 
 - No architecture blocker identified.
 
 The repository is now at the final owner acceptance/code-freeze gate. No new implementation unit starts automatically.
+
+
+## BASE-ARCH-014 CODE FREEZE — 2026-09-23
+
+**State:** FROZEN
+
+The project owner explicitly accepted the complete BASE-ARCH-014 implementation after verification. BASE-ARCH-014 is now code-frozen on `feature/base-arch-014`.
+
+Frozen verification state:
+- 014-01 through 014-07 → ACCEPTED.
+- 014-08 → VERIFIED.
+- 014-09 → VERIFIED; F02 resolved.
+- T01 → VERIFIED; Gradle 9.7.1 Wrapper and Wrapper-based baseline verified.
+- No architecture blocker identified.
+
+No further implementation changes are permitted under BASE-ARCH-014. Any new change must be handled as a new approved work item under the project workflow.
