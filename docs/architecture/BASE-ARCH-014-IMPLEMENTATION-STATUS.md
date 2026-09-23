@@ -105,3 +105,47 @@ Branch: `feature/base-arch-014`
 014-07 implementation is authorized and in progress. 014-08 and 014-09 remain pending.
 
 Implementation scope for 014-07 is limited to frozen foundation module dependencies; no runtime library, DI, Store, Navigation implementation, bootstrap, business, or SDUI work is introduced.
+
+
+## 014-07 Verification and Acceptance — 2026-09-23
+
+**State:** ACCEPTED
+
+Implementation matches the frozen 014-07 dependency/module-wiring scope:
+- :domain → :core
+- :data → :domain, :core
+- :navigation → :core
+- :feature:splash → :domain, :core, :navigation
+- :feature:dynamic → :domain, :core, :navigation
+
+Verification completed:
+- All five commonMainImplementation dependency reports: **BUILD SUCCESSFUL**.
+- JVM compilation for :core, :domain, :data, :navigation, :feature:splash, and :feature:dynamic: **BUILD SUCCESSFUL**.
+- Android KMP namespace/configuration failure previously observed on shared modules is resolved through the 014-06 platform-boundary namespace convention.
+- No prohibited or out-of-scope implementation was introduced.
+
+The Windows iOS simulator disabled-target warning remains an expected host limitation and is not a verification failure.
+
+## 014-06 Namespace Correction Record — 2026-09-23
+
+The Android KMP namespace requirement is recorded as part of 014-06.
+
+The approved deterministic convention is centrally implemented in KmpConventionPlugin:
+- :core → com.carbroz.cbpartner.core
+- :domain → com.carbroz.cbpartner.domain
+- :data → com.carbroz.cbpartner.data
+- :navigation → com.carbroz.cbpartner.navigation
+- :feature:splash → com.carbroz.cbpartner.feature.splash
+- :feature:dynamic → com.carbroz.cbpartner.feature.dynamic
+
+This correction is platform-boundary configuration only. It does not alter 014-07 dependency decisions, module boundaries, or the frozen BASE-ARCH-014 graph.
+
+## Gate Update
+
+014-01 through 014-07 are now **VERIFIED and ACCEPTED**.
+
+014-08 — Build/Test Baseline is **PENDING**.
+
+014-09 — Architecture Verification is **PENDING**.
+
+**Next authorization:** 014-08 requires a separate explicit authorization after this checkpoint. It must not be started automatically.
