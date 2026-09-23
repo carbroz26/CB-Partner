@@ -234,3 +234,10 @@ The project owner explicitly accepted BASE-ARCH-014. The verified implementation
 Owner acceptance and code freeze are complete. The implementation remains frozen on `feature/base-arch-014`.
 
 The next valid workflow state is PR/merge preparation to `development`. No further BASE-ARCH-014 implementation changes are authorized.
+
+
+## BASE-ARCH-014 PR — 2026-09-23
+
+**State:** OPEN — REVIEW PENDING
+
+PR #2 has been opened from `feature/base-arch-014` to `development`. BASE-ARCH-014 remains code-frozen; no additional implementation changes are authorized under this work item.
