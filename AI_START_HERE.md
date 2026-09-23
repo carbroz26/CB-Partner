@@ -252,6 +252,9 @@ Before modification inspect status, branch and relevant diff. Preserve user chan
 
 Do not duplicate authoritative information unnecessarily.
 
+## GRADLE DOCUMENT AUTHORITY
+For all Gradle installation, version policy, Wrapper setup, commands, build/test commands, troubleshooting, and version changes, use `docs/build/GRADLE-SETUP-AND-WORKFLOW.md` as the single authoritative Gradle reference. Do not maintain competing Gradle setup instructions in other documents. Project-management documents route to this document; architecture documents do not define Gradle installation procedure.
+
 ## 19. MISSING DOCUMENT
 If the correct durable document does not exist:
 1. determine why it is needed;
@@ -759,7 +762,7 @@ Then run the required integration/build verification.
 ### Gradle Wrapper rule
 The repository must use the Gradle Wrapper for normal builds. Required files are gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.jar, and gradle/wrapper/gradle-wrapper.properties.
 Windows uses .\gradlew.bat; macOS/Linux uses ./gradlew.
-The current AGP 9.3.0 configuration requires Gradle 9.5.0 as the minimum/default compatible version. BASE-ARCH-014-T01 therefore targets Gradle 9.5.0.
+The current AGP 9.3.0 configuration requires Gradle 9.7.1 as the minimum/default compatible version. BASE-ARCH-014-T01 therefore targets Gradle 9.7.1.
 Do not replace the official Wrapper with a custom script or manually invented JAR.
 
 ### Build/test baseline
@@ -767,3 +770,12 @@ After clone or synchronization, execute the exact build/test commands required b
 
 ### Antigravity handoff
 When AI changes repository state remotely, return exact local synchronization and verification commands for the actual final Git state. Never invent a branch, commit, merge, tag, or SHA.
+
+## 64. GRADLE VERSION AUTHORITY
+**Authoritative CB-Partner Gradle version: 9.7.1.**
+
+- Project Wrapper target: Gradle 9.7.1.
+- Normal project builds use `.\\gradlew.bat` on Windows or `./gradlew` on macOS/Linux.
+- System Gradle is bootstrap/update tooling only; it is not the normal project build path.
+- Gradle 9.5.0 was previously documented as a compatibility baseline and is superseded; it is not the selected CB-Partner version.
+- All Gradle setup and command details live in `docs/build/GRADLE-SETUP-AND-WORKFLOW.md`.
