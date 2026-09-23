@@ -1002,3 +1002,28 @@ BASE-ARCH-014 → DECISION_FROZEN
 ```
 
 **Next architecture unit:** Determine the next Base Architecture unit only after the project owner explicitly authorizes it.
+
+
+---
+
+# BASE-ARCH-014-06 — Android KMP Namespace Convention
+
+**State:** DECISION_FROZEN  
+**Owner approval:** 2026-09-23
+
+The Android namespace for every KMP shared-library module is owned centrally by `KmpConventionPlugin` under the 014-06 platform boundary.
+
+## Frozen convention
+
+```text
+:core → com.carbroz.cbpartner.core
+:domain → com.carbroz.cbpartner.domain
+:data → com.carbroz.cbpartner.data
+:navigation → com.carbroz.cbpartner.navigation
+:feature:splash → com.carbroz.cbpartner.feature.splash
+:feature:dynamic → com.carbroz.cbpartner.feature.dynamic
+```
+
+The namespace is derived deterministically from the Gradle module path using the base `com.carbroz.cbpartner`. Individual KMP module build files must not duplicate namespace configuration. The Android application namespace remains `com.carbroz.cbpartner.android`.
+
+This decision changes no module boundaries, dependency direction, target matrix, or other BASE-ARCH-014 decisions.
