@@ -248,3 +248,36 @@ The current verification host is Windows. A native Xcode build cannot be execute
 BASE-ARCH-014-09-F02 is RESOLVED. No new architecture violation was identified during the fresh repository verification.
 
 Source implementation was limited to the authorized iOS/Xcode application boundary.
+
+
+## BASE-ARCH-014 Final Verification Checkpoint — 2026-09-23
+
+**State:** IMPLEMENTATION VERIFIED — OWNER ACCEPTANCE PENDING
+
+### Verified units
+- 014-01 → ACCEPTED
+- 014-02 → ACCEPTED
+- 014-03 → ACCEPTED
+- 014-04 → ACCEPTED
+- 014-05 → ACCEPTED
+- 014-06 → ACCEPTED
+- 014-07 → ACCEPTED
+- 014-08 → VERIFIED
+- 014-09 → VERIFIED; F02 RESOLVED
+- T01 → VERIFIED
+
+### T01 verification
+- Gradle 9.7.1 is authoritative.
+- Official Wrapper is implemented and committed in `0630982`.
+- Wrapper verification passed.
+- Wrapper-based BASE-ARCH-014 build/test baseline passed.
+
+### 014-09 verification
+- Native `iosApp/CB-Partner.xcodeproj` boundary exists.
+- No `:iosApp` Gradle module exists.
+- Android/Desktop remain Gradle application boundaries.
+- No prohibited architecture, business, SDUI, fake bootstrap, or fake JSON scope was introduced.
+- Windows host limitation prevents native Xcode build execution; repository-level boundary verification is complete.
+
+### Final gate
+No architecture blocker is identified. BASE-ARCH-014 is implementation-verified and is now waiting only for explicit project-owner acceptance before code freeze. No next architecture unit starts automatically.
