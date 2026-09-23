@@ -1,6 +1,6 @@
 # CB-Partner — Decision Log
 
-**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-014; BASE-ARCH-014 implementation verified pending final owner acceptance/code freeze; TRELLO-002 frozen.
+**Status:** ACTIVE — Base Architecture decisions frozen/documented through BASE-ARCH-014; BASE-ARCH-014 implementation accepted and code frozen; TRELLO-002 frozen.
 
 ## Purpose
 Durable record of significant project decisions. It prevents the project from depending on old conversations to remember why a choice was made.
@@ -221,3 +221,10 @@ The complete implementation record has been reconciled with the repository state
 - no new architecture finding identified.
 
 This checkpoint does not itself freeze the completed implementation. Final BASE-ARCH-014 code freeze remains subject to explicit project-owner acceptance.
+
+
+## BASE-ARCH-014 Owner Acceptance and Code Freeze — 2026-09-23
+
+**Decision:** ACCEPTED / FROZEN
+
+The project owner explicitly accepted the complete BASE-ARCH-014 implementation after the recorded verification gates passed. The implementation is now code-frozen. Existing BASE-ARCH-014 decisions are not to be reopened without a new approved work item and evidence requiring reconsideration.
