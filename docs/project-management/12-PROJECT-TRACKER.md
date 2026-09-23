@@ -158,3 +158,27 @@ Scope:
 - no architecture expansion or unrelated changes.
 
 014-09 remains gated and must not start automatically.
+
+
+## BASE-ARCH-014-09 Architecture Verification — 2026-09-23
+
+**Review state:** REQUIRED finding — not accepted.
+
+Formal verification completed after the 014-08 records were reconciled and after following `AI_START_HERE.md` routing.
+
+Verified:
+- approved Gradle project hierarchy for the currently registered modules;
+- build-logic and four approved convention plugins;
+- frozen foundation dependency direction in inspected module build files;
+- Compose boundary;
+- absence of ViewModel/prohibited architecture modules;
+- absence of business-specific/SDUI/fake-bootstrap scope expansion;
+- 014-08 build/test baseline successful.
+
+### REQUIRED finding
+The frozen foundation expects an `iosApp/` platform application boundary, but the current branch has no discoverable `iosApp` project/directory. `settings.gradle.kts` does not register `:iosApp`, and the successful `gradle projects` output does not list it.
+
+**Finding:** REQUIRED
+**014-09 result:** NOT ACCEPTED / BLOCKED pending resolution.
+**Source changes during review:** None.
+**Next action:** resolve whether the iOS/Xcode application boundary is required now under 014-06 or whether the frozen scope must be explicitly reopened/updated. Do not silently create the boundary during review.
