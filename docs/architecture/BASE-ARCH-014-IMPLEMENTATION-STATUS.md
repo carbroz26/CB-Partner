@@ -186,3 +186,28 @@ This correction is platform-boundary configuration only. It does not alter 014-0
 The project owner explicitly authorized BASE-ARCH-014-08 — Build/Test Baseline.
 
 The authorized verification completed successfully as recorded above. 014-08 is now VERIFIED and the workflow proceeds to the separately gated 014-09 architecture verification.
+
+
+## 014-09 Architecture Verification — 2026-09-23
+
+**Review state:** REQUIRED ACTION FOUND — not accepted
+
+Formal architecture verification was performed after reconciling the 014-08 verification records and following `AI_START_HERE.md` review routing.
+
+### Verified
+- Approved Gradle project hierarchy is present for `:androidApp`, `:core`, `:data`, `:desktopApp`, `:domain`, `:feature:splash`, `:feature:dynamic`, and `:navigation`.
+- `:build-logic` is included and the four approved convention plugins are present.
+- Frozen foundation dependency direction is preserved in the inspected build files.
+- Compose convention is applied only to `:feature:splash` and `:feature:dynamic`; `:core`, `:domain`, and `:data` remain Compose-free in the inspected source/build configuration.
+- No ViewModel or prohibited architecture modules were found in repository search.
+- No business-specific authentication, booking, payment, dashboard, SDUI internals, fake bootstrap, fake JSON, or fake backend implementation was found in the inspected repository state.
+- 014-08 build/test baseline passed as recorded above.
+
+### REQUIRED finding
+The frozen BASE-ARCH-001/014 foundation expects an `iosApp/` platform application boundary. The current branch has no `iosApp` project/directory discoverable in repository search, `settings.gradle.kts` does not register an `:iosApp` Gradle project, and `gradle projects` does not list an `:iosApp` project.
+
+This is not being silently fixed during review. It requires clarification/implementation under the approved 014-06 platform-boundary scope before 014-09 can be accepted, unless the project owner explicitly confirms that the iOS/Xcode boundary is intentionally deferred and reopens/updates the relevant frozen scope.
+
+**Finding classification:** REQUIRED
+**Architecture verification result:** NOT ACCEPTED / BLOCKED pending resolution of the iOS application boundary discrepancy.
+**No source code was changed during 014-09 review.**
