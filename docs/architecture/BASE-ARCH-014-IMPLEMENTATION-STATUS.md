@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** IMPLEMENTING — 014-08 IN PROGRESS  
+**State:** VERIFIED — 014-08 complete; 014-09 architecture verification in progress  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -14,11 +14,13 @@
 
 014-04 — KMP Target Configuration is **VERIFIED and accepted**.
 
-014-06 — Platform Application Boundaries is now **VERIFIED and accepted**. The owner explicitly approved Android `compileSdk = 36` for this unit.
+014-06 — Platform Application Boundaries is **VERIFIED and accepted**. The owner explicitly approved Android `compileSdk = 36` for this unit.
 
 014-05 — Compose Configuration is **VERIFIED and accepted**.
 
 014-07 — Dependency and Module Wiring is **VERIFIED and accepted**.
+
+014-08 — Build/Test Baseline is **VERIFIED**. The authorized baseline commands completed successfully on 2026-09-23.
 
 ## Implementation units
 | Unit | Description | State |
@@ -30,8 +32,54 @@
 | 014-05 | Compose Configuration | ACCEPTED |
 | 014-06 | Platform Application Boundaries | ACCEPTED |
 | 014-07 | Dependency and Module Wiring | ACCEPTED |
-| 014-08 | Build/Test Baseline | IMPLEMENTING |
-| 014-09 | Architecture Verification | PENDING |
+| 014-08 | Build/Test Baseline | VERIFIED |
+| 014-09 | Architecture Verification | IN PROGRESS |
+
+## 014-08 Verification Record — 2026-09-23
+
+**State:** VERIFIED
+
+Authorized baseline verification was executed on the project owner's Windows environment.
+
+### Commands and results
+
+1. Project/module structure:
+`gradle projects`
+- **BUILD SUCCESSFUL**
+- 5 actionable tasks: 1 executed, 4 up-to-date
+- Confirmed approved modules:
+  - `:androidApp`
+  - `:core`
+  - `:data`
+  - `:desktopApp`
+  - `:domain`
+  - `:feature:splash`
+  - `:feature:dynamic`
+  - `:navigation`
+- Confirmed included build: `:build-logic`
+
+2. Build logic:
+`gradle -p build-logic build`
+- **BUILD SUCCESSFUL**
+- 6 actionable tasks: 6 up-to-date
+
+3. Shared JVM tests:
+`gradle :core:jvmTest :domain:jvmTest :data:jvmTest :navigation:jvmTest :feature:splash:jvmTest :feature:dynamic:jvmTest`
+- **BUILD SUCCESSFUL**
+- 28 actionable tasks: 10 executed, 18 up-to-date
+
+4. Shared JVM compilation:
+`gradle :core:compileKotlinJvm :domain:compileKotlinJvm :data:compileKotlinJvm :navigation:compileKotlinJvm :feature:splash:compileKotlinJvm :feature:dynamic:compileKotlinJvm`
+- **BUILD SUCCESSFUL**
+- 15 actionable tasks: 10 executed, 5 up-to-date
+
+### Host limitation
+
+Gradle reports that `iosSimulatorArm64Test` is disabled because the current host is Windows and iOS simulator tests require macOS. This is an expected host limitation and is not treated as a verification failure. No suppression property was added.
+
+### Scope result
+
+014-08 introduced no code changes. The existing foundation passed the authorized build/test baseline. No runtime architecture, business logic, backend/bootstrap, SDUI, ViewModel, prohibited module, or unrelated change was introduced.
 
 ## 014-06 implementation record
 
@@ -55,17 +103,11 @@ Implemented:
 
 No minSdk, namespace, build variants, runtime dependencies, application behavior, Compose configuration, DI, Store, Navigation implementation, backend, or business architecture was added.
 
-The Android-KMP configuration follows the current Android/Kotlin guidance for the `com.android.kotlin.multiplatform.library` plugin and its `kotlin { android { ... } }` DSL. Official guidance confirms the plugin is the supported Android target integration for KMP libraries, and the current compatibility range includes the project's Kotlin 2.4.20 / AGP 9.3.x combination. citeturn2search0turn0search1
-
 ## Verification state
 
 Remote source inspection and local verification confirm the intended 014-04, 014-05, and 014-06 changes are present.
 
-Local Gradle verification completed successfully on 2026-09-23. `gradle projects` and targeted JVM compilation both returned **BUILD SUCCESSFUL**.
-
-The targeted JVM compilation verified `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, and `:feature:dynamic`. The Windows iOS simulator disabled-target warning is expected because simulator tests require macOS.
-
-014-04, 014-05, and 014-06 are now VERIFIED and accepted.
+014-04, 014-05, and 014-06 are VERIFIED and accepted.
 
 ## 014-03 implementation and acceptance
 
@@ -86,7 +128,6 @@ The conventions remain minimal and type-oriented.
 - ViewModel or speculative architecture modules
 - runtime dependency wiring before its authorized consumer unit
 - unrelated refactoring
-- 014-05 Compose configuration
 
 ## Git
 Branch: `feature/base-arch-014`
@@ -99,13 +140,15 @@ Branch: `feature/base-arch-014`
 - **Configure Kotlin Multiplatform Targets** — 014-04, IN PROGRESS / verification pending.
 - **Set Up Platform App Modules** — 014-06, IN PROGRESS / implementation complete, verification pending.
 
-## Gate
-014-01 through 014-06 are VERIFIED and accepted.
+## Gate Update
 
-014-07 is verified and accepted. 014-08 and 014-09 remain pending. 014-08 requires separate explicit authorization.
+014-01 through 014-07 are **VERIFIED and ACCEPTED**.
 
-Implementation scope for 014-07 is limited to frozen foundation module dependencies; no runtime library, DI, Store, Navigation implementation, bootstrap, business, or SDUI work is introduced.
+014-08 — Build/Test Baseline is **VERIFIED**.
 
+014-09 — Architecture Verification is **IN PROGRESS**.
+
+The next action is the formal 014-09 architecture verification against the reconciled repository state. No code changes are authorized by this verification step.
 
 ## 014-07 Verification and Acceptance — 2026-09-23
 
@@ -124,8 +167,6 @@ Verification completed:
 - Android KMP namespace/configuration failure previously observed on shared modules is resolved through the 014-06 platform-boundary namespace convention.
 - No prohibited or out-of-scope implementation was introduced.
 
-The Windows iOS simulator disabled-target warning remains an expected host limitation and is not a verification failure.
-
 ## 014-06 Namespace Correction Record — 2026-09-23
 
 The Android KMP namespace requirement is recorded as part of 014-06.
@@ -140,29 +181,8 @@ The approved deterministic convention is centrally implemented in KmpConventionP
 
 This correction is platform-boundary configuration only. It does not alter 014-07 dependency decisions, module boundaries, or the frozen BASE-ARCH-014 graph.
 
-## Gate Update
+## 014-08 Authorization — 2026-09-23
 
-014-01 through 014-07 are now **VERIFIED and ACCEPTED**.
+The project owner explicitly authorized BASE-ARCH-014-08 — Build/Test Baseline.
 
-014-08 — Build/Test Baseline is **IMPLEMENTING**.
-
-014-09 — Architecture Verification is **PENDING**.
-
-**Next authorization:** 014-08 has been explicitly authorized by the project owner on 2026-09-23 and is now active. Verification and acceptance are pending.
-
-
-## 014-08 Implementation Start — 2026-09-23
-
-**State:** IMPLEMENTING
-
-Owner authorization was explicitly received for BASE-ARCH-014-08 — Build/Test Baseline.
-
-Authorized scope:
-- establish minimal shared testing/build verification;
-- run and record actual Gradle test/build commands and results;
-- preserve the frozen module architecture and dependency graph;
-- no new runtime architecture, business logic, backend/bootstrap, SDUI, ViewModel, or prohibited modules.
-
-Implementation begins with verification of the existing minimal foundation. No code change is authorized unless required by a concrete baseline failure and kept within this unit's scope.
-
-**Next action:** run the 014-08 baseline verification commands and report actual results.
+The authorized verification completed successfully as recorded above. 014-08 is now VERIFIED and the workflow proceeds to the separately gated 014-09 architecture verification.
