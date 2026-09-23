@@ -1,6 +1,6 @@
 # BASE-ARCH-014 — Implementation Status
 
-**State:** CHECKPOINTED — 014-07 ACCEPTED  
+**State:** IMPLEMENTING — 014-08 IN PROGRESS  
 **Plan:** PLAN_FROZEN  
 **Owner approval:** 2026-09-22  
 **Scope:** Minimum Gradle/KMP/Compose/Build-Logic Foundation
@@ -30,7 +30,7 @@
 | 014-05 | Compose Configuration | ACCEPTED |
 | 014-06 | Platform Application Boundaries | ACCEPTED |
 | 014-07 | Dependency and Module Wiring | ACCEPTED |
-| 014-08 | Build/Test Baseline | PENDING |
+| 014-08 | Build/Test Baseline | IMPLEMENTING |
 | 014-09 | Architecture Verification | PENDING |
 
 ## 014-06 implementation record
@@ -144,8 +144,25 @@ This correction is platform-boundary configuration only. It does not alter 014-0
 
 014-01 through 014-07 are now **VERIFIED and ACCEPTED**.
 
-014-08 — Build/Test Baseline is **PENDING**.
+014-08 — Build/Test Baseline is **IMPLEMENTING**.
 
 014-09 — Architecture Verification is **PENDING**.
 
-**Next authorization:** 014-08 requires a separate explicit authorization after this checkpoint. It must not be started automatically.
+**Next authorization:** 014-08 has been explicitly authorized by the project owner on 2026-09-23 and is now active. Verification and acceptance are pending.
+
+
+## 014-08 Implementation Start — 2026-09-23
+
+**State:** IMPLEMENTING
+
+Owner authorization was explicitly received for BASE-ARCH-014-08 — Build/Test Baseline.
+
+Authorized scope:
+- establish minimal shared testing/build verification;
+- run and record actual Gradle test/build commands and results;
+- preserve the frozen module architecture and dependency graph;
+- no new runtime architecture, business logic, backend/bootstrap, SDUI, ViewModel, or prohibited modules.
+
+Implementation begins with verification of the existing minimal foundation. No code change is authorized unless required by a concrete baseline failure and kept within this unit's scope.
+
+**Next action:** run the 014-08 baseline verification commands and report actual results.
