@@ -97,3 +97,31 @@ BASE-ARCH-014 implementation planning is complete and the plan is frozen. The du
 No application source code has been implemented.
 
 TRELLO-002 is frozen. TRELLO-001 is superseded. The Trello board has been migrated to the TRELLO-002 simple work model. 014-01 and 014-02 are represented as completed work; 014-03 is prepared in READY. Remaining approved work is represented as human-readable TO DO cards.
+
+
+## BASE-ARCH-014-07 Acceptance Record
+
+**Decision:** BASE-ARCH-014-07 — Dependency and Module Wiring  
+**State:** ACCEPTED  
+**Date:** 2026-09-23
+
+The project owner supplied and reviewed the required local verification results. The implementation preserves the frozen dependency graph:
+
+- :domain → :core
+- :data → :domain, :core
+- :navigation → :core
+- :feature:splash → :domain, :core, :navigation
+- :feature:dynamic → :domain, :core, :navigation
+
+The five dependency reports and targeted JVM compilation all completed successfully. No out-of-scope runtime architecture or business implementation was introduced.
+
+## BASE-ARCH-014-06 Namespace Boundary Record
+
+**State:** ACCEPTED / FROZEN  
+**Date:** 2026-09-23
+
+The Android KMP namespace requirement is owned by the 014-06 platform boundary. The approved convention is deterministic and centrally derived from the Gradle module path using com.carbroz.cbpartner as the base package.
+
+This correction resolved the Android KMP configuration failure without changing the 014-07 dependency decision, module boundaries, target matrix, or other BASE-ARCH-014 decisions.
+
+The detailed namespace mapping is recorded in docs/architecture/BASE-ARCHITECTURE.md and the BASE-ARCH-014 implementation records.
