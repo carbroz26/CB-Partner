@@ -154,3 +154,24 @@ The prior 014-09 finding is therefore superseded. A fresh verification is requir
 No source code was changed during the clarification.
 
 **Next valid action:** perform fresh BASE-ARCH-014-09 Architecture Verification against the clarified rule.
+
+
+## 014-09 iOS Boundary Implementation — 2026-09-23
+
+**State:** IMPLEMENTED AND VERIFIED — pending owner acceptance of the verification gate.
+
+The project owner authorized correction of BASE-ARCH-014-09-F02. The native iOS/Xcode application boundary is now present under iosApp/.
+
+Implemented:
+- iosApp/CB-Partner.xcodeproj/project.pbxproj
+- iosApp/CB-Partner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+- iosApp/CBPartnerApp.swift
+- removed iosApp/.gitkeep
+
+The implementation did not add :iosApp to Gradle and did not add an iOS Gradle convention.
+
+Fresh 014-09 repository verification confirms the clarified platform-boundary rule is now satisfied. No new architecture finding was identified.
+
+The host is Windows, so Xcode/macOS build verification is not available in this environment. This limitation is recorded rather than hidden.
+
+Next valid action: owner review/acceptance of BASE-ARCH-014-09. Do not start another architecture or implementation unit automatically.
