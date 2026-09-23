@@ -105,3 +105,29 @@ The frozen BASE-ARCH-014 implementation contract is:
 docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md
 
 Historical chat is not an implementation source.
+
+
+## BASE-ARCH-014-07 Acceptance Checkpoint — 2026-09-23
+
+**Checkpoint state:** 014-07 VERIFIED → ACCEPTED → CHECKPOINTED.
+
+### Verified dependency graph
+- :domain → :core
+- :data → :domain, :core
+- :navigation → :core
+- :feature:splash → :domain, :core, :navigation
+- :feature:dynamic → :domain, :core, :navigation
+
+### Verification
+- Five commonMainImplementation dependency reports: **BUILD SUCCESSFUL**.
+- Targeted JVM compilation for :core, :domain, :data, :navigation, :feature:splash, and :feature:dynamic: **BUILD SUCCESSFUL**.
+- Android KMP namespace/configuration issue resolved through the 014-06 platform-boundary convention.
+- No prohibited modules, runtime architecture implementation, business logic, SDUI internals, fake bootstrap, or fake JSON introduced.
+
+### State transition
+IMPLEMENTING — 014-07 → VERIFIED → ACCEPTED → CHECKPOINTED.
+
+014-08 remains **PENDING** and has not been authorized or started.
+
+### Next valid action
+Explicitly authorize BASE-ARCH-014-08 before implementation begins. No automatic transition is permitted.
