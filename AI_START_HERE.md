@@ -689,3 +689,81 @@ Tracker: <reference/state>
 Then verify the target branch before making changes.
 
 When no branch switch is required, do not switch branches merely for convenience.
+## 63. STANDARD REPOSITORY GIT + BUILD LIFECYCLE
+
+The repository workflow must be recoverable from documentation without relying on chat history.
+
+CLONE → VERIFY → FETCH → CREATE/SWITCH BRANCH → PULL/UPDATE → IMPLEMENT → BUILD/TEST → REVIEW DIFF → COMMIT → PUSH → PR/REVIEW → MERGE → FETCH → SYNC LOCAL BRANCH → BUILD/TEST AGAIN.
+
+### Initial clone
+After cloning, verify the remote URL, current branch, working-tree status, required project files, and Gradle Wrapper availability.
+
+    git clone <repository-url>
+    cd CB-Partner
+    git remote -v
+    git status
+    git branch --show-current
+    Get-ChildItem -Force -Name
+
+### Before starting work
+    git fetch origin
+    git status
+    git branch -vv
+    git log --oneline --decorate -10
+
+Use only the authorized branch workflow. Never overwrite unexpected user changes.
+
+### Branch workflow
+    git fetch origin
+    git switch development
+    git pull --ff-only origin development
+    git switch -c feature/<module>
+
+Do not develop directly on main or development.
+
+### Inspect before commit
+    git status
+    git diff --check
+    git diff --stat
+    git diff
+
+### Commit and publish
+    git add <files>
+    git diff --cached
+    git commit -m "<type>: <description>"
+    git push -u origin feature/<module>
+
+Never force-push without explicit authorization.
+
+### Fetch, pull and merge
+git fetch origin updates remote-tracking references without changing the working tree.
+Use git pull --ff-only for safe fast-forward synchronization.
+Normal module flow is feature/<module> → PR/review → development → integration verification → release review → main.
+Do not use local git merge merely for convenience when the approved workflow requires a Pull Request.
+
+### Post-merge synchronization
+    git fetch origin
+    git switch development
+    git pull --ff-only origin development
+    git status
+
+After an approved production merge:
+
+    git fetch origin
+    git switch main
+    git pull --ff-only origin main
+    git status
+
+Then run the required integration/build verification.
+
+### Gradle Wrapper rule
+The repository must use the Gradle Wrapper for normal builds. Required files are gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.jar, and gradle/wrapper/gradle-wrapper.properties.
+Windows uses .\gradlew.bat; macOS/Linux uses ./gradlew.
+The current AGP 9.3.0 configuration requires Gradle 9.5.0 as the minimum/default compatible version. BASE-ARCH-014-T01 therefore targets Gradle 9.5.0.
+Do not replace the official Wrapper with a custom script or manually invented JAR.
+
+### Build/test baseline
+After clone or synchronization, execute the exact build/test commands required by the frozen plan. Never claim a test passed unless it actually ran. Record Windows iOS simulator limitations instead of suppressing them.
+
+### Antigravity handoff
+When AI changes repository state remotely, return exact local synchronization and verification commands for the actual final Git state. Never invent a branch, commit, merge, tag, or SHA.
