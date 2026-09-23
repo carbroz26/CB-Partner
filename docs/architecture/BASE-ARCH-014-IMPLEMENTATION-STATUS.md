@@ -18,7 +18,7 @@
 
 014-05 — Compose Configuration is **VERIFIED and accepted**.
 
-014-07 — Dependency and Module Wiring is **IMPLEMENTING**.
+014-07 — Dependency and Module Wiring is **VERIFIED and accepted**.
 
 ## Implementation units
 | Unit | Description | State |
