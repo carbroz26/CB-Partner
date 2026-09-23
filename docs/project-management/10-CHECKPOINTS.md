@@ -47,7 +47,7 @@ A checkpoint records exact Git commit and, when applicable, branch/tag/PR state,
 **State:** ESTABLISHED  
 **Date:** 2026-09-23  
 **Git branch:** feature/base-arch-014  
-**Checkpoint commit:** cb3754081a50bcf71d0051b590f7b2dfa4e0dd26
+**Checkpoint baseline commit:** 730ecbab247214b803d7a047ade93a7bb906efd2
 
 ### Milestone
 BASE-ARCH-014-07 — Dependency and Module Wiring accepted and checkpointed.
