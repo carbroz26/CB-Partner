@@ -175,3 +175,21 @@ Fresh 014-09 repository verification confirms the clarified platform-boundary ru
 The host is Windows, so Xcode/macOS build verification is not available in this environment. This limitation is recorded rather than hidden.
 
 Next valid action: owner review/acceptance of BASE-ARCH-014-09. Do not start another architecture or implementation unit automatically.
+
+
+## BASE-ARCH-014-T01 — Gradle Wrapper + Git/Build Workflow — 2026-09-23
+
+**State:** IMPLEMENTING
+
+Owner authorization was granted to add the Gradle Wrapper and to establish a complete operational Git/build command reference.
+
+Completed in this step:
+- `AI_START_HERE.md` now contains the standard repository Git/build lifecycle and Wrapper rule.
+- `docs/project-management/11-TERMINAL-GIT-COMMANDS.md` now covers clone, inspect, fetch, pull, branch, commit, push, PR/merge flow, post-merge sync, Wrapper, build/test checks, safe undo, and Antigravity handoff.
+- Gradle 9.5.0 is recorded as the current Wrapper target for the repository's AGP 9.3.0 configuration.
+
+Remaining:
+- Generate and verify the official Wrapper files using a compatible Gradle 9.5.0 executable.
+- Run the baseline using `gradlew.bat` and record the result.
+
+Current blocker: the user's Windows environment has no system `gradle`, and the repository currently has no Wrapper. No fake/custom Wrapper is permitted.
