@@ -26,7 +26,7 @@ BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 014-07 is verified and accepted.
 
-014-08 and 014-09 remain pending.
+014-08 is authorized and in progress. 014-09 remains pending.
 
 ## What has been implemented
 
@@ -124,6 +124,15 @@ Verification:
 
 014-06 now includes the recorded deterministic Android KMP namespace convention. This is a platform-boundary correction only and does not change the 014-07 dependency graph.
 
-**Current implementation state:** 014-07 complete and accepted; 014-08 pending.
+**Current implementation state:** 014-07 complete and accepted; 014-08 authorized and in progress.
 
-**Next valid action:** Obtain explicit authorization to begin 014-08 Build/Test Baseline. Do not start 014-08 automatically.
+**Next valid action:** Execute and record the 014-08 Build/Test Baseline verification. Do not start 014-09.
+
+
+## 014-08 Authorization — 2026-09-23
+
+The project owner explicitly authorized BASE-ARCH-014-08 — Build/Test Baseline.
+
+Scope is limited to minimal shared testing/build verification and recording actual commands/results. No architecture expansion or unrelated code changes are authorized.
+
+**State:** IMPLEMENTING — verification pending.
