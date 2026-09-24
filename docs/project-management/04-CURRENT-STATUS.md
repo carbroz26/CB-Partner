@@ -1,13 +1,13 @@
 # CB-Partner — Current Status
 
 **Status:** ACTIVE  
-**Last Updated:** 2026-09-23
+**Last Updated:** 2026-09-24
 
 ## Current Phase
-Phase 1 — Technical Foundation implementation.
+Phase 1 — Technical Foundation.
 
 ## Current Objective
-Implement and verify the frozen BASE-ARCH-014 minimum Gradle/KMP/Compose/build-logic foundation through the approved unit-by-unit workflow.
+Complete the architecture foundation progressively, one separately authorized work item at a time, using the frozen project workflow.
 
 ## Base Architecture State
 BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
@@ -16,83 +16,54 @@ BASE-ARCH-001 through BASE-ARCH-014 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-IMPLEMENTING — 014-09 Architecture Verification in progress.
+POST-MERGE INTEGRATION VERIFIED — READY FOR NEXT AUTHORIZATION.
 
 ## Current Work Item
 BASE-ARCH-014 — Minimum Gradle/KMP/Compose/Build-Logic Foundation.
 
 ## Current Implementation Unit
-014-01 through 014-07 are verified and accepted.
+BASE-ARCH-014 is **FROZEN** and merged into `development`.
 
-014-08 Build/Test Baseline is **VERIFIED**.
+Local post-merge verification completed successfully on 2026-09-24 using the repository Gradle Wrapper.
 
-014-09 Architecture Verification is **VERIFIED**.
+Verified:
+- `.\gradlew.bat --version` → Gradle 9.7.1.
+- `.\gradlew.bat projects` → **BUILD SUCCESSFUL**.
+- Shared JVM tests for `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, and `:feature:dynamic` → **BUILD SUCCESSFUL**.
+- Shared JVM compilation for the same six modules → **BUILD SUCCESSFUL**.
+- Expected Windows iOS simulator disabled-target limitation remains; native Xcode build requires macOS.
+
+## BASE-ARCH-014 Integration Verification — 2026-09-24
+
+**State:** VERIFIED — MERGED INTO DEVELOPMENT.
+
+PR #2 (`feature/base-arch-014` → `development`) was merged with merge commit `50c361587b924dde2bcfc40de20176a097c8b75e`.
+
+Post-merge local verification confirms that the merged `development` branch passes the approved Wrapper baseline. No implementation change was required.
+
+BASE-ARCH-014 remains frozen. Do not modify its implementation. Any new change requires a new separately authorized work item.
 
 ## What has been implemented
 
-014-01:
-- root Gradle settings/build configuration;
-- included `build-logic` boundary;
-- required module registrations;
-- placeholder build files;
-- root Gradle properties and ignore rules.
-
-014-02:
-- `gradle/libs.versions.toml` with central Kotlin, AGP, Compose versions and approved plugin aliases.
-
-014-03:
-- four approved convention plugins;
-- intended module application of the conventions.
-
-014-04:
-- iOS ARM64;
-- iOS Simulator ARM64;
-- JVM;
-- standard KMP target/source-set configuration.
-
-014-06:
-- Android KMP target added through `com.android.kotlin.multiplatform.library`;
-- Android KMP `compileSdk = 36`;
-- Android application `compileSdk = 36`;
-- iOS and Desktop remain thin platform boundaries;
-- no business/application behavior was introduced.
-
-## 014-08 Verification
-
-The authorized Build/Test Baseline was executed successfully on 2026-09-23:
-
-- `gradle projects` → **BUILD SUCCESSFUL**; approved project hierarchy and included `:build-logic` confirmed.
-- `gradle -p build-logic build` → **BUILD SUCCESSFUL**.
-- Shared JVM tests for `:core`, `:domain`, `:data`, `:navigation`, `:feature:splash`, and `:feature:dynamic` → **BUILD SUCCESSFUL**; 28 actionable tasks.
-- Shared JVM compilation for the same six modules → **BUILD SUCCESSFUL**; 15 actionable tasks.
-
-The Windows iOS simulator disabled-target warning is expected because iOS simulator tests require macOS. No suppression property was added.
-
-014-08 required no source-code changes.
-
-## Verification State
-
-014-01 through 014-07 verification is complete and accepted.
-
-014-08 Build/Test Baseline verification is complete and verified.
-
-014-09 Architecture Verification is the active verification gate.
-
-The previous iOS discrepancy has been resolved by the owner-approved platform-boundary decision: `iosApp/` is an Xcode application boundary, not a Gradle module. Fresh 014-09 verification completed successfully against this clarified rule.
+BASE-ARCH-014 established the minimum production foundation:
+- root Gradle/KMP project structure;
+- centralized version catalog;
+- approved build convention plugins;
+- approved KMP targets/source sets;
+- Android/Desktop application boundaries;
+- native iOS/Xcode application boundary without a `:iosApp` Gradle module;
+- shared foundation module skeleton;
+- Gradle 9.7.1 Wrapper and operational Git/build workflow.
 
 ## Explicitly Excluded
 - Authentication, OTP, booking, payment, dashboard.
 - SDUI internals/dynamic JSON.
 - Real backend bootstrap implementation.
-- Fake bootstrap.
-- Fake JSON.
-- Fake backend/API.
+- Fake bootstrap/JSON/backend/API.
 - ApplicationBootstrap/Store/Navigation/Koin implementation.
 - ViewModel or speculative architecture modules.
 - Unrelated refactoring.
 - Runtime dependency wiring before its authorized consumer unit.
-
-The later startup vertical slice will use the actual backend API and exact response supplied by the project owner.
 
 ## Trello Execution Tracking
 Authoritative board: **CB-Partner — Frontend**.
@@ -100,161 +71,15 @@ Authoritative board: **CB-Partner — Frontend**.
 Workflow:
 **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
 
-Current Trello state:
-- **DONE:** Set Up Gradle Project Structure; Add Version Catalog; Set Up Gradle Build Conventions.
-- **IN PROGRESS:** none for BASE-ARCH-014.
-- **DONE:** Configure Kotlin Multiplatform Targets; Set Up Platform App Modules; Verify Project Architecture.
-- **TO DO:** remaining approved foundation and architecture implementation work; no automatic start.
-- **BACKLOG:** future/uncommitted work.
+BASE-ARCH-014 execution cards are complete. No next architecture item is started automatically.
 
 ## Blocker
-No architecture blocker identified for BASE-ARCH-014.
+No BASE-ARCH-014 blocker remains.
 
 ## Next Valid Action
-Owner review/acceptance of the complete BASE-ARCH-014 implementation, followed by code freeze, documentation checkpoint, and merge preparation. Do not start the next architecture item automatically.
+Select and explicitly authorize the **next separately authorized architecture work item**. The next item must be processed through `AI_START_HERE.md` and the approved discussion/research/decision/freeze workflow before implementation.
+
+Do not reopen or modify BASE-ARCH-014.
 
 ## Recovery
 A new AI session must read `AI_START_HERE.md`, Tracker, this document, the frozen implementation plan/status, and relevant architecture records before acting.
-
-
-## 014-08 Verification Checkpoint — 2026-09-23
-
-**State:** VERIFIED
-
-The project owner authorized 014-08 and the actual baseline commands completed successfully.
-
-Verification evidence:
-- Project hierarchy and included build verified with `gradle projects`.
-- Build logic verified with `gradle -p build-logic build`.
-- Six shared `jvmTest` tasks completed successfully.
-- Six shared JVM compilation tasks completed successfully.
-- Windows iOS simulator disabled-target warning recorded as expected host limitation.
-
-No source-code changes were required for 014-08.
-
-**Current state:** 014-08 VERIFIED; 014-09 Architecture Verification IN PROGRESS.
-
-**Next action:** perform formal 014-09 architecture verification. Do not introduce implementation changes during review.
-
-
-## 014-09 Architecture Verification — 2026-09-23
-
-**State:** DOCUMENTATION CLARIFICATION COMPLETE — FRESH VERIFICATION PENDING
-
-The project owner explicitly froze the platform-boundary rule: every supported platform has an application boundary, but not every application boundary is a Gradle module.
-
-The clarified mapping is:
-- Android: `androidApp/` → `:androidApp` Gradle application.
-- Desktop: `desktopApp/` → `:desktopApp` Gradle application.
-- iOS: `iosApp/` → native Xcode application boundary; no `:iosApp` Gradle project.
-
-The architecture record and BASE-ARCH-014 plan/status documentation were updated to remove the stale expectation that `:iosApp` must appear in the Gradle hierarchy.
-
-The prior 014-09 finding is therefore superseded. A fresh verification is required to inspect the actual `iosApp/` native/Xcode application boundary. Absence of `:iosApp` from `gradle projects` is expected and is not itself a violation.
-
-No source code was changed during the clarification.
-
-**Next valid action:** perform fresh BASE-ARCH-014-09 Architecture Verification against the clarified rule.
-
-
-## 014-09 iOS Boundary Implementation — 2026-09-23
-
-**State:** IMPLEMENTED AND VERIFIED — pending owner acceptance of the verification gate.
-
-The project owner authorized correction of BASE-ARCH-014-09-F02. The native iOS/Xcode application boundary is now present under iosApp/.
-
-Implemented:
-- iosApp/CB-Partner.xcodeproj/project.pbxproj
-- iosApp/CB-Partner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-- iosApp/CBPartnerApp.swift
-- removed iosApp/.gitkeep
-
-The implementation did not add :iosApp to Gradle and did not add an iOS Gradle convention.
-
-Fresh 014-09 repository verification confirms the clarified platform-boundary rule is now satisfied. No new architecture finding was identified.
-
-The host is Windows, so Xcode/macOS build verification is not available in this environment. This limitation is recorded rather than hidden.
-
-Next valid action: owner review/acceptance of BASE-ARCH-014-09. Do not start another architecture or implementation unit automatically.
-
-
-## BASE-ARCH-014-T01 — Gradle Wrapper + Git/Build Workflow — 2026-09-23
-
-**State:** IMPLEMENTING
-
-Owner authorization was granted to add the Gradle Wrapper and to establish a complete operational Git/build command reference.
-
-Completed in this step:
-- `AI_START_HERE.md` now contains the standard repository Git/build lifecycle and Wrapper rule.
-- `docs/project-management/11-TERMINAL-GIT-COMMANDS.md` now covers clone, inspect, fetch, pull, branch, commit, push, PR/merge flow, post-merge sync, Wrapper, build/test checks, safe undo, and Antigravity handoff.
-- Gradle 9.7.1 is recorded as the current Wrapper target for the repository's AGP 9.3.0 configuration.
-
-Remaining:
-- Generate and verify the official Wrapper files using a compatible Gradle 9.7.1 executable.
-- Run the baseline using `gradlew.bat` and record the result.
-
-Current blocker: the user's Windows environment has no system `gradle`, and the repository currently has no Wrapper. No fake/custom Wrapper is permitted.
-
-
-## BASE-ARCH-014-T01 Gradle Authority Correction — 2026-09-23
-
-**Authoritative version:** Gradle 9.7.1.
-
-The earlier 9.5.0 target has been superseded. The repository now has one dedicated Gradle source of truth at docs/build/GRADLE-SETUP-AND-WORKFLOW.md, and AI_START_HERE.md routes Gradle setup and command questions to it.
-
-Documentation/routing is complete. The remaining T01 work is Windows provisioning, official Wrapper generation, Wrapper verification, and rerunning the baseline through gradlew.bat.
-
-
-## BASE-ARCH-014 Final Verification Checkpoint — 2026-09-23
-
-**State:** IMPLEMENTATION VERIFIED — OWNER ACCEPTANCE PENDING
-
-Actual repository state has been reconciled:
-- 014-01 through 014-07 accepted.
-- 014-08 verified.
-- 014-09 verified; F02 resolved.
-- T01 verified; Gradle 9.7.1 Wrapper and Wrapper-based baseline passed.
-- iOS/Xcode boundary exists under `iosApp/`; no `:iosApp` Gradle module.
-- No architecture blocker identified.
-
-The project is now at the final BASE-ARCH-014 owner acceptance/code-freeze gate. No automatic next-unit start.
-
-
-## BASE-ARCH-014 CODE FREEZE — 2026-09-23
-
-**State:** FROZEN
-
-The project owner explicitly accepted BASE-ARCH-014. The verified implementation is now frozen on `feature/base-arch-014`. No additional implementation is authorized under this work item. Next workflow step is freeze documentation/checkpoint and merge preparation.
-
-
-## BASE-ARCH-014 Post-Freeze Checkpoint — 2026-09-23
-
-**State:** FROZEN — MERGE PREPARATION
-
-Owner acceptance and code freeze are complete. The implementation remains frozen on `feature/base-arch-014`.
-
-The next valid workflow state is PR/merge preparation to `development`. No further BASE-ARCH-014 implementation changes are authorized.
-
-
-## BASE-ARCH-014 PR — 2026-09-23
-
-**State:** OPEN — REVIEW PENDING
-
-PR #2 has been opened from `feature/base-arch-014` to `development`. BASE-ARCH-014 remains code-frozen; no additional implementation changes are authorized under this work item.
-
-
-## BASE-ARCH-014 Post-Merge Verification — 2026-09-24
-
-**State:** MERGED INTO DEVELOPMENT — REMOTE VERIFICATION COMPLETE
-
-PR #2 (`feature/base-arch-014` → `development`) was merged successfully with merge commit `50c361587b924dde2bcfc40de20176a097c8b75e`.
-
-Verified remotely:
-- PR #2 is closed and merged.
-- `development` contains the merged BASE-ARCH-014 foundation.
-- No GitHub Actions workflow runs or commit status checks are configured for the merge commit.
-- The frozen BASE-ARCH-014 scope remains unchanged.
-
-Local post-merge Gradle/build verification must be run on the developer environment using the repository Wrapper. Native iOS/Xcode verification remains a macOS/Xcode-only check.
-
-**Next valid action:** synchronize local `development`, run the approved Wrapper baseline, record the result, then proceed to the next separately authorized work item. Do not modify frozen BASE-ARCH-014 implementation.
