@@ -54,6 +54,13 @@ The researched structure is accepted and frozen as the foundation for the later 
 
 ## Direction carried forward
 
+The repository structure below identifies **platform application boundaries and shared architecture areas**. A platform application boundary is not required to be a Gradle module; its build-system representation is platform-specific.
+
+Platform boundary rule:
+- `androidApp/` → Android application boundary implemented as Gradle project `:androidApp`.
+- `desktopApp/` → Desktop application boundary implemented as Gradle project `:desktopApp`.
+- `iosApp/` → iOS application boundary owned by Xcode; it is **not** a Gradle project and must not be represented as `:iosApp`.
+
 ```text
 CB-Partner/
 ├── androidApp/
@@ -86,7 +93,7 @@ The researched responsibility model and dependency direction are accepted and fr
 
 ## Responsibility model
 
-- Platform apps: thin platform-specific entry points.
+- Platform application boundaries: thin platform-specific entry points. Android and Desktop are Gradle application projects; iOS is an Xcode application boundary.
 - Core: shared technical foundation.
 - Domain: generic domain/business abstractions and logic; no current business-specific feature architecture.
 - Data: generic data-access implementations.
@@ -159,11 +166,12 @@ Initial Gradle modules:
 :feature:splash
 :feature:dynamic
 :androidApp
-:iosApp
 :desktopApp
 ```
 
 `build-logic/` is a separate included Gradle build.
+
+`iosApp/` is intentionally **not** a Gradle module. It is the native iOS/Xcode application boundary corresponding to the iOS platform. Application-boundary symmetry is required across Android, Desktop and iOS; Gradle-module symmetry is not.
 
 ## Module-granularity rules
 
@@ -450,6 +458,11 @@ The scope intentionally excludes authentication, booking, payment, SDUI internal
 
 ## Frozen principles
 
+- Every supported platform has an explicit application boundary.
+- A platform application boundary is not necessarily a Gradle module.
+- Android: `androidApp/` is a thin Gradle application entry point represented by `:androidApp`.
+- Desktop: `desktopApp/` is a thin Gradle application entry point represented by `:desktopApp`.
+- iOS: `iosApp/` is a thin native Xcode application entry point and is not represented as `:iosApp`.
 - Platform applications are thin entry points.
 - Application Root is the shared application composition boundary.
 - Application Root composes DI, Navigation and Features.
@@ -1002,3 +1015,28 @@ BASE-ARCH-014 → DECISION_FROZEN
 ```
 
 **Next architecture unit:** Determine the next Base Architecture unit only after the project owner explicitly authorizes it.
+
+
+---
+
+# BASE-ARCH-014-06 — Android KMP Namespace Convention
+
+**State:** DECISION_FROZEN  
+**Owner approval:** 2026-09-23
+
+The Android namespace for every KMP shared-library module is owned centrally by `KmpConventionPlugin` under the 014-06 platform boundary.
+
+## Frozen convention
+
+```text
+:core → com.carbroz.cbpartner.core
+:domain → com.carbroz.cbpartner.domain
+:data → com.carbroz.cbpartner.data
+:navigation → com.carbroz.cbpartner.navigation
+:feature:splash → com.carbroz.cbpartner.feature.splash
+:feature:dynamic → com.carbroz.cbpartner.feature.dynamic
+```
+
+The namespace is derived deterministically from the Gradle module path using the base `com.carbroz.cbpartner`. Individual KMP module build files must not duplicate namespace configuration. The Android application namespace remains `com.carbroz.cbpartner.android`.
+
+This decision changes no module boundaries, dependency direction, target matrix, or other BASE-ARCH-014 decisions.

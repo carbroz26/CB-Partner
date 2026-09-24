@@ -1,0 +1,3 @@
+plugins {
+    id("cbpartner.kmp")
+}

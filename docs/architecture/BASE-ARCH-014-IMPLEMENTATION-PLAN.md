@@ -21,7 +21,7 @@ Establish the minimum reproducible Gradle/Kotlin Multiplatform/Compose Multiplat
 - architecture/dependency verification
 - durable documentation/status updates
 
-Initial modules:
+Initial Gradle modules:
 ```
 :core
 :domain
@@ -30,11 +30,17 @@ Initial modules:
 :feature:splash
 :feature:dynamic
 :androidApp
-:iosApp
 :desktopApp
 ```
 
 `build-logic` is an included Gradle build, not an architecture module.
+
+Platform application boundaries are:
+- `androidApp/` → Gradle application project `:androidApp`.
+- `desktopApp/` → Gradle application project `:desktopApp`.
+- `iosApp/` → native Xcode/iOS application boundary; **no `:iosApp` Gradle project**.
+
+Application-boundary symmetry is required; Gradle-module symmetry is not.
 
 ## Out of scope
 Authentication, OTP, booking, payment, dashboard, business workflows, SDUI internals, dynamic JSON, template/component/registry/renderer/action systems, real bootstrap/API implementation, backend DTOs/contracts, fake bootstrap, fake JSON, fake backend, ApplicationBootstrap implementation, Splash Store, Navigation implementation, Koin application graph, ViewModel, `:store`, `:mvi`, `:presentation-core`, `:di`, `:common`, `:shared`, unrelated refactoring/upgrades.
@@ -69,7 +75,12 @@ Wire only dependencies genuinely required by the foundation. Frozen runtime libr
 Compose is authorized for `:feature:splash` and `:feature:dynamic`. `:navigation` may use Compose only if its actual implementation requires it. `:core`, `:domain`, and `:data` remain Compose-free.
 
 ## Platform boundaries
-`:androidApp` and `:desktopApp` remain thin entry points. `:iosApp` is the iOS/Xcode boundary; no artificial symmetric iOS convention is required. Platform apps contain no duplicated business/application architecture.
+All three supported platforms have explicit application boundaries, but those boundaries are represented by their native build systems:
+- `:androidApp` is the Android Gradle application boundary.
+- `:desktopApp` is the Desktop Gradle application boundary.
+- `iosApp/` is the native iOS/Xcode application boundary and is **not** a Gradle module.
+
+No artificial iOS Gradle convention is required or permitted merely for symmetry. Platform apps contain no duplicated business/application architecture.
 
 ## Dependency direction
 Preserve:
@@ -102,13 +113,13 @@ Establish central version/dependency/plugin catalog. Verify aliases and versions
 Implement included build-logic and approved convention types. Verify conventions resolve and apply to intended project types.
 
 ### 014-04 — KMP Target Configuration
-Apply approved target matrix and standard source-set hierarchy. Verify shared modules compile for configured targets.
+Apply the approved non-platform-specific KMP target configuration and standard source-set hierarchy. The Android target is part of the approved matrix, but its required `compileSdk` configuration is intentionally deferred to 014-06. 014-04 must not configure `compileSdk` or other Android platform application details. Verify the shared KMP configuration that can be validated without crossing the 014-06 boundary.
 
 ### 014-05 — Compose Configuration
 Apply Compose only to actual Compose modules. Verify Compose modules configure/compile and Core/Domain/Data remain Compose-free.
 
 ### 014-06 — Platform Application Boundaries
-Configure Android, Desktop and iOS boundaries. Verify platform builds/integration where environment permits; report iOS limitations honestly.
+Configure the Android, Desktop and iOS **application boundaries** using their appropriate platform build systems. Android uses Gradle project `:androidApp`; Desktop uses Gradle project `:desktopApp`; iOS uses `iosApp/` as the native Xcode boundary and does not introduce `:iosApp`. Include the minimum Android KMP `compileSdk` configuration required by the approved Android target. This `compileSdk` configuration is the only Android configuration moved from the 014-04 staging boundary; no other 014-04/014-06 scope is changed. Verify platform builds/integration where environment permits; report iOS limitations honestly.
 
 ### 014-07 — Dependency and Module Wiring
 Wire only foundation-required dependencies and preserve the frozen graph. Verify dependency boundaries.
@@ -149,4 +160,41 @@ Maintain this plan, `BASE-ARCH-014-IMPLEMENTATION-STATUS.md`, Tracker, Current S
 After BASE-ARCH-014 is implemented, verified, accepted and frozen, the next separately authorized startup vertical slice uses the actual backend endpoint and exact response supplied by the project owner. No fake bootstrap is used.
 
 ## Plan freeze
-**PLAN_FROZEN.** Explicit owner approval received 2026-09-22. Implementation is authorized through the unit-by-unit gates, beginning only after READY/branch/execution-tracking checks.
+**PLAN_FROZEN.** Explicit owner approval received 2026-09-22. On 2026-09-22, the project owner explicitly resolved the 014-04/014-06 staging conflict by keeping the boundary and moving only the required Android `compileSdk` configuration into 014-06. No other BASE-ARCH-014 decision is changed. Implementation remains authorized through the unit-by-unit gates.
+
+## 014-07 Acceptance Record — 2026-09-23
+
+**State:** ACCEPTED
+
+Implementation was reviewed against the frozen 014-07 unit contract.
+
+Verified implementation:
+- :domain → :core
+- :data → :domain, :core
+- :navigation → :core
+- :feature:splash → :domain, :core, :navigation
+- :feature:dynamic → :domain, :core, :navigation
+
+Verification performed on the project owner's Windows environment:
+- All five commonMainImplementation dependency reports completed with **BUILD SUCCESSFUL**.
+- JVM compilation completed successfully for :core, :domain, :data, :navigation, :feature:splash, and :feature:dynamic.
+- The Android KMP namespace configuration required for Gradle task/configuration discovery was resolved under the already-approved 014-06 platform boundary.
+- No runtime library, DI, Store/MVI, Navigation implementation, bootstrap, business, SDUI, fake backend, or fake JSON work was introduced.
+
+The (n) marker in the dependency reports was observed because commonMainImplementation is a non-resolvable configuration; the declared project dependencies were present in each report.
+
+**Acceptance result:** 014-07 satisfies its frozen implementation-plan scope and verification requirements. 014-08 remains separately gated and is not started by this acceptance.
+
+## 014-06 Namespace Boundary Record — 2026-09-23
+
+The deterministic Android KMP namespace convention is part of the 014-06 platform boundary.
+
+The namespace is centrally derived by KmpConventionPlugin from the Gradle module path using com.carbroz.cbpartner as the base:
+- :core → com.carbroz.cbpartner.core
+- :domain → com.carbroz.cbpartner.domain
+- :data → com.carbroz.cbpartner.data
+- :navigation → com.carbroz.cbpartner.navigation
+- :feature:splash → com.carbroz.cbpartner.feature.splash
+- :feature:dynamic → com.carbroz.cbpartner.feature.dynamic
+
+Individual KMP module build files do not duplicate namespace configuration. This correction does not change the 014-07 dependency graph or any other BASE-ARCH-014 decision.
