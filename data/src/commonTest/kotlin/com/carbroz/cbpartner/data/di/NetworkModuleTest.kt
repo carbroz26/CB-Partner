@@ -5,6 +5,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
+import io.ktor.client.engine.mock.addHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
@@ -26,11 +27,13 @@ class NetworkModuleTest {
     @Test
     fun mockEngineExecutesRequestWithoutRealNetwork() = runTest {
         val client = HttpClient(MockEngine) {
-            addHandler {
+            engine {
+                addHandler {
                 respond(
                     content = "",
                     status = HttpStatusCode.OK,
                 )
+                }
             }
         }
 
