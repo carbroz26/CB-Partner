@@ -1093,3 +1093,24 @@ The Android namespace for every KMP shared-library module is owned centrally by 
 The namespace is derived deterministically from the Gradle module path using the base `com.carbroz.cbpartner`. Individual KMP module build files must not duplicate namespace configuration. The Android application namespace remains `com.carbroz.cbpartner.android`.
 
 This decision changes no module boundaries, dependency direction, target matrix, or other BASE-ARCH-014 decisions.
+
+
+# BASE-ARCH-017 PLAN FREEZE — 2026-09-30
+
+**State:** PLAN_FROZEN
+
+The implementation plan for BASE-ARCH-017 is now frozen:
+
+`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
+
+The frozen plan resolves the four outstanding PLAN-stage decisions:
+- `:data` does not apply the Koin Compiler Plugin for BASE-ARCH-017.
+- Data owns concrete application `HttpClient` construction; initial configuration remains generic and minimal.
+- Ktor `ktor-client-engine-defaults` is the multiplatform engine strategy; no project-owned `expect/actual` engine abstraction is introduced.
+- The pre-existing 017 implementation branch is reconciled by resulting implementation state rather than blindly preserving its pre-freeze commit history.
+
+The plan specifies exact dependency scope, Koin usage, Ktor ownership/configuration, Navigation 3 integration, tests, verification commands, acceptance criteria, prohibited changes, and branch reconciliation.
+
+**Implementation authorization:** NOT GRANTED.
+
+The next valid process gate is separate explicit implementation authorization. No production source implementation or merge is permitted until that gate is granted.
