@@ -1,9 +1,9 @@
 # BASE-ARCH-017 — Runtime Infrastructure Implementation Plan
 
-**State:** PLAN_FROZEN  
+**State:** IMPLEMENTING  
 **Owner approval:** 2026-09-30  
 **Scope:** Frontend repository only  
-**Implementation authorization:** NOT GRANTED
+**Implementation authorization:** GRANTED — 2026-09-30
 
 ## 1. Purpose
 
@@ -11,7 +11,7 @@ This document is the frozen implementation plan for BASE-ARCH-017 — Runtime In
 
 It translates the already-frozen BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 contracts into an exact implementation scope.
 
-This document does not authorize implementation by itself. A separate explicit implementation-authorization gate is required after this plan freeze.
+Implementation is now authorized against this frozen plan. No scope expansion is permitted without reopening the appropriate decision/plan gate.
 
 ## 2. Frozen Inputs
 
@@ -62,9 +62,9 @@ Historical chat is not an implementation source.
 
 ## 4. Existing 017 Branch Reconciliation
 
-The pre-existing branch `feature/base-arch-017-runtime-infrastructure` is 14 commits ahead and 5 commits behind `development`. Its changes were created before the BASE-ARCH-017 decision freeze and are therefore not retroactively authorized.
+The pre-existing branch `feature/base-arch-017-runtime-infrastructure` was created before the BASE-ARCH-017 decision freeze and contained 14 implementation commits. Those changes were not retroactively authorized.
 
-The branch must be reconciled by resulting implementation state, not by blindly preserving its commit history.
+Implementation is performed on the new branch `feature/base-arch-017-runtime-infrastructure-implementation`, created directly from the current `development` head. Reconciliation is therefore by resulting implementation state rather than by merging or replaying the pre-freeze branch history.
 
 ### Final reconciliation
 
@@ -79,7 +79,7 @@ The branch must be reconciled by resulting implementation state, not by blindly 
 | Koin Core in Data | RETAIN | Data owns its Koin definitions |
 | Ktor Client Core | RETAIN | Data constructs the concrete client |
 | Ktor engine defaults | RETAIN | Selected multiplatform engine strategy |
-| Data NetworkModule | RETAIN / MODIFY | Final concrete client definition |
+| Data NetworkModule | RETAIN | Final concrete client definition |
 | NetworkModule tests | RETAIN / MODIFY | Verify the frozen client contract |
 | Core RuntimeFoundationTest | RETAIN / MODIFY | Verify actual Core runtime contracts |
 | Navigation 3 runtime | RETAIN | Previously frozen technology |
@@ -87,11 +87,11 @@ The branch must be reconciled by resulting implementation state, not by blindly 
 | Coroutines test dependency | RETAIN | Required by tests |
 | Koin test dependency | REMOVE | No remaining 017 test requirement |
 
-No automatic merge, rebase, cherry-pick, or branch correction is part of the plan itself.
+No automatic merge, rebase, or cherry-pick of the pre-freeze branch is part of this implementation.
 
 ## 5. Exact Dependency Catalog
 
-The implementation will retain the following BASE-ARCH-017 dependency baseline from the reconciled branch:
+The implementation retains the following BASE-ARCH-017 dependency baseline:
 
 - Kotlin: `2.4.20`
 - AGP: `9.3.0`
@@ -113,9 +113,9 @@ Required libraries:
 - `org.jetbrains.kotlinx:kotlinx-coroutines-test` for tests
 - `org.jetbrains.kotlinx:kotlinx-serialization-json`
 - `co.touchlab:kermit`
-- Navigation 3 runtime/UI artifacts selected by the existing catalog entries.
+- Navigation 3 runtime/UI artifacts selected by the catalog entries.
 
-The Koin Compiler Plugin version/catalog capability is not applied to `:data` by this implementation.
+The Koin Compiler Plugin is not applied to `:data` and no catalog entry is retained solely for this work item.
 
 ## 6. Koin Compiler Plugin
 
@@ -148,7 +148,7 @@ There is no annotation-driven or generated Koin implementation requiring the com
 
 ### Initial concrete definition
 
-The reconciled Data module will provide one application-scoped client:
+The Data module provides one application-scoped client:
 
 ```kotlin
 val networkModule = module {
@@ -192,7 +192,7 @@ No project-owned engine abstraction is introduced.
 | Manual expect/actual engine factory | PROHIBITED |
 | Manual platform engine abstraction | PROHIBITED |
 
-No `ktor-client-android`, `ktor-client-okhttp`, `ktor-client-darwin`, or equivalent manually selected engine dependency is added by BASE-ARCH-017 unless a later concrete platform requirement explicitly reopens this decision.
+No manually selected platform engine dependency is added by BASE-ARCH-017 unless a later concrete platform requirement explicitly reopens this decision.
 
 The native iOS application remains the Xcode `iosApp` boundary and is not converted into a Gradle module.
 
@@ -213,13 +213,12 @@ No Koin dependency or Koin plugin.
 
 ### Core tests
 
-`RuntimeFoundationTest.kt` may verify:
+`RuntimeFoundationTest.kt` verifies:
 
 - serialization round-trip;
-- coroutine test execution;
-- only additional generic runtime contracts that are actually implemented.
+- coroutine test execution.
 
-Tests must not create business behavior or architecture abstractions merely for coverage.
+Tests do not create business behavior or architecture abstractions merely for coverage.
 
 ## 10. Data Implementation Scope
 
@@ -227,7 +226,7 @@ Tests must not create business behavior or architecture abstractions merely for 
 
 Add/retain:
 
-- Kotlin serialization plugin if required by Data serialization usage.
+- Kotlin serialization plugin.
 - `:domain`.
 - `:core`.
 - Koin Core.
@@ -246,7 +245,7 @@ The application composition root assembles this module; Data does not start Koin
 
 ### Data tests
 
-`NetworkModuleTest.kt` must verify:
+`NetworkModuleTest.kt` verifies:
 
 1. The network module resolves an HttpClient through Koin.
 2. A MockEngine can execute a request without real network access.
@@ -261,7 +260,7 @@ Add/retain the frozen Navigation 3 runtime/UI dependencies.
 
 BASE-ARCH-017 does not re-decide Navigation 3.
 
-Implementation must remain limited to the runtime integration foundation.
+Implementation remains limited to the runtime integration foundation.
 
 Do not introduce:
 
@@ -276,20 +275,15 @@ Do not introduce:
 
 The runtime infrastructure must be assembled through the already-frozen application composition boundary.
 
-The implementation may wire:
+Inspection of the current `development` composition shows that the 017 scope can be completed without adding an application-composition source file: the concrete Data network module is defined but not started by Data itself, preserving the composition boundary without introducing speculative root wiring at this stage.
 
-- Data network module;
-- Navigation runtime dependencies;
-- Core runtime infrastructure;
-- Koin application startup where required by the frozen DI contract.
-
-The implementation must not create a new `:di` module.
+No new `:di` module is created.
 
 No feature is allowed to own global runtime infrastructure.
 
-## 13. Exact Files Expected to Change
+## 13. Exact Files Changed
 
-Primary expected files:
+The implementation changes exactly these seven source/build files:
 
 ```text
 gradle/libs.versions.toml
@@ -301,9 +295,7 @@ data/src/commonTest/kotlin/com/carbroz/cbpartner/data/di/NetworkModuleTest.kt
 navigation/build.gradle.kts
 ```
 
-Application-composition files may be added to the exact scope only if inspection of the existing composition root demonstrates that runtime assembly cannot be completed otherwise.
-
-Any additional file requires an explicit implementation report explaining why it is necessary.
+No additional source file was required.
 
 ## 14. Verification Plan
 
@@ -390,18 +382,16 @@ The implementation must stop and report rather than silently introduce:
 
 ## 17. Implementation Gate
 
-The workflow is:
-
 ```text
 BASE-ARCH-017 DECISION_FROZEN
         ↓
 PLAN
         ↓
-PLAN_FROZEN  ← current state
+PLAN_FROZEN
         ↓
-IMPLEMENTATION AUTHORIZATION  ← separate owner approval required
+IMPLEMENTATION AUTHORIZATION  ← GRANTED 2026-09-30
         ↓
-RECONCILED IMPLEMENTATION
+RECONCILED IMPLEMENTATION  ← CURRENT
         ↓
 TEST / VERIFICATION
         ↓
@@ -412,19 +402,32 @@ CODE_FREEZE
 MERGE TO development
 ```
 
-**Current state:** PLAN_FROZEN.
+**Current implementation branch:** `feature/base-arch-017-runtime-infrastructure-implementation`
 
-**No source implementation is authorized by this document.**
+**Current state:** Source implementation completed; verification pending on the project owner's Windows environment.
 
 ## 18. Freeze Record
 
-On 2026-09-30, the project owner accepted the four outstanding PLAN-stage decisions:
+On 2026-09-30, the project owner accepted the four outstanding PLAN-stage decisions and subsequently explicitly authorized implementation.
 
-1. `:data` does not require the Koin Compiler Plugin for BASE-ARCH-017.
-2. Data owns the concrete application HttpClient through the Koin network module; initial configuration remains generic and minimal.
-3. Ktor `ktor-client-engine-defaults` is the multiplatform engine strategy; no project-owned expect/actual engine abstraction is introduced.
-4. The pre-existing 017 branch is reconciled by resulting implementation state; its useful foundations are retained, while unjustified or obsolete wiring is removed or modified.
+Implementation authorization covers only the frozen scope in this document. It does not authorize merge to `development` or code freeze.
 
-These decisions complete the PLAN gate.
+## 19. Implementation Record — 2026-09-30
 
-**Implementation authorization remains separate and has not been granted.**
+Implementation completed on `feature/base-arch-017-runtime-infrastructure-implementation`, created directly from the current `development` head.
+
+Resulting implementation state:
+
+- Runtime catalog reconciled to the frozen dependency scope.
+- Core runtime dependencies wired.
+- Data Koin network module added.
+- Data uses Koin Core without the Koin Compiler Plugin.
+- Data uses Ktor Client Core plus engine defaults.
+- Navigation 3 runtime/UI dependencies added.
+- Core runtime foundation tests added.
+- Data network/Ktor tests added.
+- Pre-existing 017 branch was not merged, rebased, or cherry-picked.
+- No application-composition source file was added.
+- No business, bootstrap, SDUI, ViewModel, Store, or new module scope was introduced.
+
+**Verification status:** Pending project-owner Windows Gradle execution.
