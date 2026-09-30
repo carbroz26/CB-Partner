@@ -1,10 +1,10 @@
 # CB-Partner — Base Architecture Decision Record
 
-**Status:** DOCUMENTED — DECISION-FROZEN RECORD THROUGH BASE-ARCH-014  
+**Status:** DOCUMENTED — DECISION-FROZEN RECORD THROUGH BASE-ARCH-017  
 **Scope:** Frontend repository only  
-**Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-014. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
+**Purpose:** Authoritative durable record of the Base Architecture research and decisions completed through BASE-ARCH-017. This document is implementation input. Implementation must follow the frozen decisions and must not reinterpret them from historical chat.
 
-> **Important:** BASE-ARCH-001–014 are decision-frozen. BASE-ARCH-001–003 are frozen foundation decisions; BASE-ARCH-004–012 build on those foundation decisions. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
+> **Important:** BASE-ARCH-001–017 are decision-frozen. BASE-ARCH-001–003 are frozen foundation decisions; BASE-ARCH-004–012 build on those foundation decisions. Exact implementation APIs, versions, and other items explicitly marked deferred remain open until the applicable implementation-planning stage.
 
 ---
 
@@ -866,7 +866,55 @@ Before source implementation begins, the project operating process still require
 
 The next implementation objective may use a minimal fake bootstrap response as an architecture-validation vertical slice after the foundation is established, but fake JSON is not part of BASE-ARCH-014 and must not become an architectural contract.
 
-# 15. Cross-Architecture Rules Frozen Through 014
+# BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary
+
+**State:** DECISION_FROZEN  
+**Owner approval:** 2026-09-30
+
+BASE-ARCH-017 freezes the implementation boundary for the runtime technical infrastructure selected by BASE-ARCH-015 and BASE-ARCH-016. It does not re-decide those technologies and does not authorize production source implementation.
+
+## Frozen boundary
+
+```text
+Core
+├── coroutine infrastructure
+├── serialization infrastructure
+├── logging infrastructure
+└── generic network infrastructure
+
+Data
+└── concrete data-layer network/client construction
+
+Navigation
+└── Navigation 3 runtime integration
+
+Application Composition
+└── runtime infrastructure assembly
+```
+
+## Frozen decisions
+
+1. **Distinct architecture unit:** BASE-ARCH-017 is a separate architecture unit for the runtime implementation boundary.
+2. **Koin Compiler Plugin:** may be used where concrete implementation requires compiler-assisted validation/integration; it is not a blanket requirement for every Koin module. Any `:data` application must be justified by the implementation plan.
+3. **Ktor HttpClient ownership:** Core owns generic networking capability/infrastructure; Data may own concrete client construction/composition required by Data implementation, without owning generic networking infrastructure.
+4. **Ktor engine/client configuration:** engine selection, client configuration, serialization installation, timeouts, logging, response handling, retry behavior, and platform-specific engine wiring remain implementation-plan details.
+5. **Navigation 3:** remains frozen as the selected navigation technology; 017 only defines its runtime integration boundary.
+
+## Relationship and non-goals
+
+BASE-ARCH-015 remains authoritative for runtime dependency/technical-infrastructure contracts. BASE-ARCH-016 remains authoritative for Koin composition/DI rules. BASE-ARCH-017 only defines the boundary between those frozen contracts and concrete runtime wiring.
+
+No new Gradle module, `:di` module, ViewModel, global Store, business-specific architecture, SDUI internals, dynamic JSON, backend contract, or other business architecture is introduced by this decision.
+
+## Implementation authorization
+
+This decision is architecture-frozen only. It does **not** authorize implementation. A separately created and explicitly frozen implementation plan is required before source changes begin.
+
+A pre-existing `feature/base-arch-017-runtime-infrastructure` branch contains implementation commits created before this decision freeze. Those changes are not retroactively authorized. They must be reconciled against BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 during PLAN before merge or continued implementation.
+
+---
+
+# 16. Cross-Architecture Rules Frozen Through 017
 
 The following rules must be preserved by later architecture and implementation work. BASE-ARCH-001–003 are part of this frozen foundation:
 
@@ -927,7 +975,7 @@ DI → Core, Domain, Data, Feature, Navigation
 
 ---
 
-# 16. Explicit Base-Architecture Non-Goals
+# 17. Explicit Base-Architecture Non-Goals
 
 The following are intentionally NOT designed by BASE-ARCH-001–012:
 
@@ -950,7 +998,7 @@ The following are intentionally NOT designed by BASE-ARCH-001–012:
 
 ---
 
-# 17. Deferred-Decision Register
+# 18. Deferred-Decision Register
 
 The following items must NOT be silently invented during implementation:
 
@@ -972,7 +1020,7 @@ When one becomes necessary, create the appropriate research/decision/plan unit b
 
 ---
 
-# 18. Implementation Contract
+# 19. Implementation Contract
 
 When Base Architecture is eventually complete, the implementation plan must translate this record into:
 
@@ -995,7 +1043,7 @@ Until that implementation plan is explicitly frozen, **BASE-ARCH documentation i
 
 ---
 
-# 19. Current Status
+# 20. Current Status
 
 ```text
 BASE-ARCH-001 → DECISION_FROZEN
@@ -1012,9 +1060,14 @@ BASE-ARCH-011 → DECISION_FROZEN
 BASE-ARCH-012 → DECISION_FROZEN
 BASE-ARCH-013 → DECISION_FROZEN
 BASE-ARCH-014 → DECISION_FROZEN
+BASE-ARCH-015 → DECISION_FROZEN
+BASE-ARCH-016 → DECISION_FROZEN
+BASE-ARCH-017 → DECISION_FROZEN
 ```
 
-**Next architecture unit:** Determine the next Base Architecture unit only after the project owner explicitly authorizes it.
+**Current architecture unit:** BASE-ARCH-017 → DECISION_FROZEN
+
+**Next workflow stage:** PLAN — create and freeze the BASE-ARCH-017 implementation plan before any implementation authorization.
 
 
 ---
