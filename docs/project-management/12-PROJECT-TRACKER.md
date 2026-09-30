@@ -7,16 +7,17 @@
 ## Current Project State
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
-- Current work item: BASE-ARCH-016 — Koin Composition Root & Dependency Injection Implementation Contract
-- Workflow state: DECISION FROZEN — BASE-ARCH-016
-- Current implementation unit: BASE-ARCH-016 decision frozen; production implementation not started
-- Frozen decisions: BASE-ARCH-001 through BASE-ARCH-016
+- Current work item: BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary
+- Workflow state: DECISION FROZEN — BASE-ARCH-017
+- Current implementation unit: BASE-ARCH-017 decision frozen; implementation plan not yet frozen; production implementation not authorized
+- Frozen decisions: BASE-ARCH-001 through BASE-ARCH-017
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - BASE-ARCH-015 decision record: docs/architecture/BASE-ARCH-015-DECISION-RECORD.md
 - BASE-ARCH-016 decision record: docs/architecture/BASE-ARCH-016-DECISION-RECORD.md
+- BASE-ARCH-017 decision record: docs/architecture/BASE-ARCH-017-DECISION-RECORD.md
 - Blockers: None identified
-- Last completed action: BASE-ARCH-016 A–G accepted and frozen; documentation/status synchronization completed
-- Next valid action: Select and explicitly authorize the next separately authorized architecture work item or implementation unit
+- Last completed action: BASE-ARCH-017 A–F accepted and frozen; documentation/status synchronization completed
+- Next valid action: Enter PLAN for BASE-ARCH-017; reconcile the pre-existing 017 implementation branch against the frozen contracts before any implementation authorization
 - Last updated: 2026-09-30
 
 ## Base Architecture Register
@@ -38,6 +39,7 @@
 | BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTATION_VERIFIED / CODE_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; owner acceptance complete; implementation frozen |
 | BASE-ARCH-015 | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | Decision frozen; implementation not authorized by this record |
 | BASE-ARCH-016 | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | Decision frozen; implementation not authorized by this record |
+| BASE-ARCH-017 | Runtime Infrastructure Implementation Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | Decision frozen; implementation not authorized; plan required |
 
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
@@ -52,12 +54,13 @@
 | BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CODE FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; owner accepted; implementation frozen | feature/base-arch-014 | Completed | None identified | No further 014 changes; proceed only through a new authorized work item |
 | BASE-ARCH-015 | Base Architecture | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | A–F accepted and frozen; no production implementation started | — | Not started automatically | None identified | Synchronization complete; select next authorized work item |
 | BASE-ARCH-016 | Base Architecture | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | A–G accepted and frozen; no production implementation started | — | Not started automatically | None identified | Select next authorized architecture work item or implementation unit |
+| BASE-ARCH-017 | Base Architecture | Runtime Infrastructure Implementation Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | A–F accepted and frozen; implementation plan required; pre-existing implementation branch requires reconciliation | feature/base-arch-017-runtime-infrastructure | Not started automatically | None identified | Enter PLAN; reconcile existing branch changes before implementation authorization |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
 - Workflow: **BACKLOG → TO DO → READY → IN PROGRESS → DONE**
 - Completed BASE-ARCH-014 execution cards remain complete.
-- BASE-ARCH-015 and BASE-ARCH-016 do not automatically create or start Trello execution work.
+- BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 do not automatically create or start Trello execution work.
 - No automatic next-task transition is permitted.
 
 ## BASE-ARCH-014 Unit Register
@@ -330,3 +333,33 @@ The decision state is now durable through BASE-ARCH-016. No implementation branc
 
 ## Next Valid Action
 Select and explicitly authorize the next separately authorized architecture work item or implementation unit. Do not automatically start implementation after this checkpoint.
+
+
+## BASE-ARCH-017 Decision Freeze — 2026-09-30
+
+**State:** DECISION_FROZEN
+
+The project owner explicitly accepted and froze BASE-ARCH-017 A–F.
+
+Durable record:
+- `docs/architecture/BASE-ARCH-017-DECISION-RECORD.md`
+- `docs/architecture/BASE-ARCHITECTURE.md`
+
+Frozen boundary:
+- Core owns generic coroutine, serialization, logging, and network infrastructure.
+- Data may own concrete data-layer network/client construction without owning generic networking infrastructure.
+- Navigation owns Navigation 3 runtime integration.
+- Application Composition owns runtime infrastructure assembly.
+- Koin Compiler Plugin usage is conditional on concrete implementation need; it is not a blanket module requirement.
+- Ktor engine/client configuration remains implementation-plan detail.
+- Navigation 3 remains previously frozen and is not re-decided by 017.
+
+No production implementation is authorized by this freeze.
+
+### Existing 017 branch reconciliation requirement
+
+The pre-existing `feature/base-arch-017-runtime-infrastructure` branch contains implementation commits created before the 017 decision freeze. Those commits are not retroactively authorized. They must be reviewed/reconciled during PLAN before merge or continued implementation.
+
+### Next valid action
+
+Enter PLAN for BASE-ARCH-017. Do not merge, switch to, correct, or continue the pre-existing implementation branch until the plan/reconciliation gate is completed and implementation is separately authorized.
