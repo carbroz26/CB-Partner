@@ -186,3 +186,22 @@ BASE-ARCH-017 → DECISION_FROZEN
 ```
 
 **Next valid action:** Enter PLAN for BASE-ARCH-017 after reviewing/reconciling the existing implementation branch against the frozen contracts.
+
+## 9. PLAN Freeze — 2026-09-30
+
+**State:** PLAN_FROZEN
+
+The project owner accepted the four outstanding PLAN-stage decisions and the implementation plan is now frozen.
+
+Frozen implementation-plan decisions:
+- `:data` does not apply the Koin Compiler Plugin for BASE-ARCH-017 because the concrete implementation has no compiler-plugin requirement.
+- Data owns the concrete application `HttpClient` through its Koin network module; initial configuration remains generic and minimal.
+- Ktor `ktor-client-engine-defaults` is the multiplatform engine strategy; no project-owned `expect/actual` engine abstraction is introduced.
+- The pre-existing `feature/base-arch-017-runtime-infrastructure` branch is reconciled by resulting implementation state rather than blindly preserving its 14-commit history.
+
+Frozen implementation plan:
+`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
+
+**Implementation authorization:** NOT GRANTED.
+
+The next valid action is a separate explicit implementation-authorization decision.
