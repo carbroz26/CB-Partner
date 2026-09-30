@@ -5,9 +5,9 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
-import io.ktor.client.engine.mock.addHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.runTest
 import org.koin.dsl.koinApplication
 
 class NetworkModuleTest {
@@ -24,15 +24,13 @@ class NetworkModuleTest {
     }
 
     @Test
-    fun mockEngineExecutesRequestWithoutRealNetwork() = kotlinx.coroutines.test.runTest {
+    fun mockEngineExecutesRequestWithoutRealNetwork() = runTest {
         val client = HttpClient(MockEngine) {
-            engine {
-                addHandler {
-                    respond(
-                        content = "",
-                        status = HttpStatusCode.OK,
-                    )
-                }
+            addHandler {
+                respond(
+                    content = "",
+                    status = HttpStatusCode.OK,
+                )
             }
         }
 
