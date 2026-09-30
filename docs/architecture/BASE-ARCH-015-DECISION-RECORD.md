@@ -1,21 +1,23 @@
 # CB-Partner — BASE-ARCH-015 Decision Record
 
 **Work Item:** BASE-ARCH-015 — Runtime Dependency & Technical Infrastructure Implementation Contract  
-**Status:** PROPOSED — AWAITING EXPLICIT FREEZE APPROVAL  
+**Status:** DECISION_FROZEN  
 **Scope:** Base runtime infrastructure only  
 **Parent decisions:** BASE-ARCH-001 through BASE-ARCH-014  
 **Implementation:** Not started  
-**Freeze:** Not yet approved
+**Freeze:** Approved by user
 
-## Purpose
+## Freeze Declaration
 
-BASE-ARCH-015 converts the already selected runtime technologies into an implementation contract without changing the frozen architecture through BASE-ARCH-014.
+BASE-ARCH-015 A–F are explicitly accepted and frozen.
 
-This record is a decision/freeze proposal. It does not authorize production implementation until the user explicitly approves the freeze.
+This freeze converts the selected runtime technologies into an implementation contract without changing the frozen architecture through BASE-ARCH-014.
+
+The freeze does not authorize unrelated production work. Implementation must remain within the contracts below and follow the established project workflow.
 
 ## 015-A — Core Runtime Contracts
 
-**Decision:** ACCEPT
+**Decision:** ACCEPT — FROZEN
 
 ### Contract
 
@@ -37,7 +39,7 @@ Core remains a technical foundation and does not become a business, Store, Navig
 
 ## 015-B — Koin Composition
 
-**Decision:** ACCEPT
+**Decision:** ACCEPT — FROZEN
 
 ### Contract
 
@@ -57,7 +59,7 @@ Core remains a technical foundation and does not become a business, Store, Navig
 
 ## 015-C — Navigation 3 Integration
 
-**Decision:** ACCEPT
+**Decision:** ACCEPT — FROZEN
 
 ### Contract
 
@@ -76,7 +78,7 @@ Exact Navigation 3 APIs, destination-registration mechanism, command/bridge API,
 
 ## 015-D — Pure Store / MVIKotlin
 
-**Decision:** ACCEPT
+**Decision:** ACCEPT — FROZEN
 
 ### Contract
 
@@ -117,7 +119,7 @@ The combined dependency proof resolved MVIKotlin `4.4.0` with Essenty `2.5.0` an
 
 ## 015-E — Runtime Compatibility Baseline
 
-**Decision:** ACCEPT
+**Decision:** ACCEPT — FROZEN
 
 ### Validated implementation baseline
 
@@ -146,7 +148,7 @@ This is an implementation baseline, not a reason to add every dependency immedia
 
 ## 015-F — Runtime Testing Boundaries
 
-**Decision:** ACCEPT
+**Decision:** ACCEPT — FROZEN
 
 ### Contract
 
@@ -181,16 +183,15 @@ BASE-ARCH-015 does not authorize:
 
 ## Freeze Gate
 
-**Current state: PROPOSED — NOT FROZEN.**
+**Current state: DECISION_FROZEN.**
 
-Freeze requires explicit user approval of 015-A through 015-F as recorded above.
+BASE-ARCH-015 A–F were explicitly accepted and frozen by the user.
 
-After approval, the workflow is:
+Next workflow:
 
-1. Mark this record `DECISION_FROZEN`.
-2. Synchronize the project architecture/status tracker.
-3. Commit the documentation change on the authorized architecture branch.
-4. Review/merge according to the project's established workflow.
-5. Begin the next separately authorized implementation work item.
+1. Synchronize the project architecture/status tracker.
+2. Commit the documentation change on the authorized architecture branch.
+3. Review/merge according to the project's established workflow.
+4. Begin the next separately authorized implementation work item.
 
-No production runtime implementation is authorized by this document until the freeze gate is explicitly approved.
+No unrelated production implementation is authorized by this record.
