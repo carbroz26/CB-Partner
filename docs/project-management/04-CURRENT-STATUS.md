@@ -119,7 +119,14 @@ BASE-ARCH-014 established the minimum production foundation:
 
 ## Next Workflow Gate
 
-PLAN — create the BASE-ARCH-017 implementation plan, including reconciliation of the pre-existing implementation branch. Plan freeze and separate implementation authorization are required before source implementation or merge.
+**PLAN_FROZEN — BASE-ARCH-017 implementation plan frozen.**
+
+Frozen plan:
+`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
+
+The four outstanding plan decisions are resolved: Koin Compiler Plugin placement, HttpClient ownership/configuration, Ktor multiplatform engine strategy, and reconciliation of the pre-existing 017 branch.
+
+**Implementation authorization remains a separate next gate and has not been granted.**
 
 ## Trello Execution Tracking
 Authoritative board: **CB-Partner — Frontend**.
