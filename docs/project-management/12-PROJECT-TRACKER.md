@@ -328,11 +328,13 @@ Synchronized records:
 - `docs/project-management/12-PROJECT-TRACKER.md`
 - `docs/architecture/BASE-ARCH-015-DECISION-RECORD.md`
 - `docs/architecture/BASE-ARCH-016-DECISION-RECORD.md`
+- `docs/architecture/BASE-ARCH-017-DECISION-RECORD.md`
+- `docs/architecture/BASE-ARCHITECTURE.md`
 
-The decision state is now durable through BASE-ARCH-016. No implementation branch is active for BASE-ARCH-015 or BASE-ARCH-016, and no Trello execution work is started automatically.
+The decision state is now durable through BASE-ARCH-017. BASE-ARCH-017 has no implementation authorization; the pre-existing 017 implementation branch requires PLAN-stage reconciliation. No Trello execution work is started automatically.
 
 ## Next Valid Action
-Select and explicitly authorize the next separately authorized architecture work item or implementation unit. Do not automatically start implementation after this checkpoint.
+Enter PLAN for BASE-ARCH-017. Reconcile the pre-existing implementation branch against the frozen contracts before any implementation authorization. Do not automatically start implementation after this checkpoint.
 
 
 ## BASE-ARCH-017 Decision Freeze — 2026-09-30
