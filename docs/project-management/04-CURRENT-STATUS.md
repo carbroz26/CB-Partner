@@ -10,25 +10,28 @@ Phase 1 — Technical Foundation.
 Complete the architecture foundation progressively, one separately authorized work item at a time, using the frozen project workflow.
 
 ## Base Architecture State
-BASE-ARCH-001 through BASE-ARCH-016 → DECISION_FROZEN.
+BASE-ARCH-001 through BASE-ARCH-017 → DECISION_FROZEN.
 
 ## Process State
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-DOCUMENTATION/TRACKER SYNCHRONIZATION COMPLETE — READY FOR NEXT AUTHORIZATION.
+BASE-ARCH-017 DECISION FREEZE COMPLETE — READY FOR PLAN.
 
 ## Current Work Item
-BASE-ARCH-016 — Koin Composition Root & Dependency Injection Implementation Contract.
+BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary.
 
 ## Current Decision State
-BASE-ARCH-015 and BASE-ARCH-016 are decision-frozen. No production implementation has been authorized or started by those decision records.
+BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 are decision-frozen. No production implementation is authorized by these decision records.
 
 BASE-ARCH-015 durable record:
 `docs/architecture/BASE-ARCH-015-DECISION-RECORD.md`
 
 BASE-ARCH-016 durable record:
 `docs/architecture/BASE-ARCH-016-DECISION-RECORD.md`
+
+BASE-ARCH-017 durable record:
+`docs/architecture/BASE-ARCH-017-DECISION-RECORD.md`
 
 ## BASE-ARCH-014 Integration Verification — 2026-09-24
 
@@ -55,6 +58,25 @@ Frozen scope:
 - Runtime testing boundaries.
 
 No production runtime dependency wiring was authorized by the freeze record itself.
+
+## BASE-ARCH-017 Freeze Checkpoint
+
+**State:** DECISION_FROZEN.
+
+The project owner explicitly accepted and froze BASE-ARCH-017 A–F.
+
+Frozen boundary:
+- Core owns generic coroutine, serialization, logging, and network infrastructure.
+- Data may own concrete data-layer network/client construction without owning generic networking infrastructure.
+- Navigation owns Navigation 3 runtime integration.
+- Application Composition owns runtime infrastructure assembly.
+- Koin Compiler Plugin use is conditional on concrete implementation need.
+- Ktor engine/client configuration remains implementation-plan detail.
+- Navigation 3 itself is not re-decided by 017.
+
+No production implementation is authorized by the freeze record itself.
+
+A pre-existing `feature/base-arch-017-runtime-infrastructure` branch contains implementation commits created before the decision freeze. Those changes require reconciliation during PLAN and are not retroactively authorized.
 
 ## BASE-ARCH-016 Freeze Checkpoint
 
@@ -95,6 +117,10 @@ BASE-ARCH-014 established the minimum production foundation:
 - Speculative architecture modules.
 - Runtime dependency wiring outside an explicitly authorized implementation unit.
 
+## Next Workflow Gate
+
+PLAN — create the BASE-ARCH-017 implementation plan, including reconciliation of the pre-existing implementation branch. Plan freeze and separate implementation authorization are required before source implementation or merge.
+
 ## Trello Execution Tracking
 Authoritative board: **CB-Partner — Frontend**.
 
@@ -107,7 +133,7 @@ No next architecture item is started automatically after a freeze checkpoint.
 No BASE-ARCH-014, BASE-ARCH-015, or BASE-ARCH-016 blocker is currently recorded.
 
 ## Next Valid Action
-Select and explicitly authorize the next separately authorized architecture work item or implementation unit. The next item must be processed through `AI_START_HERE.md` and the approved discussion/research/decision/freeze/plan workflow before implementation.
+Enter PLAN for BASE-ARCH-017. Reconcile the pre-existing implementation branch against BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 before any implementation authorization. Do not automatically switch branches, merge, or continue implementation.
 
 Do not reopen or modify BASE-ARCH-014, BASE-ARCH-015, or BASE-ARCH-016 without the established reopening process and concrete evidence.
 
