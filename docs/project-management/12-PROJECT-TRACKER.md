@@ -333,8 +333,24 @@ Synchronized records:
 
 The decision state is now durable through BASE-ARCH-017. BASE-ARCH-017 has no implementation authorization; the pre-existing 017 implementation branch requires PLAN-stage reconciliation. No Trello execution work is started automatically.
 
-## Next Valid Action
-Enter PLAN for BASE-ARCH-017. Reconcile the pre-existing implementation branch against the frozen contracts before any implementation authorization. Do not automatically start implementation after this checkpoint.
+## BASE-ARCH-017 PLAN FREEZE — 2026-09-30
+
+**State:** PLAN_FROZEN
+
+Frozen implementation plan:
+`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
+
+The project owner accepted the four outstanding PLAN-stage decisions:
+1. `:data` does not apply the Koin Compiler Plugin for 017.
+2. Data owns the concrete application `HttpClient`; initial configuration remains generic and minimal.
+3. `ktor-client-engine-defaults` is the multiplatform engine strategy; no project-owned `expect/actual` engine abstraction.
+4. The pre-existing 017 branch is reconciled by resulting implementation state, not blindly merged by commit history.
+
+**Implementation authorization:** NOT GRANTED.
+
+### Next Valid Action
+Obtain explicit implementation authorization for BASE-ARCH-017. Do not modify source, merge, rebase, switch, or continue the pre-existing 017 implementation branch until that authorization is granted.
+
 
 
 ## BASE-ARCH-017 Decision Freeze — 2026-09-30
