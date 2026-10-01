@@ -1,6 +1,6 @@
 plugins {
     `java-gradle-plugin`
-    alias(libs.plugins.kotlinJvm)
+    `kotlin-dsl`
 }
 
 repositories {
