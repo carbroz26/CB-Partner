@@ -43,8 +43,8 @@ class SplashStore(
     private fun loadBootstrap() {
         if (loadJob?.isActive == true) return
 
+        _state.value = SplashState.Loading
         loadJob = scope.launch {
-            _state.value = SplashState.Loading
             bootstrap()
                 .onSuccess { output -> _state.value = SplashState.Success(output) }
                 .onFailure { error ->
