@@ -8,7 +8,17 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":domain"))
             implementation(project(":core"))
+            implementation(project(":data"))
             implementation(project(":navigation"))
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
