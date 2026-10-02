@@ -6,6 +6,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
@@ -27,6 +28,8 @@ internal class BootstrapRemoteDataSource(
 
             val dto = json.decodeFromString<BootstrapResponseDto>(response.bodyAsText())
             dto.toDomain()
+        } catch (error: CancellationException) {
+            throw error
         } catch (error: SerializationException) {
             Result.failure(BootstrapFailure.Serialization(error.message ?: "Unable to decode bootstrap response"))
         } catch (error: Throwable) {

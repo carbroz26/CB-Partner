@@ -24,5 +24,5 @@ include(
     ":feature:splash",
     ":feature:dynamic",
     ":androidApp",
-    ":desktopApp",
+    ":webApp",
 )

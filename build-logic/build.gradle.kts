@@ -31,9 +31,9 @@ gradlePlugin {
             id = "cbpartner.android.application"
             implementationClass = "com.carbroz.cbpartner.buildlogic.AndroidApplicationConventionPlugin"
         }
-        register("cbPartnerDesktopApplication") {
-            id = "cbpartner.desktop.application"
-            implementationClass = "com.carbroz.cbpartner.buildlogic.DesktopApplicationConventionPlugin"
+        register("cbPartnerWebApplication") {
+            id = "cbpartner.web.application"
+            implementationClass = "com.carbroz.cbpartner.buildlogic.WebApplicationConventionPlugin"
         }
     }
 }
