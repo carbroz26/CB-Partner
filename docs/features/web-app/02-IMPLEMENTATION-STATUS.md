@@ -47,13 +47,14 @@ The viewport is configured to fill the browser window.
 ### Bootstrap
 
 - Preserved the existing Bootstrap endpoint and known headers.
-- Updated the configured Bootstrap base URL from `https://localhost:300` to the actual local backend port `https://localhost:3000`.
-- This is a local environment/configuration correction only; the Bootstrap endpoint and request contract remain unchanged.
+- Corrected the local Bootstrap base URL to `http://localhost:3000`, matching the backend's actual plain HTTP server.
+- The Bootstrap endpoint and request contract remain unchanged.
 - Bootstrap coroutine cancellation is rethrown instead of being incorrectly converted into a transport failure.
+- Added Kermit runtime diagnostics for request, HTTP response, parsing, serialization, and transport outcomes.
 
 ## Runtime Diagnostics
 
-Added explicit Bootstrap runtime diagnostics to the shared remote data source so Web browser verification can confirm the request lifecycle in the browser console. Diagnostics currently report:
+Bootstrap runtime diagnostics are emitted through the existing Kermit logging infrastructure with the `Bootstrap` tag. They report:
 
 - Bootstrap request URL.
 - HTTP response status.
@@ -66,24 +67,41 @@ These logs are diagnostic only and do not change the Bootstrap contract or archi
 
 ## Runtime Verification
 
-Web build and browser startup have now been verified successfully:
+Web build and browser startup have been verified successfully:
 
 - `:webApp:wasmJsBrowserDevelopmentRun` starts the Kotlin/Wasm development server.
 - Browser loads the generated `webApp.js` and Wasm assets.
 - Splash renders.
-- Bootstrap request is attempted.
-- Initial request failed with `net::ERR_CONNECTION_REFUSED` because the configured local port was `300` while the local backend uses `3000`.
-- The port correction above is now applied.
-- Next verification is to rerun/reload the Web app with the backend running on `https://localhost:3000` and verify Bootstrap success/failure/retry behavior.
+- Bootstrap request is initiated from the browser.
+- The previous `https://localhost:3000` request failed because the backend is a plain HTTP server.
+- Backend research confirmed CORS is configured with `@fastify/cors`, supports the required preflight/custom headers, and the backend listens on plain `http://localhost:3000`.
+- The frontend Bootstrap URL is now corrected to `http://localhost:3000`.
+- Final browser verification is pending: confirm the actual HTTP Bootstrap response and Splash success transition with the backend running.
 
-## Verification Pending
+## Verification Plan
 
 Run locally:
 
 ```text
-: webApp:wasmJsBrowserDevelopmentRun
-: webApp:wasmJsBrowserDistribution
+Backend: http://localhost:3000
+Web:     http://localhost:8080
+```
 
+Then verify in the browser:
+
+1. Web application starts.
+2. Splash renders.
+3. Browser sends Bootstrap request to `http://localhost:3000/api/v1/partner/config/bootstrap`.
+4. Backend returns an HTTP response successfully.
+5. Bootstrap response is parsed successfully.
+6. Splash transitions to the expected success state/navigation.
+7. Failure state renders when the request fails.
+8. Retry starts a new Bootstrap request.
+9. Kermit Bootstrap diagnostics confirm the request lifecycle.
+
+After browser verification, run automated tests:
+
+```text
 :core:jvmTest
 :domain:jvmTest
 :data:jvmTest
@@ -92,16 +110,6 @@ Run locally:
 :feature:dynamic:jvmTest
 ```
 
-Then verify in the browser:
-
-1. Web application starts.
-2. Splash renders.
-3. Bootstrap request succeeds against the local backend on port 3000.
-4. Success state renders when the backend responds successfully.
-5. Failure state renders when the request fails.
-6. Retry starts a new Bootstrap request.
-7. Browser CORS/TLS behavior is recorded without changing the backend contract.
-
 ## Freeze Criteria
 
-The feature remains NOT FROZEN until build, tests, browser runtime verification, documentation review, and final architecture review are complete.
+The feature remains NOT FROZEN until build, automated tests, browser runtime verification, documentation review, and final architecture review are complete.
