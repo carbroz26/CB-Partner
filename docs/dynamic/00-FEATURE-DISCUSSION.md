@@ -2,9 +2,11 @@
 
 ## Status
 
-**DYNAMIC-01 — FROZEN**
+**DYNAMIC-01 — FROZEN**  
+**DYNAMIC-02 — FROZEN**  
+**DYNAMIC-03 — DISCUSSION IN PROGRESS**
 
-Overall Dynamic UI feature discussion remains **IN PROGRESS**. DYNAMIC-02 through DYNAMIC-07 are not yet frozen.
+Overall Dynamic UI feature discussion remains **IN PROGRESS**. DYNAMIC-01 and DYNAMIC-02 are frozen; DYNAMIC-03 through DYNAMIC-07 are not yet frozen.
 
 ---
 
@@ -524,34 +526,305 @@ image
 
 # DYNAMIC-02 — Screen → Template → Component → Section → Group → Element
 
-**Status:** DISCUSSION NOT STARTED
+## Status
 
-## Objective
+**FROZEN**
 
-Define the exact Dynamic UI hierarchy and the responsibility of each level without introducing unnecessary architecture.
+## Purpose
 
-The discussion must establish:
+Define the exact Dynamic UI hierarchy and the responsibility of each level while keeping the hierarchy flexible enough for simple and complex backend-driven UIs without adding unnecessary structural layers.
 
-- Screen responsibility
-- Template responsibility
-- Component responsibility
-- Section responsibility
-- Group responsibility
-- Element responsibility
-- Legal parent/child relationships
-- Whether levels can be skipped
-- How the fixed JSON hierarchy maps to runtime models
-- How the initial `stack_template` → `stack_component` → `stack_section` / `stack_group` → `text` / `image` example is represented
+## 1. Screen — Root Dynamic Configuration
 
-The hierarchy must remain simple and predictable. The final decision will be recorded here before moving to DYNAMIC-03.
+Screen is the root Dynamic configuration.
+
+A Screen owns exactly one Template and may also contain screen-level configuration such as Theme, Header, and Footer when provided by the fixed JSON contract.
+
+Conceptually:
+
+```text
+Screen
+├── screen-level configuration
+├── Theme
+├── Header / Footer (when provided)
+└── Template
+```
+
+Theme is a Screen-level concern. Header and Footer are also Screen-level concerns rather than Template, Component, Section, Group, or Element concerns.
+
+The exact Header/Footer structures are not expanded by DYNAMIC-02 unless required by the fixed contract.
+
+## 2. Template — Complete Screen-Level Layout Strategy
+
+Template represents the complete screen-level layout strategy.
+
+A Screen contains exactly one Template.
+
+Template does not represent business screens such as Login, OTP, or Dashboard. It represents the rendering/composition strategy for the complete Dynamic screen.
+
+Example:
+
+```text
+Screen
+└── stack_template
+```
+
+## 3. Component — Flexible Composition Block
+
+A Template can contain multiple Components.
+
+Component can contain multiple Elements, multiple Sections, or both Elements and Sections.
+
+All of the following are legal:
+
+```text
+Component
+├── Element
+├── Element
+└── Element
+```
+
+```text
+Component
+├── Section
+├── Section
+└── Section
+```
+
+```text
+Component
+├── Element
+├── Section
+├── Element
+└── Section
+```
+
+Therefore Component does not require an XOR choice between Elements and Sections. Both child types may be present, and their backend-provided ordering is significant and must be preserved.
+
+## 4. Section — Optional Composition Level
+
+Section is an optional structural level used when the UI requires additional grouping/composition.
+
+Section can contain multiple Elements, multiple Groups, or both Elements and Groups.
+
+Examples:
+
+```text
+Section
+├── Element
+├── Element
+└── Element
+```
+
+```text
+Section
+├── Group
+├── Group
+└── Group
+```
+
+```text
+Section
+├── Element
+├── Group
+├── Element
+└── Group
+```
+
+Section does not require Groups to exist. A Section can directly contain Elements.
+
+The backend-provided ordering of Elements and Groups is significant and must be preserved.
+
+## 5. Group — Final Structural Grouping Level
+
+Group is the final optional structural level before Elements.
+
+A Group can contain one or multiple Elements.
+
+```text
+Group
+├── Element
+├── Element
+└── Element
+```
+
+Group cannot contain another Group, Section, Component, Template, or Screen.
+
+## 6. Element — Terminal UI Node
+
+Element is the terminal UI node.
+
+An Element has no Dynamic child nodes.
+
+The initial implementation will contain:
+
+```text
+text
+image
+```
+
+Additional Elements such as `input` or `button` will be introduced later when required by the actual backend contract.
+
+## 7. Minimum Valid Structural Path
+
+Every Dynamic screen always has the minimum structural path:
+
+```text
+Screen → Template → Component → Element
+```
+
+Therefore a simple screen can be:
+
+```text
+Screen
+└── Template
+    └── Component
+        ├── Element
+        ├── Element
+        └── Element
+```
+
+Section and Group are optional structural levels and are introduced only when the backend configuration requires additional composition.
+
+## 8. Legal Structural Paths
+
+The core legal paths are:
+
+```text
+Screen → Template → Component → Element
+
+Screen → Template → Component → Section → Element
+
+Screen → Template → Component → Section → Group → Element
+```
+
+Because Components can contain both Elements and Sections, and Sections can contain both Elements and Groups, valid configurations can also combine these paths within the same Template.
+
+For example:
+
+```text
+Screen
+└── Template
+    ├── Component
+    │   ├── Element
+    │   ├── Section
+    │   │   ├── Element
+    │   │   └── Group
+    │   │       ├── Element
+    │   │       └── Element
+    │   └── Element
+    │
+    └── Component
+        └── Element
+```
+
+## 9. Cardinality Rules
+
+```text
+Screen → Template       = exactly 1 Template
+Template → Component    = 1..N Components
+Component → Element     = 0..N Elements
+Component → Section     = 0..N Sections
+Section → Element       = 0..N Elements
+Section → Group         = 0..N Groups
+Group → Element         = 1..N Elements
+Element → children      = none
+```
+
+Only Template is singular within its Screen parent. All other structural node types can occur multiple times where their parent allows them.
+
+## 10. Ordering
+
+The order supplied by the backend is significant.
+
+The renderer must preserve the order of:
+
+- Components inside Template
+- Elements and Sections inside Component
+- Elements and Groups inside Section
+- Elements inside Group
+
+The Dynamic runtime must not reorder these nodes based on frontend implementation details.
+
+## 11. Structural Hierarchy vs Visual Layout
+
+DYNAMIC-02 defines the structural hierarchy only.
+
+The existence of a Component, Section, or Group does not by itself define all visual behavior. Visual layout behavior and rendering details belong to the registered definitions and the rendering discussion in DYNAMIC-04.
+
+This keeps hierarchy and rendering responsibilities separate.
+
+---
+
+## DYNAMIC-02 — Frozen Decisions
+
+1. **Every Dynamic Screen has exactly one Template.**
+
+2. **Every Template contains one or more Components.**
+
+3. **A Component may contain multiple Elements, multiple Sections, or both.**
+
+4. **A Section may contain multiple Elements, multiple Groups, or both.**
+
+5. **A Group may contain one or more Elements only.**
+
+6. **Element is terminal and has no Dynamic children.**
+
+7. **The minimum valid Dynamic screen path is `Screen → Template → Component → Element`.**
+
+8. **Section and Group are optional structural levels**, used only when the backend-defined UI requires additional composition.
+
+9. **Only Template is singular within Screen; all other structural levels may occur multiple times where legally allowed.**
+
+10. **Backend ordering is significant and must be preserved during rendering.**
+
+11. **Screen owns screen-level concerns such as Theme and, when provided, Header/Footer.**
+
+12. **Template is the complete screen-level layout strategy and is not a business-screen class.**
+
+13. **Component and Section are flexible composition levels; they are not forced into an XOR-only child model.**
+
+14. **Structural hierarchy and visual rendering behavior remain separate concerns.**
 
 ---
 
 # DYNAMIC-03 — Registration System
 
-**Status:** NOT STARTED
+**Status:** DISCUSSION IN PROGRESS
 
-To define Template, Component, Section, Group, and Element registration and lookup.
+## Objective
+
+Define the simplest clean registration and lookup system for Dynamic Templates, Components, Sections, Groups, and Elements.
+
+The system must answer:
+
+```text
+Backend type name
+        ↓
+Is it registered?
+        ↓
+Yes → use its registered implementation
+No  → controlled unsupported handling
+```
+
+The discussion will establish:
+
+- What a registration represents
+- Template registration
+- Component registration
+- Section registration
+- Group registration
+- Element registration
+- Registry ownership
+- How backend type names map to implementations
+- How registration is performed at application startup
+- How lookup works during Dynamic rendering
+- How unknown/unregistered definitions are reported
+- Whether one registry or separate registries are clearer
+- How the initial definitions are registered
+- How future definitions can be added without changing the Dynamic core
+
+The implementation should remain simple and avoid a second SDUI language, duplicate registries, unnecessary factories, or an over-engineered plugin system.
 
 ---
 
