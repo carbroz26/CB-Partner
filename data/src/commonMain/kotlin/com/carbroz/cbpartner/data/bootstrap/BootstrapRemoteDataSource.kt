@@ -38,7 +38,7 @@ internal class BootstrapRemoteDataSource(
     }
 
     private companion object {
-        const val BASE_URL = "https://localhost:300"
+        const val BASE_URL = "https://localhost:3000"
         const val BOOTSTRAP_ENDPOINT = "/api/v1/partner/config/bootstrap"
     }
 }
