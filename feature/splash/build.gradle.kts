@@ -8,7 +8,6 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":domain"))
             implementation(project(":core"))
-            implementation(project(":data"))
             implementation(project(":navigation"))
             implementation(libs.kotlinx.coroutines.core)
             implementation(compose.runtime)
