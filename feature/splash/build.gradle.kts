@@ -23,3 +23,8 @@ kotlin {
         }
     }
 }
+
+compose.resources {
+    packageOfResClass = "com.carbroz.cbpartner.feature.splash.generated.resources"
+    generateResClass = always
+}
