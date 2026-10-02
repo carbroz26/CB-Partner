@@ -55,10 +55,15 @@ The viewport is configured to fill the browser window.
 ### Splash UI
 
 - Removed the temporary `Bootstrap completed` diagnostic text from the successful Splash state.
-- The Web app now renders the actual Splash UI presentation for the success state instead of exposing an implementation diagnostic.
-- Splash still shows a loader while Bootstrap is in progress.
-- Splash still exposes the existing failure message and Retry action on Bootstrap failure.
-- No downstream navigation or `nextScreen` behavior has been introduced.
+- Replaced the placeholder Splash layout with a polished CarBroz Partner presentation built entirely with Compose Multiplatform.
+- Added a CarBroz Partner brand header with teal visual identity.
+- Added a custom Compose Canvas car-wash illustration with car, water/bubbles, and subtle decorative elements; no external image dependency was introduced.
+- Added a light teal/white background treatment with responsive spacing.
+- Added partner-focused messaging: premium car care and professional doorstep service.
+- Added loading progress and preparation messaging while Bootstrap is running.
+- Added a clear success presentation after Bootstrap completes.
+- Preserved the existing failure message and Retry action on Bootstrap failure.
+- Kept the Splash feature self-contained; no downstream navigation or `nextScreen` behavior has been introduced.
 
 ## Runtime Diagnostics
 
@@ -85,7 +90,7 @@ Web build and browser startup have been verified successfully:
 - Backend research confirmed CORS is configured with `@fastify/cors`, supports the required preflight/custom headers, and the backend listens on plain `http://localhost:3000`.
 - The frontend Bootstrap URL is now corrected to `http://localhost:3000`.
 - The successful Splash state no longer renders the temporary Bootstrap-completed diagnostic message.
-- Final browser verification is pending: confirm the actual HTTP Bootstrap response, successful parsing, and final Splash presentation with the backend running.
+- The polished Splash UI implementation is now committed; final browser visual verification and compilation verification are pending.
 
 ## Verification Plan
 
@@ -99,11 +104,11 @@ Web:     http://localhost:8080 (or the next available development-server port)
 Then verify in the browser:
 
 1. Web application starts.
-2. Splash UI renders.
+2. Polished Splash UI renders.
 3. Browser sends Bootstrap request to `http://localhost:3000/api/v1/partner/config/bootstrap`.
 4. Backend returns an HTTP response successfully.
 5. Bootstrap response is parsed successfully.
-6. Splash remains on the intended success presentation for the current feature boundary.
+6. Splash shows the intended success presentation for the current feature boundary.
 7. Failure state renders when the request fails.
 8. Retry starts a new Bootstrap request.
 9. Kermit Bootstrap diagnostics confirm the request lifecycle.
