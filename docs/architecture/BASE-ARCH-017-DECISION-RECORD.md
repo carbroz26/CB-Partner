@@ -8,7 +8,7 @@
 
 BASE-ARCH-017 defines the architectural boundary for implementing the runtime technical infrastructure already selected by BASE-ARCH-015 and BASE-ARCH-016.
 
-This decision does not introduce a new business architecture, does not re-decide previously frozen technologies, and does not authorize production source implementation.
+This decision does not introduce a new business architecture and does not re-decide previously frozen technologies.
 
 ## 2. Decision
 
@@ -84,7 +84,7 @@ Concrete client configuration must respect the Core/Data responsibility boundary
 
 **ACCEPTED / FROZEN**
 
-The following remain implementation-plan details rather than new architecture decisions:
+The following are implementation-plan details:
 
 - concrete Ktor engine selection;
 - client configuration;
@@ -95,7 +95,7 @@ The following remain implementation-plan details rather than new architecture de
 - retry behavior;
 - platform-specific engine wiring.
 
-These details must be specified in the implementation plan before implementation and must not be silently invented during coding.
+These details must be specified in the implementation plan and must not be silently invented during coding.
 
 ### F — Navigation 3 integration
 
@@ -137,39 +137,30 @@ BASE-ARCH-017 does not define or authorize:
 - a new universal networking abstraction without concrete need;
 - automatic retry policy;
 - backend API contracts;
-- bootstrap DTO/schema;
-- production source implementation.
+- bootstrap DTO/schema.
 
 ## 6. Implementation Authorization
 
-This decision is **architecture-frozen only**.
+**IMPLEMENTATION AUTHORIZED — 2026-09-30**
 
-It does **not** authorize implementation.
+The project owner explicitly authorized implementation of BASE-ARCH-017 after the implementation plan reached `PLAN_FROZEN`.
 
-The next required gate is a separately created implementation plan that must define:
+Authorization is limited to the frozen implementation plan:
+`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
 
-1. exact affected modules/files;
-2. exact dependency/plugin changes;
-3. exact Ktor client/engine configuration;
-4. exact Koin compiler-plugin usage and justification;
-5. exact Navigation 3 integration changes;
-6. exact runtime object-graph assembly;
-7. tests and verification commands;
-8. acceptance criteria;
-9. prohibited changes;
-10. reconciliation of any pre-existing BASE-ARCH-017 branch changes with this frozen boundary.
+This authorization does **not** authorize merge to `development` or code freeze. Those remain later gates.
 
-The implementation plan must be explicitly frozen before implementation begins.
+## 7. Existing Branch Reconciliation
 
-## 7. Existing Branch Reconciliation Note
+The pre-existing branch `feature/base-arch-017-runtime-infrastructure` contained implementation commits created before the BASE-ARCH-017 decision freeze.
 
-A pre-existing branch named `feature/base-arch-017-runtime-infrastructure` contains implementation commits that were created before BASE-ARCH-017 was decision-frozen.
+Those changes were not retroactively authorized.
 
-Those changes are **not** authorized retroactively by this decision.
+A new implementation branch was created directly from the current `development` head:
 
-They must be reviewed against BASE-ARCH-015, BASE-ARCH-016, and this BASE-ARCH-017 boundary during the PLAN/RECONCILIATION stage before any merge or continued implementation.
+`feature/base-arch-017-runtime-infrastructure-implementation`
 
-No automatic merge, branch switch, or source correction is authorized by this freeze.
+The pre-existing branch was not merged, rebased, or cherry-picked. Its intended useful changes were reconciled by resulting implementation state against the frozen plan.
 
 ## 8. Frozen State
 
@@ -180,28 +171,30 @@ BASE-ARCH-017 → DECISION_FROZEN
                  ↓
               PLAN
                  ↓
-           PLAN FREEZE
+           PLAN_FROZEN
                  ↓
         IMPLEMENTATION AUTHORIZATION
+                 ↓
+        RECONCILED IMPLEMENTATION
+                 ↓
+          TEST / VERIFICATION
+                 ↓
+              REVIEW
+                 ↓
+           CODE_FREEZE
+                 ↓
+        MERGE TO development
 ```
 
-**Next valid action:** Enter PLAN for BASE-ARCH-017 after reviewing/reconciling the existing implementation branch against the frozen contracts.
+## 9. Implementation Record — 2026-09-30
 
-## 9. PLAN Freeze — 2026-09-30
+**State:** IMPLEMENTATION COMPLETED — VERIFICATION PENDING
 
-**State:** PLAN_FROZEN
+Implemented on:
+`feature/base-arch-017-runtime-infrastructure-implementation`
 
-The project owner accepted the four outstanding PLAN-stage decisions and the implementation plan is now frozen.
+Implementation scope was limited to the seven files defined by the frozen plan.
 
-Frozen implementation-plan decisions:
-- `:data` does not apply the Koin Compiler Plugin for BASE-ARCH-017 because the concrete implementation has no compiler-plugin requirement.
-- Data owns the concrete application `HttpClient` through its Koin network module; initial configuration remains generic and minimal.
-- Ktor `ktor-client-engine-defaults` is the multiplatform engine strategy; no project-owned `expect/actual` engine abstraction is introduced.
-- The pre-existing `feature/base-arch-017-runtime-infrastructure` branch is reconciled by resulting implementation state rather than blindly preserving its 14-commit history.
+No application-composition source file was required, and no business, bootstrap, SDUI, ViewModel, Store, or new module scope was introduced.
 
-Frozen implementation plan:
-`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
-
-**Implementation authorization:** NOT GRANTED.
-
-The next valid action is a separate explicit implementation-authorization decision.
+Verification remains a separate gate and has not been represented as passed.

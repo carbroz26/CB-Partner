@@ -1065,9 +1065,15 @@ BASE-ARCH-016 → DECISION_FROZEN
 BASE-ARCH-017 → DECISION_FROZEN
 ```
 
-**Current architecture unit:** BASE-ARCH-017 → DECISION_FROZEN
+**Current architecture unit:** BASE-ARCH-017 → IMPLEMENTING
 
-**Next workflow stage:** PLAN — create and freeze the BASE-ARCH-017 implementation plan before any implementation authorization.
+**Implementation authorization:** GRANTED 2026-09-30.
+
+**Current implementation branch:** `feature/base-arch-017-runtime-infrastructure-implementation`
+
+**Current workflow stage:** RECONCILED IMPLEMENTATION COMPLETE → VERIFICATION PENDING.
+
+The frozen BASE-ARCH-017 implementation plan is being executed without scope expansion. Merge/code-freeze remain later gates.
 
 
 ---
@@ -1111,6 +1117,6 @@ The frozen plan resolves the four outstanding PLAN-stage decisions:
 
 The plan specifies exact dependency scope, Koin usage, Ktor ownership/configuration, Navigation 3 integration, tests, verification commands, acceptance criteria, prohibited changes, and branch reconciliation.
 
-**Implementation authorization:** NOT GRANTED.
+**Implementation authorization:** GRANTED 2026-09-30.
 
-The next valid process gate is separate explicit implementation authorization. No production source implementation or merge is permitted until that gate is granted.
+Implementation is complete on `feature/base-arch-017-runtime-infrastructure-implementation`. Verification, review, code freeze, and merge remain separate later gates.

@@ -16,22 +16,32 @@ BASE-ARCH-001 through BASE-ARCH-017 → DECISION_FROZEN.
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-BASE-ARCH-017 DECISION FREEZE COMPLETE — READY FOR PLAN.
+BASE-ARCH-017 IMPLEMENTATION AUTHORIZED — IMPLEMENTATION COMPLETED / VERIFICATION PENDING.
 
 ## Current Work Item
 BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary.
 
 ## Current Decision State
-BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 are decision-frozen. No production implementation is authorized by these decision records.
+BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 are decision-frozen. BASE-ARCH-017 implementation authorization was explicitly granted on 2026-09-30 and is limited to the frozen implementation plan.
 
-BASE-ARCH-015 durable record:
-`docs/architecture/BASE-ARCH-015-DECISION-RECORD.md`
+## BASE-ARCH-017 Implementation
 
-BASE-ARCH-016 durable record:
-`docs/architecture/BASE-ARCH-016-DECISION-RECORD.md`
+**Branch:** `feature/base-arch-017-runtime-infrastructure-implementation`
 
-BASE-ARCH-017 durable record:
-`docs/architecture/BASE-ARCH-017-DECISION-RECORD.md`
+**State:** IMPLEMENTATION COMPLETED — VERIFICATION PENDING.
+
+The implementation branch was created directly from the current `development` head. The pre-existing `feature/base-arch-017-runtime-infrastructure` branch was not merged, rebased, or cherry-picked.
+
+Implemented scope:
+- reconciled runtime dependency catalog;
+- Core coroutine/serialization/logging runtime dependencies;
+- Data Koin network module;
+- Data Ktor HttpClient construction using engine defaults;
+- Navigation 3 runtime/UI dependencies;
+- Core runtime foundation tests;
+- Data network tests.
+
+No application-composition source file was required.
 
 ## BASE-ARCH-014 Integration Verification — 2026-09-24
 
@@ -74,9 +84,7 @@ Frozen boundary:
 - Ktor engine/client configuration remains implementation-plan detail.
 - Navigation 3 itself is not re-decided by 017.
 
-No production implementation is authorized by the freeze record itself.
-
-A pre-existing `feature/base-arch-017-runtime-infrastructure` branch contains implementation commits created before the decision freeze. Those changes require reconciliation during PLAN and are not retroactively authorized.
+Implementation authorization was subsequently granted on 2026-09-30 under the separately frozen implementation plan. Merge and code-freeze authorization remain pending.
 
 ## BASE-ARCH-016 Freeze Checkpoint
 
@@ -92,8 +100,6 @@ Frozen scope:
 - Compose integration only when an actual Compose-layer injection requirement exists; no ViewModel Koin architecture.
 - Platform dependency entry through the established Android/Desktop/iOS application boundaries.
 - Koin does not own Pure Store lifecycle.
-
-No production Koin implementation has been authorized by the freeze record itself.
 
 ## What has been implemented
 
@@ -117,32 +123,30 @@ BASE-ARCH-014 established the minimum production foundation:
 - Speculative architecture modules.
 - Runtime dependency wiring outside an explicitly authorized implementation unit.
 
+## Verification Gate
+
+**Current:** BASE-ARCH-017 implementation verification pending.
+
+Required owner-environment commands:
+
+```powershell
+.\gradlew.bat projects
+.\gradlew.bat :core:jvmTest
+.\gradlew.bat :core:compileKotlinJvm
+.\gradlew.bat :data:jvmTest
+.\gradlew.bat :data:compileKotlinJvm
+.\gradlew.bat :navigation:jvmTest
+.\gradlew.bat :core:jvmTest :domain:jvmTest :data:jvmTest :navigation:jvmTest :feature:splash:jvmTest :feature:dynamic:jvmTest
+```
+
+The Windows `iosSimulatorArm64Test` disabled-target warning is expected and does not represent a Windows verification failure.
+
 ## Next Workflow Gate
 
-**PLAN_FROZEN — BASE-ARCH-017 implementation plan frozen.**
+After verification passes, the next gate is **REVIEW**. Then **CODE_FREEZE** and separate merge approval.
 
-Frozen plan:
-`docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
-
-The four outstanding plan decisions are resolved: Koin Compiler Plugin placement, HttpClient ownership/configuration, Ktor multiplatform engine strategy, and reconciliation of the pre-existing 017 branch.
-
-**Implementation authorization remains a separate next gate and has not been granted.**
-
-## Trello Execution Tracking
-Authoritative board: **CB-Partner — Frontend**.
-
-Workflow:
-**BACKLOG → TO DO → READY → IN PROGRESS → DONE**
-
-No next architecture item is started automatically after a freeze checkpoint.
-
-## Blocker
-No BASE-ARCH-014, BASE-ARCH-015, or BASE-ARCH-016 blocker is currently recorded.
-
-## Next Valid Action
-Enter PLAN for BASE-ARCH-017. Reconcile the pre-existing implementation branch against BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 before any implementation authorization. Do not automatically switch branches, merge, or continue implementation.
-
-Do not reopen or modify BASE-ARCH-014, BASE-ARCH-015, or BASE-ARCH-016 without the established reopening process and concrete evidence.
+No merge to `development` has been performed.
 
 ## Recovery
+
 A new AI session must read `AI_START_HERE.md`, the Project Tracker, this document, the relevant frozen architecture records, and the relevant implementation plan/status before acting.

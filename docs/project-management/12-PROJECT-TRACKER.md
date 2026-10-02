@@ -8,16 +8,16 @@
 - Phase: Base Architecture implementation
 - Current module: Base Architecture
 - Current work item: BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary
-- Workflow state: DECISION FROZEN — BASE-ARCH-017
-- Current implementation unit: BASE-ARCH-017 decision frozen; implementation plan not yet frozen; production implementation not authorized
+- Workflow state: IMPLEMENTING — BASE-ARCH-017
+- Current implementation unit: BASE-ARCH-017 implementation authorized; source implementation completed; verification pending
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-017
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - BASE-ARCH-015 decision record: docs/architecture/BASE-ARCH-015-DECISION-RECORD.md
 - BASE-ARCH-016 decision record: docs/architecture/BASE-ARCH-016-DECISION-RECORD.md
 - BASE-ARCH-017 decision record: docs/architecture/BASE-ARCH-017-DECISION-RECORD.md
 - Blockers: None identified
-- Last completed action: BASE-ARCH-017 A–F accepted and frozen; documentation/status synchronization completed
-- Next valid action: Enter PLAN for BASE-ARCH-017; reconcile the pre-existing 017 implementation branch against the frozen contracts before any implementation authorization
+- Last completed action: BASE-ARCH-017 implementation completed on the authorized implementation branch; verification pending
+- Next valid action: Execute the frozen BASE-ARCH-017 verification commands, then enter REVIEW if verification passes
 - Last updated: 2026-09-30
 
 ## Base Architecture Register
@@ -39,7 +39,7 @@
 | BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTATION_VERIFIED / CODE_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; owner acceptance complete; implementation frozen |
 | BASE-ARCH-015 | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | Decision frozen; implementation not authorized by this record |
 | BASE-ARCH-016 | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | Decision frozen; implementation not authorized by this record |
-| BASE-ARCH-017 | Runtime Infrastructure Implementation Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | Decision frozen; implementation not authorized; plan required |
+| BASE-ARCH-017 | Runtime Infrastructure Implementation Boundary | IMPLEMENTING | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | Implementation authorized 2026-09-30; verification pending |
 
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
@@ -54,7 +54,7 @@
 | BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CODE FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; owner accepted; implementation frozen | feature/base-arch-014 | Completed | None identified | No further 014 changes; proceed only through a new authorized work item |
 | BASE-ARCH-015 | Base Architecture | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | A–F accepted and frozen; no production implementation started | — | Not started automatically | None identified | Synchronization complete; select next authorized work item |
 | BASE-ARCH-016 | Base Architecture | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | A–G accepted and frozen; no production implementation started | — | Not started automatically | None identified | Select next authorized architecture work item or implementation unit |
-| BASE-ARCH-017 | Base Architecture | Runtime Infrastructure Implementation Boundary | DECISION_FROZEN | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | A–F accepted and frozen; implementation plan required; pre-existing implementation branch requires reconciliation | feature/base-arch-017-runtime-infrastructure | Not started automatically | None identified | Enter PLAN; reconcile existing branch changes before implementation authorization |
+| BASE-ARCH-017 | Base Architecture | Runtime Infrastructure Implementation Boundary | IMPLEMENTING | docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md | Implementation authorized 2026-09-30; seven-file reconciled implementation completed; verification pending | feature/base-arch-017-runtime-infrastructure-implementation | In Progress | None identified | Run frozen verification, then REVIEW |
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -333,9 +333,9 @@ Synchronized records:
 
 The decision state is now durable through BASE-ARCH-017. BASE-ARCH-017 has no implementation authorization; the pre-existing 017 implementation branch requires PLAN-stage reconciliation. No Trello execution work is started automatically.
 
-## BASE-ARCH-017 PLAN FREEZE — 2026-09-30
+## BASE-ARCH-017 IMPLEMENTATION AUTHORIZATION — 2026-09-30
 
-**State:** PLAN_FROZEN
+**State:** IMPLEMENTATION_AUTHORIZED / IMPLEMENTING
 
 Frozen implementation plan:
 `docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
@@ -346,10 +346,11 @@ The project owner accepted the four outstanding PLAN-stage decisions:
 3. `ktor-client-engine-defaults` is the multiplatform engine strategy; no project-owned `expect/actual` engine abstraction.
 4. The pre-existing 017 branch is reconciled by resulting implementation state, not blindly merged by commit history.
 
-**Implementation authorization:** NOT GRANTED.
+**Implementation authorization:** GRANTED.
 
-### Next Valid Action
-Obtain explicit implementation authorization for BASE-ARCH-017. Do not modify source, merge, rebase, switch, or continue the pre-existing 017 implementation branch until that authorization is granted.
+Implementation branch: `feature/base-arch-017-runtime-infrastructure-implementation`.
+
+The implementation is complete within the frozen seven-file scope. Verification is pending. No merge to `development` is authorized by this status.
 
 
 
