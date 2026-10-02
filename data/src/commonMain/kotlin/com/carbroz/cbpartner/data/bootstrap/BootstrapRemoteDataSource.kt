@@ -6,7 +6,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
@@ -22,7 +21,7 @@ internal class BootstrapRemoteDataSource(
                 header("X-CarBroz-Build-Number", "1")
             }
 
-            if (response.status != HttpStatusCode.OK) {
+            if (response.status.value !in 200..299) {
                 return Result.failure(BootstrapFailure.Http(response.status.value))
             }
 
