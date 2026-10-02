@@ -30,7 +30,9 @@ class KmpConventionPlugin : Plugin<Project> {
             iosSimulatorArm64()
             jvm()
             @OptIn(ExperimentalWasmDsl::class)
-            wasmJs()
+            wasmJs {
+                browser()
+            }
         }
     }
 }
