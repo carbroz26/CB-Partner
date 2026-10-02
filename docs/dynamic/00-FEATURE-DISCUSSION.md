@@ -2,525 +2,85 @@
 
 ## Status
 
-**DYNAMIC-01 — FROZEN**  
-**DYNAMIC-02 — FROZEN**  
-**DYNAMIC-03 — DISCUSSION IN PROGRESS**
+- DYNAMIC-01 — FROZEN
+- DYNAMIC-02 — FROZEN
+- DYNAMIC-03 — FROZEN
+- DYNAMIC-04 — DISCUSSION IN PROGRESS
+- DYNAMIC-05 — NOT STARTED
+- DYNAMIC-06 — NOT STARTED
+- DYNAMIC-07 — NOT STARTED
 
-Overall Dynamic UI feature discussion remains **IN PROGRESS**. DYNAMIC-01 and DYNAMIC-02 are frozen; DYNAMIC-03 through DYNAMIC-07 are not yet frozen.
+This is the single discussion document for the complete Dynamic UI feature. All seven discussions are recorded here. The implementation is a fresh CB-Partner design; the previous SDUI project/reference is used only to understand the fixed JSON contract and intended behavior. The fixed backend JSON format is not being redesigned here.
 
----
-
-# Scope
-
-This document is the single discussion document for the complete Dynamic UI feature.
-
-All seven Dynamic architecture discussions will be recorded here. We will not create a separate discussion document for each topic.
-
-The implementation is a fresh design for CB-Partner. The previous SDUI project/reference is used only to understand the fixed JSON contract and intended behavior. Existing classes, registries, builders, and implementation structure will not be copied.
-
-The fixed backend JSON format is not being redesigned as part of this discussion.
-
-Initial Dynamic vocabulary for implementation is intentionally small:
+Initial vocabulary:
 
 ```text
-Template
-└── stack_template
-
-Component
-└── stack_component
-
-Section
-└── stack_section
-
-Group
-└── stack_group
-
-Elements
-├── text
-└── image
+Template  -> stack_template
+Component -> stack_component
+Section   -> stack_section
+Group     -> stack_group
+Elements  -> text, image
 ```
-
-Additional definitions will be added later when the actual backend response requires them.
 
 ---
 
 # DYNAMIC-01 — Dynamic Container + Dynamic Screen Lifecycle
 
-## 1. Purpose
+## Status
 
-The Dynamic system is the main runtime UI system after Bootstrap. It must be able to receive a backend-defined destination, load the corresponding Dynamic screen configuration, render it using registered Dynamic definitions, and move between backend-defined destinations without creating native frontend screen classes such as LoginScreen, OtpScreen, or DashboardScreen.
+**FROZEN**
 
-The Dynamic Container is the permanent host for the current Dynamic destination.
-
----
-
-## 2. Dynamic Container
-
-There is one Dynamic Container responsible for displaying the current Dynamic destination.
-
-Conceptually:
-
-```text
-App
- │
- ├── Splash
- │
- └── DynamicContainer
-       │
-       └── Current Dynamic Screen
-```
-
-The Dynamic Container does not know business screen names such as Login, OTP, Dashboard, Profile, Booking, or Settings.
-
-It works with Dynamic destinations and Dynamic screen configurations.
-
----
-
-## 3. Dynamic Destination
-
-A Dynamic Destination represents one backend-defined destination that can be placed in the Dynamic navigation stack.
-
-Conceptually it contains:
-
-```text
-DynamicDestination
-├── templateId
-├── templateType
-├── screen/config API information
-└── other information defined by the fixed JSON contract
-```
-
-The exact fields and JSON structure remain governed by the fixed backend contract. This discussion does not redesign that contract.
-
----
-
-## 4. Bootstrap → Dynamic handoff
-
-Bootstrap is responsible for obtaining the initial configuration information needed to enter the Dynamic experience.
-
-The configuration response provides information for the next Dynamic destination, including the template type, unique template ID, and the API information required to load the actual screen configuration.
-
-The lifecycle is:
+The Dynamic system is the main runtime UI system after Bootstrap. It uses one permanent Dynamic Container and a Destination / Navigation Stack model. There are no native LoginScreen, OtpScreen, DashboardScreen, etc.; these are backend-defined Dynamic destinations.
 
 ```text
 Bootstrap
-   ↓
+  ↓
 Config API
-   ↓
+  ↓
 Dynamic Destination
-   ↓
+  ↓
 Dynamic Navigation
-   ↓
+  ↓
 Dynamic Container
-   ↓
+  ↓
 Screen API
-   ↓
+  ↓
 Dynamic Screen JSON
-   ↓
+  ↓
 Render
 ```
 
-Bootstrap does not become the owner of the ongoing Dynamic screen lifecycle. Once the Dynamic experience starts, Dynamic owns the subsequent Dynamic destination lifecycle.
+A Dynamic destination contains the backend-defined information required to identify and load the destination, including `templateType`, unique `templateId`, and screen/config API information according to the fixed JSON contract.
 
----
-
-## 5. Template Type vs Template ID
-
-These two values have different responsibilities and must not be confused.
-
-### templateType
-
-`templateType` determines **how the destination is rendered**.
+`templateType` answers **which registered Template renderer?** `templateId` answers **which Dynamic destination/back-stack entry?**.
 
 Example:
 
 ```text
-stack_template
+Login      templateId = login_123
+   ↓
+OTP        templateId = otp_456
+   ↓
+Dashboard  templateId = dashboard_789
 ```
 
-The Dynamic runtime uses the Template Registry to find the registered implementation for that type.
-
-Later, other registered template types can be added.
-
-### templateId
-
-`templateId` identifies **which particular Dynamic destination/screen instance is being represented**.
-
-Each backend-provided destination has its own unique template ID for Dynamic navigation/back-stack identity.
-
-Therefore:
-
-```text
-templateType
-    ↓
-Which Template renderer?
-
- templateId
-    ↓
-Which Dynamic destination?
-```
-
-This distinction is a fundamental DYNAMIC-01 rule.
-
----
-
-## 6. Navigation model
-
-The agreed model is the **Destination / Navigation Stack model**.
-
-We do not simply replace one template in a single state variable and separately invent back behavior.
-
-The Dynamic navigation stack contains Dynamic destinations.
-
-Example:
-
-```text
-Navigation Stack
-
-┌────────────────────────┐
-│ templateId = A         │
-├────────────────────────┤
-│ templateId = B         │
-├────────────────────────┤
-│ templateId = C         │ ← current
-└────────────────────────┘
-```
-
-The Dynamic Container displays the current destination.
-
-The container itself does not own navigation decisions. Navigation determines which Dynamic destination is current.
-
----
-
-## 7. Login → OTP → Dashboard concept
-
-There are no native Dynamic screen classes such as:
-
-```text
-LoginScreen
-OtpScreen
-DashboardScreen
-```
-
-Instead, these business experiences are represented by backend-defined Dynamic destinations.
-
-Conceptually:
-
-```text
-Destination A
-    ↓
-Destination B
-    ↓
-Destination C
-```
-
-For example:
-
-```text
-Login
-templateId = login_123
-        ↓
-OTP
- templateId = otp_456
-        ↓
-Dashboard
- templateId = dashboard_789
-```
-
-Dynamic itself only needs the destination information and the fixed JSON contract. It does not need frontend classes named after these business screens.
-
----
-
-## 8. Loading the actual Dynamic screen
-
-The configuration/bootstrap response provides the destination information and the API required to obtain the actual screen configuration.
-
-The runtime then loads the screen API for the current destination.
-
-Conceptually:
-
-```text
-DynamicDestination
-       ↓
-Screen API
-       ↓
-Dynamic Screen JSON
-       ↓
-Decode
-       ↓
-Render
-```
-
-The actual UI tree is supplied by the screen response according to the fixed JSON contract.
-
-The current implementation will initially support only the small registered vocabulary defined in this document's scope.
-
----
-
-## 9. Template responsibility
-
-A Template determines **how a Dynamic screen is rendered**.
-
-It does not determine navigation.
-
-For example:
-
-```text
-Dynamic Destination
-       │
-       ├── templateId   → destination identity
-       │
-       └── templateType → renderer selection
-```
-
-The Template Registry resolves `templateType` to the registered Template implementation.
-
-For the initial implementation, only `stack_template` is required.
-
----
-
-## 10. Dynamic Container lifecycle
-
-The agreed lifecycle is:
-
-```text
-                         SPLASH
-                            │
-                            │ Bootstrap
-                            ▼
-                 Initial DynamicDestination
-                            │
-                            ▼
-                   Navigation / Current
-                            │
-                            ▼
-                  ┌──────────────────┐
-                  │ Dynamic Container │
-                  └────────┬─────────┘
-                           │
-                           ▼
-                  Load Current Destination
-                           │
-                           ▼
-                        Backend
-                           │
-                           ▼
-                    Dynamic Screen JSON
-                           │
-                           ▼
-                       Decode
-                           │
-                           ▼
-                 Registered definitions
-                           │
-                           ▼
-                  Template / UI rendering
-                           │
-                           ▼
-                      Compose UI
-                           │
-                           │ user action
-                           ▼
-                         Action
-                           │
-                  ┌────────┴─────────┐
-                  │                  │
-             same destination   new destination
-                  │                  │
-                  ▼                  ▼
-              update state      Navigation push
-                                     │
-                                     ▼
-                              Dynamic Container
-                                     │
-                                     ▼
-                               Load + Render
-```
-
-The exact action model will be designed in DYNAMIC-06.
-
----
-
-## 11. Navigation and Back
-
-Because Dynamic destinations are navigation entries, system Back can operate on the Dynamic navigation stack.
-
-Example:
-
-```text
-Before:
-
-Login Destination
-OTP Destination  ← current
-```
-
-Back:
-
-```text
-OTP Destination is popped
-        ↓
-Login Destination becomes current
-        ↓
-Dynamic Container displays Login Destination
-```
-
-No business-screen-specific `if currentScreen == ...` logic is required.
-
----
-
-## 12. Refresh / reload
-
-Refreshing the current Dynamic destination does not require creating a new navigation destination.
-
-Conceptually:
-
-```text
-Current Dynamic Destination
-        ↓
-Reload its screen API
-        ↓
-Receive new Dynamic Screen JSON
-        ↓
-Render updated UI
-```
-
-The navigation identity and the loaded screen configuration are therefore conceptually separate.
-
----
-
-## 13. Unsupported Dynamic definitions
-
-The backend may eventually send a Template, Component, Section, Group, or Element that the installed application does not currently support.
-
-The Dynamic runtime must not guess an implementation and must not crash merely because a backend definition is unknown.
-
-Conceptually:
-
-```text
-Backend definition
-       ↓
-Registry lookup
-       ↓
-Registered?
-   ┌───┴───┐
-  YES     NO
-   │       │
-   ▼       ▼
-Render  Controlled unsupported handling
-```
-
-The exact fallback/error UI is intentionally not frozen in DYNAMIC-01. It will be addressed after the core Dynamic architecture discussions where appropriate.
-
----
-
-## 14. Initial Dynamic vocabulary
-
-The first implementation intentionally contains only enough definitions to prove the complete Dynamic pipeline:
-
-```text
-Template
-└── stack_template
-
-Component
-└── stack_component
-
-Section
-└── stack_section
-
-Group
-└── stack_group
-
-Elements
-├── text
-└── image
-```
-
-Later definitions are added incrementally when the real backend contract requires them.
-
-The Dynamic architecture must not need to be redesigned when additional registered definitions are introduced.
-
----
-
-## 15. Core separation of responsibilities
-
-The following mental model is frozen for DYNAMIC-01:
-
-```text
-Navigation
-    = WHERE
-
-Dynamic Screen
-    = WHAT
-
-Template
-    = HOW
-
-Dynamic Container
-    = WHERE IT IS DISPLAYED
-```
-
-More specifically:
-
-```text
-Navigation
-    → owns the current Dynamic destination and stack
-
-Dynamic Destination
-    → identifies the backend-defined destination
-
-Dynamic Screen
-    → contains the backend-defined UI configuration
-
-Template
-    → determines the rendering structure
-
-Dynamic Container
-    → displays the current Dynamic destination
-```
-
----
-
-# DYNAMIC-01 — Frozen Decisions
-
-1. **One permanent Dynamic Container** hosts the current Dynamic destination.
-
-2. **Dynamic uses the Destination / Navigation Stack model**, not a simple template replacement model.
-
-3. Every Dynamic destination has a backend-provided **unique `templateId`** used as its Dynamic destination/back-stack identity.
-
-4. `templateType` determines **which registered Template renderer** is used.
-
-5. The Dynamic destination contains the information required to obtain the actual screen JSON from its API according to the fixed backend contract.
-
-6. The Dynamic navigation stack stores Dynamic destinations and therefore supports push/pop/back behavior without creating native Login/OTP/Dashboard screen classes.
-
-7. The Dynamic Container renders the destination currently selected/current in the Dynamic navigation stack.
-
-8. The actual UI tree comes from the Dynamic screen response:
-
-```text
-Screen
- → Template
- → Component
- → Section
- → Group
- → Element
-```
-
-9. Unknown/unregistered Dynamic definitions must be handled safely rather than causing the application to crash. Exact fallback behavior is deferred until the relevant discussion.
-
-10. Initial implementation is intentionally limited to:
-
-```text
-stack_template
-stack_component
-stack_section
-stack_group
-text
-image
-```
-
-11. Additional Dynamic definitions will be added incrementally when required by actual backend responses; adding definitions must not require redesigning the Dynamic core architecture.
+The Dynamic navigation stack owns push/pop/back. The Dynamic Container displays the current destination. Refreshing a current destination reloads its screen API without creating a new navigation entry.
+
+Unknown/unregistered definitions must be handled safely; exact fallback presentation is deferred to the relevant discussion.
+
+Frozen DYNAMIC-01 principles:
+
+1. One permanent Dynamic Container.
+2. Destination / Navigation Stack model.
+3. Unique backend `templateId` identifies a Dynamic destination/back-stack entry.
+4. `templateType` selects the registered Template renderer.
+5. Destination contains information required to obtain the actual screen JSON.
+6. Dynamic navigation supports push/pop/back without business-screen-specific frontend classes.
+7. Dynamic Container renders the current destination.
+8. Actual UI comes from the backend Dynamic Screen JSON.
+9. Unknown definitions have controlled unsupported handling.
+10. Initial definitions are `stack_template`, `stack_component`, `stack_section`, `stack_group`, `text`, `image`.
+11. New definitions can be added without redesigning the Dynamic core.
 
 ---
 
@@ -530,17 +90,9 @@ image
 
 **FROZEN**
 
-## Purpose
+## Screen
 
-Define the exact Dynamic UI hierarchy and the responsibility of each level while keeping the hierarchy flexible enough for simple and complex backend-driven UIs without adding unnecessary structural layers.
-
-## 1. Screen — Root Dynamic Configuration
-
-Screen is the root Dynamic configuration.
-
-A Screen owns exactly one Template and may also contain screen-level configuration such as Theme, Header, and Footer when provided by the fixed JSON contract.
-
-Conceptually:
+Screen is the root Dynamic configuration. It owns exactly one Template and may contain screen-level configuration such as Theme, Header, and Footer when provided by the fixed JSON contract.
 
 ```text
 Screen
@@ -550,175 +102,61 @@ Screen
 └── Template
 ```
 
-Theme is a Screen-level concern. Header and Footer are also Screen-level concerns rather than Template, Component, Section, Group, or Element concerns.
+Theme, Header and Footer are Screen-level concerns.
 
-The exact Header/Footer structures are not expanded by DYNAMIC-02 unless required by the fixed contract.
+## Template
 
-## 2. Template — Complete Screen-Level Layout Strategy
+Template is the complete screen-level layout strategy. A Screen has exactly one Template. Template does not mean Login, OTP, Dashboard, etc.; it defines the rendering/composition strategy.
 
-Template represents the complete screen-level layout strategy.
+## Component
 
-A Screen contains exactly one Template.
-
-Template does not represent business screens such as Login, OTP, or Dashboard. It represents the rendering/composition strategy for the complete Dynamic screen.
-
-Example:
-
-```text
-Screen
-└── stack_template
-```
-
-## 3. Component — Flexible Composition Block
-
-A Template can contain multiple Components.
-
-Component can contain multiple Elements, multiple Sections, or both Elements and Sections.
-
-All of the following are legal:
+A Template contains multiple Components. A Component may contain multiple Elements, multiple Sections, or both. Ordering supplied by the backend is significant.
 
 ```text
 Component
-├── Element
-├── Element
-└── Element
+├── Element*
+└── Section*
 ```
 
-```text
-Component
-├── Section
-├── Section
-└── Section
-```
+Both child collections may be present.
 
-```text
-Component
-├── Element
-├── Section
-├── Element
-└── Section
-```
+## Section
 
-Therefore Component does not require an XOR choice between Elements and Sections. Both child types may be present, and their backend-provided ordering is significant and must be preserved.
-
-## 4. Section — Optional Composition Level
-
-Section is an optional structural level used when the UI requires additional grouping/composition.
-
-Section can contain multiple Elements, multiple Groups, or both Elements and Groups.
-
-Examples:
+A Section may contain multiple Elements, multiple Groups, or both. Ordering is significant.
 
 ```text
 Section
-├── Element
-├── Element
-└── Element
+├── Element*
+└── Group*
 ```
 
-```text
-Section
-├── Group
-├── Group
-└── Group
-```
+## Group
 
-```text
-Section
-├── Element
-├── Group
-├── Element
-└── Group
-```
+A Group can contain one or multiple Elements only. It cannot contain another Group, Section, Component, Template, or Screen.
 
-Section does not require Groups to exist. A Section can directly contain Elements.
+## Element
 
-The backend-provided ordering of Elements and Groups is significant and must be preserved.
+Element is terminal and has no Dynamic children. Initial elements are `text` and `image`; additional elements are added when the actual backend contract requires them.
 
-## 5. Group — Final Structural Grouping Level
+## Minimum and legal structure
 
-Group is the final optional structural level before Elements.
-
-A Group can contain one or multiple Elements.
-
-```text
-Group
-├── Element
-├── Element
-└── Element
-```
-
-Group cannot contain another Group, Section, Component, Template, or Screen.
-
-## 6. Element — Terminal UI Node
-
-Element is the terminal UI node.
-
-An Element has no Dynamic child nodes.
-
-The initial implementation will contain:
-
-```text
-text
-image
-```
-
-Additional Elements such as `input` or `button` will be introduced later when required by the actual backend contract.
-
-## 7. Minimum Valid Structural Path
-
-Every Dynamic screen always has the minimum structural path:
+Every Dynamic screen has the minimum path:
 
 ```text
 Screen → Template → Component → Element
 ```
 
-Therefore a simple screen can be:
-
-```text
-Screen
-└── Template
-    └── Component
-        ├── Element
-        ├── Element
-        └── Element
-```
-
-Section and Group are optional structural levels and are introduced only when the backend configuration requires additional composition.
-
-## 8. Legal Structural Paths
-
-The core legal paths are:
+Optional structural levels allow:
 
 ```text
 Screen → Template → Component → Element
-
 Screen → Template → Component → Section → Element
-
 Screen → Template → Component → Section → Group → Element
 ```
 
-Because Components can contain both Elements and Sections, and Sections can contain both Elements and Groups, valid configurations can also combine these paths within the same Template.
+Components can mix Elements and Sections; Sections can mix Elements and Groups.
 
-For example:
-
-```text
-Screen
-└── Template
-    ├── Component
-    │   ├── Element
-    │   ├── Section
-    │   │   ├── Element
-    │   │   └── Group
-    │   │       ├── Element
-    │   │       └── Element
-    │   └── Element
-    │
-    └── Component
-        └── Element
-```
-
-## 9. Cardinality Rules
+## Cardinality
 
 ```text
 Screen → Template       = exactly 1 Template
@@ -731,135 +169,242 @@ Group → Element         = 1..N Elements
 Element → children      = none
 ```
 
-Only Template is singular within its Screen parent. All other structural node types can occur multiple times where their parent allows them.
+Only Template is singular within Screen. All other structural nodes can occur multiple times where legally allowed. Backend ordering must be preserved.
 
-## 10. Ordering
+DYNAMIC-02 defines structure only; visual rendering behavior belongs to the registered definitions and DYNAMIC-04.
 
-The order supplied by the backend is significant.
+Frozen DYNAMIC-02 decisions:
 
-The renderer must preserve the order of:
-
-- Components inside Template
-- Elements and Sections inside Component
-- Elements and Groups inside Section
-- Elements inside Group
-
-The Dynamic runtime must not reorder these nodes based on frontend implementation details.
-
-## 11. Structural Hierarchy vs Visual Layout
-
-DYNAMIC-02 defines the structural hierarchy only.
-
-The existence of a Component, Section, or Group does not by itself define all visual behavior. Visual layout behavior and rendering details belong to the registered definitions and the rendering discussion in DYNAMIC-04.
-
-This keeps hierarchy and rendering responsibilities separate.
-
----
-
-## DYNAMIC-02 — Frozen Decisions
-
-1. **Every Dynamic Screen has exactly one Template.**
-
-2. **Every Template contains one or more Components.**
-
-3. **A Component may contain multiple Elements, multiple Sections, or both.**
-
-4. **A Section may contain multiple Elements, multiple Groups, or both.**
-
-5. **A Group may contain one or more Elements only.**
-
-6. **Element is terminal and has no Dynamic children.**
-
-7. **The minimum valid Dynamic screen path is `Screen → Template → Component → Element`.**
-
-8. **Section and Group are optional structural levels**, used only when the backend-defined UI requires additional composition.
-
-9. **Only Template is singular within Screen; all other structural levels may occur multiple times where legally allowed.**
-
-10. **Backend ordering is significant and must be preserved during rendering.**
-
-11. **Screen owns screen-level concerns such as Theme and, when provided, Header/Footer.**
-
-12. **Template is the complete screen-level layout strategy and is not a business-screen class.**
-
-13. **Component and Section are flexible composition levels; they are not forced into an XOR-only child model.**
-
-14. **Structural hierarchy and visual rendering behavior remain separate concerns.**
+1. Screen has exactly one Template.
+2. Template has one or more Components.
+3. Component may contain Elements, Sections, or both.
+4. Section may contain Elements, Groups, or both.
+5. Group contains one or more Elements only.
+6. Element is terminal.
+7. Minimum path is Screen → Template → Component → Element.
+8. Section and Group are optional.
+9. Only Template is singular within Screen.
+10. Backend ordering is preserved.
+11. Theme/Header/Footer are Screen-level concerns when provided.
+12. Template is not a business-screen class.
+13. Component and Section are flexible composition levels, not XOR-only levels.
+14. Structural hierarchy and rendering behavior remain separate.
 
 ---
 
 # DYNAMIC-03 — Registration System
 
-**Status:** DISCUSSION IN PROGRESS
+## Status
+
+**FROZEN**
 
 ## Objective
 
-Define the simplest clean registration and lookup system for Dynamic Templates, Components, Sections, Groups, and Elements.
-
-The system must answer:
+Registration answers one simple question:
 
 ```text
 Backend type name
-        ↓
+      ↓
 Is it registered?
-        ↓
-Yes → use its registered implementation
-No  → controlled unsupported handling
+      ↓
+YES → use registered definition
+NO  → controlled unsupported result
 ```
 
-The discussion will establish:
+Registration covers Templates, Components, Sections, Groups, and Elements.
 
-- What a registration represents
-- Template registration
-- Component registration
-- Section registration
-- Group registration
-- Element registration
-- Registry ownership
-- How backend type names map to implementations
-- How registration is performed at application startup
-- How lookup works during Dynamic rendering
-- How unknown/unregistered definitions are reported
-- Whether one registry or separate registries are clearer
-- How the initial definitions are registered
-- How future definitions can be added without changing the Dynamic core
+## 1. One central DynamicRegistry
 
-The implementation should remain simple and avoid a second SDUI language, duplicate registries, unnecessary factories, or an over-engineered plugin system.
+There is one central public `DynamicRegistry` for the Dynamic system.
+
+Conceptually:
+
+```text
+DynamicRegistry
+├── Templates
+├── Components
+├── Sections
+├── Groups
+└── Elements
+```
+
+Internally it remains strongly typed by node category:
+
+```text
+DynamicRegistry
+├── templates: Map<String, TemplateDefinition>
+├── components: Map<String, ComponentDefinition>
+├── sections: Map<String, SectionDefinition>
+├── groups: Map<String, GroupDefinition>
+└── elements: Map<String, ElementDefinition>
+```
+
+Exact Kotlin implementation types are an implementation-plan concern.
+
+## 2. Explicit registration
+
+Registration is explicit and simple:
+
+```text
+registry.registerTemplate(...)
+registry.registerComponent(...)
+registry.registerSection(...)
+registry.registerGroup(...)
+registry.registerElement(...)
+```
+
+Initial built-in definitions are explicitly registered during application/runtime setup.
+
+There is no reflection, package scanning, or automatic discovery.
+
+## 3. What is registered
+
+The registry stores a definition/implementation capable of handling a backend node type. It does not store rendered UI instances or screen instances.
+
+Conceptually:
+
+```text
+Registration
+├── type = "stack_template"
+└── definition/renderer = StackTemplate
+```
+
+The exact implementation shape is deferred to the implementation plan.
+
+## 4. Typed lookup
+
+Lookup is typed by node category:
+
+```text
+findTemplate("stack_template")
+findComponent("stack_component")
+findSection("stack_section")
+findGroup("stack_group")
+findElement("text")
+```
+
+There is no giant untyped `get(type)` returning an arbitrary object.
+
+## 5. Initial registrations
+
+```text
+Templates
+└── stack_template
+
+Components
+└── stack_component
+
+Sections
+└── stack_section
+
+Groups
+└── stack_group
+
+Elements
+├── text
+└── image
+```
+
+Future definitions use the same explicit registration mechanism.
+
+## 6. Duplicate registration
+
+Duplicate registration of the same type in the same node category is an error and must not silently replace an existing definition.
+
+```text
+registerTemplate("stack_template", A)
+registerTemplate("stack_template", B)
+```
+
+must result in a clear registration error.
+
+## 7. Unknown / unregistered definitions
+
+When backend JSON contains an unknown type:
+
+```text
+Backend type
+    ↓
+DynamicRegistry lookup
+    ↓
+NOT FOUND
+    ↓
+Controlled unsupported result
+```
+
+The registry does not guess another definition or silently substitute a different type. Exact unsupported UI/error presentation is deferred to the relevant Dynamic discussion.
+
+## 8. No reflection / discovery
+
+The initial design does not use reflection, annotation discovery, package scanning, or automatic class discovery. Registered definitions are visible through explicit application setup.
+
+## 9. No generic factory/plugin hierarchy
+
+The architecture does not introduce a large generic factory/provider/adapter/plugin hierarchy merely to perform registration. The registry remains the clear owner of type-to-definition registration and lookup.
+
+## 10. Registry responsibility boundary
+
+`DynamicRegistry` owns only:
+
+```text
+register
+lookup
+known / unknown definition
+```
+
+It does not own:
+
+```text
+navigation
+API calls
+business logic
+actions
+screen state
+rendered UI state
+```
+
+## DYNAMIC-03 — Frozen Decisions
+
+1. One central public `DynamicRegistry`.
+2. Registry is internally strongly typed by Template, Component, Section, Group, and Element.
+3. Registration is explicit.
+4. Registry stores definitions/implementations, not rendered instances.
+5. Lookup is typed by node category.
+6. Duplicate registration is an error.
+7. Unknown/unregistered types produce a controlled unsupported result.
+8. Initial registrations are `stack_template`, `stack_component`, `stack_section`, `stack_group`, `text`, and `image`.
+9. Future definitions use the same explicit registration mechanism.
+10. No reflection, package scanning, automatic discovery, generic plugin framework, or unnecessary factory hierarchy.
+11. Registry owns registration and lookup only.
 
 ---
 
 # DYNAMIC-04 — Rendering System
 
-**Status:** NOT STARTED
+**Status: DISCUSSION IN PROGRESS**
 
 To define how registered Dynamic definitions become Compose UI.
 
----
-
 # DYNAMIC-05 — Properties + State + Input Handling
 
-**Status:** NOT STARTED
+**Status: NOT STARTED**
 
 To define Dynamic properties, state, input values, and input handling.
 
----
-
 # DYNAMIC-06 — Actions
 
-**Status:** NOT STARTED
+**Status: NOT STARTED**
 
-To define Dynamic actions including request, navigation, state, external URI, and other actions actually required by the fixed contract.
-
----
+To define Dynamic actions including request, navigation, state, external URI, and other actions required by the fixed contract.
 
 # DYNAMIC-07 — Dynamic Flow
 
-**Status:** NOT STARTED
+**Status: NOT STARTED**
 
-To define the complete backend-driven flow from one Dynamic destination to the next, including the relationship between Bootstrap configuration, actions, responses, and Dynamic navigation.
+To define the complete backend-driven flow between Dynamic destinations, including Bootstrap configuration, actions, responses, and Dynamic navigation.
 
 ---
 
 # Final Dynamic Architecture Decisions
 
-**Not yet available.** This section will be completed only after DYNAMIC-01 through DYNAMIC-07 have been discussed and frozen.
+Not yet available. This will be completed only after DYNAMIC-01 through DYNAMIC-07 are discussed and frozen.
