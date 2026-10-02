@@ -12,7 +12,7 @@ class BootstrapMapperTest {
         val dto = Json.decodeFromString<BootstrapResponseDto>(
             """
             {
-              "status": 400,
+              "status": 200,
               "code": "INVALID_REQUEST",
               "message": "Bootstrap request rejected",
               "data": null,
