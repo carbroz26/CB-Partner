@@ -383,7 +383,226 @@ rendered UI state
 
 **Status: DISCUSSION IN PROGRESS**
 
-To define how registered Dynamic definitions become Compose UI.
+## 1. Definition-Owned Rendering
+
+The agreed direction is that each registered Template, Component, Section, Group, and Element definition owns the Compose rendering for its own node type.
+
+Conceptually:
+
+```text
+StackTemplateDefinition
+    → renders stack template
+
+StackComponentDefinition
+    → renders stack component
+
+StackSectionDefinition
+    → renders stack section
+
+StackGroupDefinition
+    → renders stack group
+
+TextDefinition
+    → renders text
+
+ImageDefinition
+    → renders image
+```
+
+The system must not become one giant renderer containing every Dynamic type in a large `when`/type switch.
+
+## 2. Small DynamicRenderer
+
+A small central `DynamicRenderer` remains responsible only for resolving the registered definition and delegating rendering.
+
+```text
+DynamicRenderer
+    ↓
+DynamicRegistry lookup
+    ↓
+registered Definition
+    ↓
+Definition renders itself
+```
+
+`DynamicRenderer` does not own the actual UI implementation of each Dynamic type.
+
+## 3. Render Data
+
+Definitions receive the decoded backend node data required to render their own node.
+
+Conceptually:
+
+```text
+Definition
+    + NodeData
+    + RenderContext
+    ↓
+Compose UI
+```
+
+The exact Kotlin data/definition interfaces remain an implementation-plan concern.
+
+## 4. RenderContext
+
+A small `DynamicRenderContext` is used to provide the runtime rendering capability required for child composition.
+
+It may provide access to the registry/renderer and other strictly rendering-related runtime context required by the final implementation.
+
+It must not become a general-purpose application service container.
+
+## 5. Parent / Child Rendering Responsibility
+
+**FROZEN**
+
+The same parent/child responsibility applies consistently to **Template, Component, Section, and Group**.
+
+```text
+Parent
+├── owns its own container/layout behavior
+├── decides how its legal children are arranged
+└── provides the available constraints to its children
+
+Child
+├── owns its own content
+└── may declare its own legal size/alignment constraints
+```
+
+This is a general Dynamic rendering rule, not a special case for any one node type.
+
+### Template
+
+Template owns its own screen-level layout/container behavior and decides how its Components are arranged.
+
+### Component
+
+Component owns its own container/layout behavior and decides how its legal Elements and Sections are arranged.
+
+### Section
+
+Section owns its own container/layout behavior and decides how its legal Elements and Groups are arranged.
+
+### Group
+
+Group owns its own container/layout behavior and decides how its Elements are arranged.
+
+### Element
+
+Element is terminal. It owns its own content rendering and its own legal size/alignment constraints but has no Dynamic children to arrange.
+
+## 6. Parent Controls Placement; Child Controls Itself
+
+The parent-child relationship is therefore:
+
+```text
+Parent
+   ↓
+controls child placement / arrangement
+   ↓
+Child
+   ↓
+renders its own content within the available constraints
+```
+
+A child does not reach upward to modify its parent's layout configuration.
+
+A parent does not implement the child's concrete UI content.
+
+This keeps composition predictable and allows the same rendering model to work recursively through the complete Dynamic hierarchy.
+
+## 7. Responsive Layout Direction
+
+Dynamic UI must be flexible across different available sizes, including small phones, large phones, tablets, iPads, desktop windows, and web layouts supported by the application.
+
+The preferred direction is **constraint-based/adaptive layout**, not device-specific UI branches.
+
+Conceptually:
+
+```text
+same Dynamic JSON
+       ↓
+different available constraints
+       ↓
+same registered definitions
+       ↓
+adaptive Compose layout
+```
+
+The renderer must not contain device-specific logic such as:
+
+```text
+if iPhone
+if Android phone
+if iPad
+if desktop
+```
+
+Layout should respond to available space and the legal layout capabilities of the node definition.
+
+## 8. Layout Capability Direction
+
+Dynamic nodes may need layout information such as:
+
+```text
+size
+min/max constraints
+padding
+alignment
+arrangement/spacing
+```
+
+However, these capabilities are not automatically exposed to every node. The registered definition determines which layout capabilities are legal for that node type.
+
+The exact supported properties and their mapping to the fixed backend JSON contract will be decided in the remaining DYNAMIC-04 discussion before implementation planning.
+
+## 9. Compose Responsibility
+
+Dynamic should use Compose Multiplatform's existing layout and measurement capabilities rather than creating a second responsive layout engine.
+
+Dynamic defines the backend-driven composition and legal layout configuration; Compose performs the actual measurement and layout behavior.
+
+## 10. Fixed JSON Contract
+
+The fixed backend JSON format remains authoritative.
+
+DYNAMIC-04 must map the existing JSON layout/size/alignment information into the new rendering architecture rather than inventing a second Dynamic layout language.
+
+The exact mapping of existing JSON properties to Compose layout behavior remains to be discussed.
+
+## DYNAMIC-04 — Frozen Decisions So Far
+
+1. Registered Template/Component/Section/Group/Element definitions own their own Compose rendering.
+2. A small central `DynamicRenderer` resolves definitions through `DynamicRegistry` and delegates rendering.
+3. Definitions receive their node data and a small `DynamicRenderContext`.
+4. Template, Component, Section, and Group all follow the same parent/child rendering responsibility model.
+5. A parent owns its own container/layout behavior and child arrangement.
+6. A child owns its own content and may declare its own legal size/alignment constraints.
+7. A child never reaches upward to modify parent layout configuration.
+8. Element is terminal and renders its own content; it has no Dynamic children to arrange.
+9. Responsive behavior is constraint-based/adaptive rather than device-specific.
+10. Dynamic uses Compose Multiplatform's existing measurement/layout capabilities rather than creating a second responsive layout engine.
+11. The fixed backend JSON contract remains authoritative.
+12. The exact layout/size/alignment property mapping is still under DYNAMIC-04 discussion.
+
+## Remaining DYNAMIC-04 Discussion
+
+Next we will define the exact layout model:
+
+```text
+1. width / height
+2. minWidth / maxWidth
+3. minHeight / maxHeight
+4. fill / wrap / fixed / fractional sizing
+5. padding
+6. spacing / arrangement
+7. alignment
+8. responsive/adaptive behavior
+9. mapping of the fixed JSON layout properties to Compose
+```
+
+No implementation plan or code is started until DYNAMIC-04 is fully discussed and frozen.
+
+---
 
 # DYNAMIC-05 — Properties + State + Input Handling
 
