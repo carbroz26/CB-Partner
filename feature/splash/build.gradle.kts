@@ -9,6 +9,22 @@ kotlin {
             implementation(project(":domain"))
             implementation(project(":core"))
             implementation(project(":navigation"))
+            implementation(libs.koin.core)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
+}
+
+compose.resources {
+    packageOfResClass = "com.carbroz.cbpartner.feature.splash.generated.resources"
+    generateResClass = always
 }

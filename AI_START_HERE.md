@@ -56,10 +56,22 @@ Determine:
 - Relevant feature/module documentation.
 - Current workflow state.
 
-Workflow:
-IDEA → DISCUSS → RESEARCH → DECIDE → DECISION FREEZE → PLAN → PLAN FREEZE → TRELLO READY → BRANCH → IMPLEMENT → TEST → REVIEW → ACCEPT → CODE FREEZE → COMMIT → MERGE → DOCUMENT → CHECKPOINT
+### Global Feature Lifecycle
+Every significant feature/module follows exactly three workflow phases:
 
-Do not skip a required state because the user used a short prompt.
+1. **FEATURE DISCUSSION** — Discuss + Research + Decide → Discussion Frozen
+2. **IMPLEMENTATION PLAN** — Create/review the complete feature plan → Plan Frozen
+3. **IMPLEMENTATION** — Implement the complete feature → Test + Review → Feature Frozen
+
+Once a phase is explicitly accepted/frozen, immediately move to the next phase. Do not create additional approval or freeze gates between implementation units.
+
+Implementation units are organizational subdivisions inside the complete feature. They may be used to sequence work and record progress, but they are not independent workflow phases and must not create separate unit-level authorization, freeze, or stop gates.
+
+Do not reopen already frozen architecture or feature decisions merely because implementation is being organized into units. If implementation reveals a material conflict with a frozen decision, use the reopening process defined below.
+
+Do not stop a feature implementation midway merely to create another planning or freeze gate. After the complete implementation plan is frozen and implementation is authorized, continue through all implementation units required to complete the feature before testing/reviewing the feature as a whole.
+
+Do not skip the three feature phases themselves. The objective is controlled speed: discuss once, plan once, implement completely, test/review, and freeze.
 
 ## 6. CONTINUE RULE
 'continue', 'go ahead', 'proceed', 'next', and similar phrases mean resume the next valid action from the documented current state. They do not automatically mean write code.
@@ -78,23 +90,23 @@ For CONTINUE:
 If state cannot be determined safely, STOP and ask.
 
 ## 7. PROMPT ROUTER
-DISCUSS: no repository modification; clarify requirements, constraints, assumptions, edge cases and open questions.
+DISCUSS: no repository modification; clarify requirements, constraints, assumptions, edge cases and open questions. Discussion may include research and decisions needed to reach a complete feature discussion freeze.
 
-RESEARCH: research only what is needed; distinguish evidence, interpretation, recommendation and uncertainty; no implementation.
+RESEARCH: research only what is needed for the current feature discussion; distinguish evidence, interpretation, recommendation and uncertainty; no implementation.
 
-DECIDE: present problem, constraints, options, tradeoffs, proposed decision and consequences. Nothing is frozen until explicitly accepted.
+DECIDE: present problem, constraints, options, tradeoffs, proposed decision and consequences. Nothing is frozen until explicitly accepted. Decisions required to complete the feature discussion belong to the same feature-discussion phase; do not create a separate decision gate for each implementation unit.
 
-FREEZE: restate exact frozen points, scope, non-goals, consequences, related module/feature and documents; then update the durable record when authorized.
+FEATURE DISCUSSION FREEZE: restate exact frozen feature requirements, scope, non-goals, constraints, consequences, related module/feature and documents, remaining explicitly accepted unknowns, and the next phase. Once accepted, immediately move to the complete implementation plan.
 
-PLAN: create an implementation contract covering objective, scope, out-of-scope, prerequisites, files/modules, architecture impact, dependencies, sequence, tests, acceptance criteria, risks and documentation.
+PLAN: create one complete implementation contract for the feature covering objective, scope, out-of-scope, prerequisites, files/modules, architecture impact, dependencies, complete implementation sequence, tests, acceptance criteria, risks and documentation. Implementation units may be listed inside the plan but do not become separate approval gates.
 
-PLAN FREEZE: restate the exact implementation contract. Explicit approval is the authorization boundary for implementation.
+PLAN FREEZE: restate the exact complete implementation contract. Explicit approval is the authorization boundary for implementation. Once frozen and implementation is authorized, immediately begin/continue complete feature implementation without additional unit-level planning gates.
 
-IMPLEMENT: verify requirement, frozen decisions, approved plan, Trello readiness where required, correct branch, safe Git state and absence of conflicting user changes. If a prerequisite is missing, do not code.
+IMPLEMENT: verify requirement, frozen decisions, approved complete plan, Trello readiness where required, correct branch, safe Git state and absence of conflicting user changes. If a prerequisite is missing, do not code. Implement all required units of the feature within the same implementation phase.
 
-TEST: validate according to the relevant test/build protocol. Do not weaken verification to make it pass.
+TEST: after complete feature implementation, validate the complete feature according to the relevant test/build protocol. Do not weaken verification to make it pass.
 
-REVIEW: compare actual work with requirement, decisions, plan, architecture, tests and scope. Classify findings as BLOCKER, REQUIRED, OPTIONAL or FUTURE. Do not silently fix review findings.
+REVIEW: after complete feature testing, compare the complete work with requirement, decisions, plan, architecture, tests and scope. Classify findings as BLOCKER, REQUIRED, OPTIONAL or FUTURE. Do not silently fix review findings.
 
 DOCUMENT: update only the appropriate authoritative documents.
 
@@ -165,6 +177,25 @@ DISCUSSED / PROPOSED / FROZEN / IMPLEMENTED / VERIFIED
 
 Never mark a proposal frozen merely because AI wrote it. Never mark implemented merely because files exist.
 
+### Feature Documentation Structure
+Every significant feature/module must have a dedicated documentation directory under `docs/features/`.
+
+At minimum, the directory contains:
+- `00-FEATURE-DISCUSSION.md` — durable record of requirements, research, decisions, scope, non-goals, constraints and discussion freeze.
+- `01-IMPLEMENTATION-PLAN.md` — the complete implementation contract created after the feature discussion is frozen.
+- `02-IMPLEMENTATION-STATUS.md` — implementation progress, verification, review findings and final feature-freeze state, maintained once implementation begins.
+
+Example:
+```text
+docs/features/
+└── splash-bootstrap/
+    ├── 00-FEATURE-DISCUSSION.md
+    ├── 01-IMPLEMENTATION-PLAN.md
+    └── 02-IMPLEMENTATION-STATUS.md
+```
+
+These feature documents are the durable source for the feature lifecycle. Do not create separate discussion, plan, authorization or freeze documents for individual implementation units unless a separate durable document is explicitly required by an accepted decision.
+
 ## 11. DISCUSSION PRESERVATION
 During discussion, separate:
 - User requirement
@@ -185,7 +216,7 @@ If points 1–7 are accepted and 8–9 are challenged:
 - re-discuss 8–9;
 - never reopen unrelated frozen points.
 
-When all required points are accepted, update the durable record.
+When all required points are accepted, update the durable record and move directly to the complete implementation plan.
 
 ## 13. FREEZE RECORD
 When the user says final/frozen/approved, return:
@@ -201,12 +232,12 @@ When the user says final/frozen/approved, return:
 - Remaining open items
 - Next workflow state
 
-A freeze is not complete until the durable record reflects it.
+A feature discussion freeze is not complete until the durable record reflects it. Once the complete discussion is frozen, the next state is the complete implementation plan. Once the complete plan is frozen and implementation is authorized, the next state is complete feature implementation.
 
 ## 14. IMPLEMENTATION PROTECTION
 Before changing code, AI must be able to answer:
 - What exact frozen requirement am I implementing?
-- Which approved plan authorizes this?
+- Which approved complete feature plan authorizes this?
 - Which module owns it?
 - Which decisions constrain it?
 - How will it be verified?
@@ -298,19 +329,21 @@ IMPLEMENT → Plan followed / Changes / Tests / Platform verification / Deviatio
 REVIEW → Scope / Findings / Tests / Architecture / Required actions / Acceptance status
 
 ## 24. NEXT PROMPT RULE
-When a stage finishes, return the single next prompt required to progress. The prompt must reflect actual state, not a generic script.
+When a phase finishes, return the single next prompt required to progress. The prompt must reflect actual state, not a generic script.
 
 Examples:
-After discussion: 'Research the open decisions above and return the evidence.'
-After research: 'Create the proposed decision from this research.'
-After freeze: 'Create the implementation plan for the frozen contract.'
-After plan: 'Review and freeze this implementation plan.'
-After implementation: 'Run the required tests and verification.'
-After testing: 'Review the implementation against the frozen plan.'
-After acceptance: 'Finalize documentation, Git state, and checkpoint.'
+After feature discussion freeze: 'Create the complete implementation plan for the frozen feature contract.'
+After plan freeze: 'Begin implementation of the complete feature according to the frozen plan.'
+After complete implementation: 'Run the required tests and verification for the complete feature.'
+After testing: 'Review the complete implementation against the frozen plan.'
+After review/acceptance: 'Finalize documentation, Git state, and feature freeze.'
 
-## 25. DO NOT SKIP STATES TO SAVE TIME
-The objective is progressive, recoverable, reviewable development without uncontrolled drift or repeated restarts. Scale ceremony to risk, but never remove scope control, frozen constraints, validation or Git safety.
+Do not generate an intermediate unit-level approval prompt.
+
+## 25. DO NOT CREATE EXTRA GATES TO SAVE OR SPEND TIME
+The objective is productive, progressive, recoverable development without uncontrolled drift or repeated restarts. Use exactly the three feature phases. Do not add unit-level discussion, planning, authorization, freeze, or stop gates merely because a feature contains multiple implementation units.
+
+Scale the amount of discussion, research, testing and review to risk, but never remove scope control, frozen constraints, validation or Git safety.
 
 ## 26. CURRENT TECHNICAL DIRECTION
 Currently stated direction:
@@ -375,418 +408,74 @@ After each transition, update the required records before declaring it complete.
 |---|---|
 | New module/feature discussion | Current Status + Tracker |
 | Durable decision produced | Decision Log + relevant module/feature plan |
-| Decision frozen | Decision Log + module plan + Tracker |
-| Implementation plan created | Module plan + Tracker |
-| Implementation plan frozen | Module plan + Tracker + Trello |
-| Unit selected | Module Status + Tracker + Trello |
-| Coding starts/completes | Module Status + Tracker |
-| Tests run | Module Status + Tracker + test result |
-| Review completes | Module Status + Tracker |
-| Unit accepted/frozen | Module Status + Tracker + Trello |
-| Module complete | Module Status + Current Status + Tracker + Trello |
-| Checkpoint | Checkpoints + Current Status + Tracker |
-| Commit/merge | Tracker + Current Status when materially relevant |
+| Feature discussion frozen | Decision Log + feature plan + Tracker |
+| Complete implementation plan created | Feature plan + Tracker |
+| Complete implementation plan frozen | Feature plan + Tracker + Trello |
+| Implementation starts/completes | Feature Status + Tracker |
+| Tests run for complete feature | Feature Status + Tracker + test result |
+| Complete feature review | Feature Status + Tracker |
+| Complete feature accepted/frozen | Feature Status + Current Status + Tracker |
 
-If a required record cannot be updated, do not falsely declare the transition complete.
+## 34. FINAL RULE
+The AI must never silently advance the project state. Every transition must be explicit, documented, verifiable and recoverable.
 
-## 34. TWO DOCUMENTS PER SIGNIFICANT MODULE
-Each significant module has exactly two primary lifecycle documents.
-
-### 00-MODULE-IMPLEMENTATION-PLAN.md
-The frozen contract: purpose/boundary, responsibilities/non-responsibilities, architecture, dependencies, public contracts, Store/state design, domain/data/API rules, platform rules, DI/lifecycle rules, error handling, logging, security, testing strategy, coding constraints, ordered implementation units, acceptance criteria, and out-of-scope items. Changes require the decision/reopening process.
-
-### 01-MODULE-IMPLEMENTATION-STATUS.md
-The living execution ledger. For each unit record unit ID, requirement reference, status, files changed, tests written/executed, verification result, review result, frozen/accepted state, checkpoint/date, limitations, and next unit. Never erase implementation history.
-
-## 35. ONE IMPLEMENTATION UNIT AT A TIME
-After a module plan is frozen:
-SELECT → IMPLEMENT → TEST → REVIEW → ACCEPT/FIX → FREEZE → RECORD → STOP
-
-After the unit is frozen, update Module Status, Tracker, Trello, Current Status when materially relevant, and checkpoint when required. Then STOP. Never automatically implement the next unit.
-
-## 36. GLOBAL CODING QUALITY GATE
-Every code change follows applicable frozen engineering standards. Verify as applicable: cohesive/single-responsibility classes; intentional ownership/lifecycle; immutability; safe nullability; clear naming; minimal public API; dependency direction and DI; appropriate class lifetime; Singleton only when justified by lifecycle/resource/ownership; no unnecessary design patterns; no speculative abstractions; no hidden global state; structured error handling; coroutine/concurrency/thread-safety correctness; logging/security rules; Compose state/recomposition rules; platform boundaries; testability; maintainability.
-
-If a desired coding rule is not frozen, propose it instead of silently making it permanent.
-
-## 37. TESTING GATE
-Compiling is not sufficient. For every unit, determine required verification from the frozen plan and testing standards. As applicable: build/compile, unit tests, Store/state tests, domain/use-case tests, repository/data tests, serialization/API tests, UI tests, platform tests, regression tests, failure/edge-case tests, lint/format/static checks. Record what actually ran and the result. Never claim an unrun test passed.
-
-## 38. CONTROLLED PROGRESS NOTIFICATION
-During repository work, keep the user informed.
-
-Before each material action:
-ABOUT TO DO: <action>
-
-After it:
-DONE: <result>
-
-For coding, announce the unit, intended files/scope, and intended change. After coding, show the relevant changed code/diff or precise file summary, test commands/results, and any deviation immediately. Do not expose hidden chain-of-thought; provide operational progress, decisions, changed files, commands/results, and diffs.
-
-## 39. NO UNAUTHORIZED BATCH WORK
-Do not silently implement multiple units, create unrelated modules, refactor unrelated code, upgrade dependencies, alter architecture, modify frozen decisions, touch backend, change unrelated Trello cards, or merge code. Material scope expansion requires authorization.
-
-## 40. AUTOMATION FAILURE RULE
-This process reduces omissions but cannot honestly guarantee zero mistakes. If a required tool/action is unavailable: STOP; identify the missing action; perform it manually if authorized and possible; otherwise mark BLOCKED and tell the user exactly what remains.
-
-## 41. POST-FREEZE GATE
-After any meaningful freeze, STOP. Do not automatically start the next feature, module, unit, dependency change, or refactor.
-
-Return FREEZE COMPLETE with what was frozen, records updated, Tracker state, Trello state, current state, and remaining work. Then ask what objective the user wants next. Offer: continue this module; discuss another aspect; start another module; start another feature; research; review; status; end session. Provide one recommended copy/paste prompt but do not execute it automatically.
-
-## 42. MANDATORY RESPONSE FOOTER
-Every substantial workflow response ends with:
-CURRENT STATE — topic/module, workflow state, current unit, frozen items, open items.
-RECORDS UPDATED — documents, Tracker, Trello, Git when applicable.
-NEXT ACTION — one precise process action.
-NEXT PROMPT — one copy/paste-ready prompt.
-At a freeze boundary also include POST-FREEZE CHOICE and wait for the user's objective.
-
-## 43. USER OVERRIDE DOES NOT BYPASS GATES
-"Just do it" does not authorize silently skipping required decision, planning, testing, review, documentation, or Git safety gates. Identify the minimum missing authorization instead.
-
-## 44. DEFINITION OF DONE
-A work item is DONE only when applicable: requirement understood; scope known; decisions frozen; approved plan exists; correct unit selected; code implemented; required tests executed; review completed; acceptance/freeze recorded; Module Status updated; Tracker updated; Trello synchronized; Git state recorded; checkpoint/documentation completed; user notified; next action returned. If an applicable condition is false, do not report DONE.
-
-## 45. SINGLE SOURCE FOR "WHERE ARE WE?"
-CURRENT-STATUS + Tracker + relevant Module Status + Git + Trello must agree. If they disagree, STOP and reconcile before material work.
-
-## 46. STATUS
-This document is PROPOSED. Once frozen, changes to it are process changes and must themselves follow the project decision/freeze process.
-
-## 47. MANDATORY GIT / ANTIGRAVITY CONTROL GATE
-Every code change is tracked through an explicit Git lifecycle. The AI must never treat code written as the end of a task.
-
-PREPARE → IMPLEMENT → VERIFY → RECORD → COMMIT → PUBLISH/PR → MERGE → SYNC.
-
-For every material code change, verify the authorized branch, implement only the authorized scope, inspect the complete changed-file list and diff, run required checks, update Module Status/Tracker/Trello, commit the focused unit, push/open or update the PR when required, merge only after required review/checks and authorization, and then provide exact Antigravity synchronization commands.
-
-## 48. BRANCHING STRATEGY
-Use branches to isolate development work. GitHub documents branches as a way to isolate feature/fix work and recommends pull requests and protection for important branches. citeturn0search2turn0search6
-
-Default:
-- main = protected, stable source of truth.
-- development = integration branch.
-- One active module/feature branch per active module/feature, based on the current development branch unless an explicitly authorized integration base is required.
-- Task-level commits live on that module branch.
-- Do not work directly on main or development.
-- Do not create a new branch for every tiny edit unless the task is independently reviewable or the plan requires it.
-
-### Module Branch Naming and Reuse Rule
-- Module/feature branches use the **module/feature name**, not work-item IDs or numeric task IDs.
-- Never create branches named after tracker IDs such as `SPLASH-BOOTSTRAP-001`, `001`, `002`, etc.
-- A module/feature has one canonical long-lived implementation branch for its related work. Reuse that branch for future work belonging to the same module/feature.
-- Example: all Splash/Bootstrap work uses the existing `feature/splash-config-bootstrap` branch; do not create `feature/SPLASH-BOOTSTRAP-001` or another numeric branch for a Splash/Bootstrap task.
-- Apply the same rule to future modules/features: use names such as `feature/sdui`, `feature/booking`, or another clear module/feature name.
-- If the canonical module branch already exists, do not create a duplicate branch merely because a new tracker/work-item ID was created.
-- A task/work-item ID belongs in the Tracker, Trello, plan/status documents, commit messages where useful, and PR metadata—not in the branch name.
-- If a canonical branch was merged/deleted, follow the documented reactivation/new-branch rules and base the replacement on current `development`; do not resurrect stale branch history blindly.
-
-Suggested names: `feature/<module>`, `fix/<module>-<short-description>`, `chore/<short-description>`, `docs/<short-description>`.
-The exact canonical branch name must be recorded in the Tracker before implementation.
-
-## 49. COMMIT STRATEGY
-Commits represent meaningful, reviewable units. A module follows: module branch → task/implementation-unit commits → verification → PR → merge → optional milestone tag. Unrelated refactors must not be mixed into the commit.
-
-## 50. TAGGING STRATEGY
-Tags are milestones, not save points. Use them for meaningful milestones such as module acceptance/freeze, release candidates, project releases, or another explicitly defined milestone. Record tag name and purpose in Tracker and Module Status. Never move an existing tag silently.
-
-## 51. REQUIRED CHANGE REPORT
-After every material code change, return:
-- CHANGE: implementation unit/task ID, branch, commit/PR if created, purpose.
-- FILES CHANGED: full relative path of every added/modified/deleted file and reason.
-- CODE REVIEW: key classes/functions, behavior, dependencies/configuration, unrelated-change confirmation.
-- VERIFICATION: exact commands run, results, tests/checks, known failures.
-- RECORDS: Module Status, Tracker, Trello, Git/PR/tag.
-- ANTIGRAVITY SYNC: exact commands appropriate to the final Git state. Never invent a branch, commit, merge, tag, or SHA.
-
-Typical post-merge synchronization when returning to main:
-git fetch origin
-git checkout main
-git pull --ff-only origin main
-
-If the user needs a module branch, return branch-specific commands instead of assuming main.
-
-## 52. GIT SAFETY GATE
-Before push/merge/tag: verify branch, working tree, changed files, diff, tests/checks, task scope, and that unrelated user changes will not be overwritten. Never use destructive commands such as hard reset, force push, or deletion to clean up without explicit authorization.
-GitHub protected branches can require pull requests, reviews, status checks, conversation resolution, signed commits, linear history, and can block force pushes/deletion. These protections should be configured for important branches rather than relying only on AI behavior. citeturn0search0turn0search3
-
-## 53. MERGE IS A DISTINCT STATE
-Track separately: IMPLEMENTED → VERIFIED → COMMITTED → PUSHED → PR OPEN → REVIEWED → MERGED → SYNCED.
-IMPLEMENTED does not mean MERGED.
-
-## 54. LOCAL ANTIGRAVITY IS PART OF THE WORKFLOW
-Antigravity is the user's local execution/synchronization environment. When the AI changes the repository remotely, it must report what changed, branch/commit/PR/tag state, exact local synchronization commands, and local verification commands. It must never assume those commands were executed.
-
-## 55. MANDATORY AI ROUTER / STATE RECOVERY
-AI_START_HERE.md is the first document for every new AI session and every request that may involve project work. It is a router, not a replacement for module documentation.
-
-### 55.1 Recover Before Acting
-1. Identify repository/project.
-2. Read this document completely.
-3. Read `docs/project-management/12-PROJECT-TRACKER.md`.
-4. Read `04-CURRENT-STATUS.md`.
-5. Determine current module/work item and workflow state.
-6. Read only the relevant module Implementation Plan/Status and required technical/process documents.
-7. Inspect actual Git branch/status/diff and relevant Trello state.
-8. Reconcile contradictions before acting.
-
-### 55.2 Interpret the User Request
-Classify the request as one primary intent:
-DISCUSS, RESEARCH, DECIDE, FREEZE, PLAN, IMPLEMENT, TEST, REVIEW, DOCUMENT, STATUS, CONTINUE, or RECOVER.
-
-The user's words are intent signals, not permission to bypass gates.
-
-### 55.3 CONTINUE Protocol
-If the user says `CONTINUE`, `continue Auth`, or gives an otherwise underspecified continuation request:
-- recover state from Tracker first;
-- identify the active module/work item;
-- read its status and frozen plan;
-- determine the next valid workflow state;
-- check whether user approval is required;
-- return the next action and a copy/paste prompt;
-- do not automatically implement the next unit.
-
-If more than one unresolved context exists, ask the user to select one.
-
-### 55.4 State-to-Document Routing
-| Detected state/intent | Required next reads |
-|---|---|
-| New discussion | Tracker + relevant project context |
-| Existing module discussion | Tracker + module Plan + module Status |
-| Research | Tracker + relevant architecture/technical docs + authoritative external sources when needed |
-| Decision | Decision Log + relevant technical docs |
-| Plan | Decision Log + Architecture + module context |
-| Implementation | Frozen module Plan + Module Status + coding/testing rules + Tracker |
-| Testing | Module Plan + Module Status + testing/review rules + Tracker |
-| Review | Module Plan + Module Status + actual Git diff + testing rules + Tracker |
-| Freeze | relevant Plan/Status + acceptance/review evidence + Tracker + Git/Trello state |
-| Continue | Tracker first, then state-specific documents |
-| New chat/recovery | AI_START + Tracker + Current Status, then current module documents |
-
-### 55.5 Authorization Gates
-- DISCUSS/RESEARCH/DECIDE/PLAN: no source-code modification.
-- IMPLEMENT: requires a frozen applicable plan and explicit implementation authorization.
-- TEST: requires an implementation target.
-- REVIEW: requires an implementation target and actual diff/evidence.
-- FREEZE: requires acceptance evidence and all required records.
-- MERGE/TAG/PUSH: requires Git safety checks and applicable authorization.
-- After meaningful FREEZE: STOP.
-
-### 55.6 Automatic State Interpretation
-The router must never assume that the last conversation message describes the current state. State comes from the Tracker plus authoritative project/module records and actual Git/Trello evidence.
+## 35. PROJECT-SPECIFIC BRANCH NAMING
+Feature/module branches must use the feature/module name, not task IDs or numeric workflow IDs.
 
 Examples:
-- Plan not frozen + user says Implement → route to plan freeze; do not code.
-- Unit implemented but not verified + user says Continue → route to verification.
-- Unit verified but not committed → route to commit.
-- PR open and awaiting review → route to review.
-- Unit merged but local workspace not synced → route to Antigravity synchronization.
-- Module has no pending units and is frozen → route to post-freeze choice; do not invent new work.
-- Contradictory records → route to reconciliation; do not continue implementation.
+- `feature/splash-config-bootstrap`
+- `feature/sdui`
+- `feature/booking`
+- `feature/payment`
 
-### 55.7 Mandatory Response Contract
-At each workflow boundary return:
-CURRENT STATE
-RECORDS UPDATED
-NEXT ACTION
-NEXT PROMPT
+Do not create branches such as `feature/SPLASH-BOOTSTRAP-001` or `feature/001`.
 
-After a meaningful freeze additionally return:
-FREEZE COMPLETE
-POST-FREEZE CHOICE
+Task IDs such as `SPLASH-BOOTSTRAP-001` remain tracking identifiers in documentation/Trello; they are not branch names.
 
-During repository work announce:
-ABOUT TO DO
-then after the action:
-DONE
+## 36. IMPLEMENTATION STATUS
+When a complete feature implementation starts, maintain the feature's `02-IMPLEMENTATION-STATUS.md` throughout implementation, testing and review. It must reflect actual progress and must not be marked COMPLETE/FROZEN until complete-feature verification and review are finished.
 
-For every material code change also return the complete changed-file list, important changed classes/functions, verification results, Git state, and exact Antigravity sync commands.
+## 37. USER-AUTHORIZED GIT OPERATIONS
+When the user explicitly authorizes a destructive or history-changing Git operation, execute only the exact authorized operation, verify the resulting state, and do not expand the authorization to unrelated operations.
 
-### 55.8 Post-Freeze Choice
-After freezing a unit/module, offer:
-1. Continue this module
-2. Discuss another aspect
-3. Start another module
-4. Start another feature
-5. Research a technical decision
-6. Review existing work
-7. Check project status
-8. End session
+## 38. SOURCE OF TRUTH HIERARCHY FOR IMPLEMENTATION
+For implementation, use this precedence:
+1. Current explicit user instruction
+2. AI_START_HERE.md
+3. Frozen architecture decisions
+4. Frozen feature discussion
+5. Frozen complete implementation plan
+6. Approved feature/module status
+7. Current source/tests
+8. Historical material
 
-Wait for the user's objective. Do not automatically proceed.
+## 39. BACKEND CONTRACT UNKNOWN
+Do not invent undocumented backend API endpoints, request bodies, headers, status codes, response schemas or error payloads. Record unknowns explicitly and isolate them behind the appropriate frontend contract. When the backend contract is later supplied, reconcile it against the frozen feature contract before changing implementation.
 
-### 55.9 No Hidden Context Dependency
-A new AI must be able to recover the current workflow without access to prior chat messages. If durable information exists only in conversation history, document it before claiming recovery is complete.
+## 40. FEATURE IMPLEMENTATION COMPLETENESS
+A feature is not considered implemented when an individual implementation unit is complete. The implementation phase remains active until all units required by the complete frozen feature plan are implemented and the complete feature is ready for testing.
 
+## 41. NO UNIT-LEVEL FREEZE
+Domain, Data/API, Store/MVI, UI, navigation/startup and tests may be listed as implementation units. They are not separate feature phases. Do not request or record separate Unit 1/Unit 2/etc. freezes unless the user explicitly changes the global workflow.
 
-## 56. THREE-TIER BRANCH STRATEGY
+## 42. COMPLETE FEATURE DISCUSSION
+The feature discussion must cover the complete intended feature scope before it is frozen. It may defer explicitly identified future behavior, but those deferred items must be recorded as out-of-scope/future work rather than reopening the discussion during implementation.
 
-The repository uses three branch levels:
+## 43. COMPLETE IMPLEMENTATION PLAN
+The implementation plan must cover the complete feature from its entry point through its final in-scope behavior and verification. It may sequence implementation units, but it must not stop at a partial vertical slice when the approved feature scope is broader.
 
-main ← development ← feature/<module>
+## 44. COMPLETE FEATURE FREEZE
+Feature freeze occurs only after complete implementation, complete-feature testing, double-check/review and documentation reconciliation. A unit completion is never itself a feature freeze.
 
-- main = production/stable branch. It receives changes only when the relevant product feature is production-ready and complete acceptance criteria are satisfied.
+## 45. FEATURE DOCUMENTATION LOCATION
+The canonical durable documentation for a feature lives under `docs/features/<feature-name>/`. The feature directory must contain the discussion and implementation plan documents before implementation is authorized; the implementation status document is required once implementation begins.
 
-- development = integration branch. Completed/frozen module work is merged here for integration and regression verification.
+## 46. SPLASH + BOOTSTRAP CURRENT FEATURE
+Current feature: `splash-bootstrap`.
 
-- feature/<module> = active module branch. Example: feature/authentication or feature/network. Module implementation work occurs here.
+Canonical feature documents:
+- `docs/features/splash-bootstrap/00-FEATURE-DISCUSSION.md`
+- `docs/features/splash-bootstrap/01-IMPLEMENTATION-PLAN.md`
+- `docs/features/splash-bootstrap/02-IMPLEMENTATION-STATUS.md`
 
-Never develop directly on main or development.
-
-
-
-## 57. MODULE BRANCH LIFECYCLE
-
-New module: development → feature/<module> → discussion → plan freeze → implementation units → test/review/freeze each unit → module acceptance → PR to development → integration verification.
-
-A frozen module does not mean its branch is permanently closed, nor that AI should switch back to it automatically.
-
-
-
-## 58. FROZEN MODULE REACTIVATION RULE
-
-After a module is frozen and merged into development, remain in the current working context unless a new task actually requires changing that module.
-
-If a later issue belongs to Network while Authentication is current: identify the issue as Network-owned; stop Authentication workflow; check Tracker for Network branch/state; switch/create feature/network only as authorized; read Network Plan + Status; create a Network task/unit if required; implement/test/review through normal gates; merge Network to development; then return to the requested context only when the Network task is complete or explicitly paused.
-
-Never switch branches merely because another module exists. Branch switching must be caused by an authorized work item.
-
-If a module branch was already merged/deleted, create a new issue branch from current development according to Git protocol; do not resurrect stale state without checking Tracker/Git history.
-
-
-
-## 59. DEVELOPMENT INTEGRATION GATE
-
-A module branch may merge into development only when applicable implementation units are accepted/frozen, required tests/checks pass, documentation is synchronized, and required review is complete.
-
-Track separately: MODULE_FROZEN → PR_TO_DEVELOPMENT → REVIEWED → MERGED_TO_DEVELOPMENT → INTEGRATION_VERIFIED.
-
-After integration, run applicable cross-module/regression verification before treating the integrated state as stable.
-
-
-
-## 60. MAIN RELEASE GATE
-
-main is not a module integration branch.
-
-A module such as Authentication is not merged to main merely because Authentication is frozen. The relevant product feature must be production-ready according to its frozen acceptance criteria.
-
-Example: Authentication (Login + OTP + session/auth state + error/retry handling + required tests + review + production acceptance) → development → release review → main.
-
-The exact definition of production-ready must be frozen for the feature/release. Do not invent missing acceptance criteria at merge time.
-
-
-
-## 61. MAIN MERGE SAFETY
-
-Before development → main: confirm release/feature scope; all required feature/module acceptance criteria; integration/regression verification; documentation/Tracker/Trello; PR/diff and Git status; repository protections/reviews/checks; required authorization; merge commit/tag/release milestone. Then provide Antigravity commands to synchronize main.
-
-Never merge a single completed module to main solely because that module is complete.
-
-
-
-## 62. BRANCH SWITCH RESPONSE REQUIREMENT
-
-Whenever a task requires a branch switch, explicitly report:
-
-BRANCH SWITCH REQUIRED
-
-Current: <branch>
-
-Target: <branch>
-
-Reason: <authorized work item>
-
-Tracker: <reference/state>
-
-Then verify the target branch before making changes.
-
-When no branch switch is required, do not switch branches merely for convenience.
-## 63. STANDARD REPOSITORY GIT + BUILD LIFECYCLE
-
-The repository workflow must be recoverable from documentation without relying on chat history.
-
-CLONE → VERIFY → FETCH → CREATE/SWITCH BRANCH → PULL/UPDATE → IMPLEMENT → BUILD/TEST → REVIEW DIFF → COMMIT → PUSH → PR/REVIEW → MERGE → FETCH → SYNC LOCAL BRANCH → BUILD/TEST AGAIN.
-
-### Initial clone
-After cloning, verify the remote URL, current branch, working-tree status, required project files, and Gradle Wrapper availability.
-
-    git clone <repository-url>
-    cd CB-Partner
-    git remote -v
-    git status
-    git branch --show-current
-    Get-ChildItem -Force -Name
-
-### Before starting work
-    git fetch origin
-    git status
-    git branch -vv
-    git log --oneline --decorate -10
-
-Use only the authorized branch workflow. Never overwrite unexpected user changes.
-
-### Branch workflow
-    git fetch origin
-    git switch development
-    git pull --ff-only origin development
-    git switch -c feature/<module>
-
-Do not develop directly on main or development.
-
-### Inspect before commit
-    git status
-    git diff --check
-    git diff --stat
-    git diff
-
-### Commit and publish
-    git add <files>
-    git diff --cached
-    git commit -m "<type>: <description>"
-    git push -u origin feature/<module>
-
-Never force-push without explicit authorization.
-
-### Fetch, pull and merge
-git fetch origin updates remote-tracking references without changing the working tree.
-Use git pull --ff-only for safe fast-forward synchronization.
-Normal module flow is feature/<module> → PR/review → development → integration verification → release review → main.
-Do not use local git merge merely for convenience when the approved workflow requires a Pull Request.
-
-### Post-merge synchronization
-    git fetch origin
-    git switch development
-    git pull --ff-only origin development
-    git status
-
-After an approved production merge:
-
-    git fetch origin
-    git switch main
-    git pull --ff-only origin main
-    git status
-
-Then run the required integration/build verification.
-
-### Gradle Wrapper rule
-The repository must use the Gradle Wrapper for normal builds. Required files are gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.jar, and gradle/wrapper/gradle-wrapper.properties.
-Windows uses .\gradlew.bat; macOS/Linux uses ./gradlew.
-The current AGP 9.3.0 configuration requires Gradle 9.7.1 as the minimum/default compatible version. BASE-ARCH-014-T01 therefore targets Gradle 9.7.1.
-Do not replace the official Wrapper with a custom script or manually invented JAR.
-
-### Build/test baseline
-After clone or synchronization, execute the exact build/test commands required by the frozen plan. Never claim a test passed unless it actually ran. Record Windows iOS simulator limitations instead of suppressing them.
-
-### Antigravity handoff
-When AI changes repository state remotely, return exact local synchronization and verification commands for the actual final Git state. Never invent a branch, commit, merge, tag, or SHA.
-
-## 64. GRADLE VERSION AUTHORITY
-**Authoritative CB-Partner Gradle version: 9.7.1.**
-
-- Project Wrapper target: Gradle 9.7.1.
-- Normal project builds use `.\\gradlew.bat` on Windows or `./gradlew` on macOS/Linux.
-- System Gradle is bootstrap/update tooling only; it is not the normal project build path.
-- Gradle 9.5.0 was previously documented as a compatibility baseline and is superseded; it is not the selected CB-Partner version.
-- All Gradle setup and command details live in `docs/build/GRADLE-SETUP-AND-WORKFLOW.md`.
+Current feature scope and decisions must be recorded in those documents and must not be inferred only from chat history.
