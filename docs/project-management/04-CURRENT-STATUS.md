@@ -7,7 +7,7 @@
 Phase 1 — Technical Foundation.
 
 ## Current Objective
-Complete the architecture foundation progressively, one separately authorized work item at a time, using the frozen project workflow.
+Complete the first Splash → Bootstrap API vertical slice progressively, one separately authorized implementation unit at a time, using the frozen project workflow.
 
 ## Base Architecture State
 BASE-ARCH-001 through BASE-ARCH-017 → DECISION_FROZEN.
@@ -18,13 +18,27 @@ BASE-ARCH-017 implementation is now **CODE_FROZEN** after successful verificatio
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-BASE-ARCH-017 → REVIEW ACCEPTED → CODE_FROZEN.
+SPLASH-BOOTSTRAP-001 → PLAN_FROZEN → TRELLO_READY → implementation authorization required.
 
 ## Current Work Item
-BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary.
+SPLASH-BOOTSTRAP-001 — Implement Application Startup and Splash.
 
 ## Current Decision State
 BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 remain decision-frozen. BASE-ARCH-017 implementation authorization was explicitly granted on 2026-09-30 and was limited to the frozen implementation plan. Verification passed and review was accepted on 2026-10-02.
+
+## SPLASH-BOOTSTRAP-001 Current State
+
+**State:** PLAN_FROZEN / TRELLO_READY.
+
+Durable module records:
+- `feature/splash/00-MODULE-IMPLEMENTATION-PLAN.md`
+- `feature/splash/01-MODULE-IMPLEMENTATION-STATUS.md`
+
+The implementation plan is frozen from the already accepted BASE-ARCH-008–013 boundaries and BASE-ARCH-017 runtime infrastructure. No source implementation is authorized by this documentation reconciliation.
+
+The known backend success response and request headers are recorded. The Bootstrap endpoint, HTTP method, request body, authentication requirement, additional required headers, and backend error schema remain explicitly unresolved and must not be invented.
+
+Canonical branch: `feature/splash-config-bootstrap`.
 
 ## BASE-ARCH-017 Final Implementation State
 
