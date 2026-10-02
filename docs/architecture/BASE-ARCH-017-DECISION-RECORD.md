@@ -1,7 +1,8 @@
 # BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary
 
-**State:** DECISION_FROZEN  
+**State:** CODE_FROZEN  
 **Owner approval:** 2026-09-30  
+**Review accepted:** 2026-10-02  
 **Scope:** Frontend repository only
 
 ## 1. Purpose
@@ -35,7 +36,7 @@ Application Composition
 └── runtime infrastructure assembly
 ```
 
-The boundary is intentionally narrow. It exists to translate the already-frozen BASE-ARCH-015 and BASE-ARCH-016 contracts into an implementation plan without reopening those decisions.
+The boundary is intentionally narrow. It translates the already-frozen BASE-ARCH-015 and BASE-ARCH-016 contracts into the approved implementation boundary without reopening those decisions.
 
 ## 3. Frozen Decisions
 
@@ -68,7 +69,7 @@ The Koin Compiler Plugin may be applied where a concrete implementation requires
 
 It is **not** a mandatory blanket plugin for every module that declares Koin definitions.
 
-In particular, applying it to `:data` must be justified by the concrete implementation need established in the implementation plan. It must not be added merely because `:data` contains a Koin module.
+For BASE-ARCH-017, `:data` does not apply the plugin because the concrete implementation uses ordinary Koin DSL and has no compiler-plugin requirement.
 
 ### D — Ktor HttpClient ownership
 
@@ -78,24 +79,20 @@ Core owns the generic networking capability/infrastructure boundary.
 
 Data may own concrete HttpClient construction/composition when required by Data-layer implementation, provided that Data does not become the owner of generic networking infrastructure.
 
-Concrete client configuration must respect the Core/Data responsibility boundary.
+Concrete client configuration respects the Core/Data responsibility boundary.
 
 ### E — Ktor engine and client configuration
 
 **ACCEPTED / FROZEN**
 
-The following are implementation-plan details:
+The implementation-plan decisions are:
 
-- concrete Ktor engine selection;
-- client configuration;
-- serialization installation/configuration;
-- timeouts;
-- logging configuration;
-- response handling;
-- retry behavior;
-- platform-specific engine wiring.
+- Ktor default engine strategy;
+- common `HttpClient()` construction;
+- no manual expect/actual engine abstraction;
+- no business/API configuration in BASE-ARCH-017.
 
-These details must be specified in the implementation plan and must not be silently invented during coding.
+Other concrete client details remain implementation-plan concerns and must not be silently invented outside an authorized work item.
 
 ### F — Navigation 3 integration
 
@@ -145,10 +142,10 @@ BASE-ARCH-017 does not define or authorize:
 
 The project owner explicitly authorized implementation of BASE-ARCH-017 after the implementation plan reached `PLAN_FROZEN`.
 
-Authorization is limited to the frozen implementation plan:
+Authorization was limited to the frozen implementation plan:
 `docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md`
 
-This authorization does **not** authorize merge to `development` or code freeze. Those remain later gates.
+Merge and code freeze were separate later gates.
 
 ## 7. Existing Branch Reconciliation
 
@@ -162,16 +159,14 @@ A new implementation branch was created directly from the current `development` 
 
 The pre-existing branch was not merged, rebased, or cherry-picked. Its intended useful changes were reconciled by resulting implementation state against the frozen plan.
 
-## 8. Frozen State
+## 8. Final Frozen State
 
 ```text
 BASE-ARCH-015 → DECISION_FROZEN
 BASE-ARCH-016 → DECISION_FROZEN
 BASE-ARCH-017 → DECISION_FROZEN
                  ↓
-              PLAN
-                 ↓
-           PLAN_FROZEN
+              PLAN_FROZEN
                  ↓
         IMPLEMENTATION AUTHORIZATION
                  ↓
@@ -179,22 +174,71 @@ BASE-ARCH-017 → DECISION_FROZEN
                  ↓
           TEST / VERIFICATION
                  ↓
-              REVIEW
+       VERIFICATION PASSED
                  ↓
-           CODE_FREEZE
+          REVIEW ACCEPTED
                  ↓
-        MERGE TO development
+            CODE_FROZEN
 ```
 
-## 9. Implementation Record — 2026-09-30
+## 9. Verification Record — 2026-10-02
 
-**State:** IMPLEMENTATION COMPLETED — VERIFICATION PENDING
+Owner-environment verification was completed from `development` on Windows.
+
+Final regression command:
+
+```powershell
+.\gradlew.bat :core:jvmTest :domain:jvmTest :data:jvmTest :navigation:jvmTest :feature:splash:jvmTest :feature:dynamic:jvmTest --no-daemon
+```
+
+Result:
+
+```text
+BUILD SUCCESSFUL
+33 actionable tasks: 14 executed, 19 up-to-date
+```
+
+The Windows `iosSimulatorArm64Test` disabled-target warning is expected because iOS simulator tests require macOS. A non-blocking `ExperimentalCoroutinesApi` warning was also reported. Neither invalidates the successful JVM verification.
+
+The build/test dependency issues found during verification were resolved using the relevant existing build-system/test fixes evidenced by the Splash branch. The Splash feature branch itself was not merged wholesale and BASE-ARCH-017 was not restarted.
+
+## 10. Review Acceptance — 2026-10-02
+
+**REVIEW ACCEPTED.**
+
+The project owner accepted the BASE-ARCH-017 review after successful verification.
+
+Review confirmed:
+
+- frozen architecture boundary is preserved;
+- no ViewModel/global Store was introduced;
+- Core remains Koin-free;
+- Data owns concrete HttpClient construction;
+- Koin Compiler Plugin is not required by the implementation;
+- Ktor default-engine strategy is preserved;
+- Navigation 3 remains unchanged as the selected technology;
+- no new `:di` module was introduced;
+- no business, bootstrap, SDUI, or feature scope was introduced;
+- required JVM regression verification passed;
+- the non-blocking Windows/macOS limitation remains documented.
+
+## 11. Code-Freeze Record — 2026-10-02
+
+BASE-ARCH-017 is now **CODE_FROZEN**.
+
+No further BASE-ARCH-017 implementation changes are authorized.
+
+The code-freeze decision does not reopen BASE-ARCH-015, BASE-ARCH-016, or BASE-ARCH-017. Any future change to the frozen implementation requires a new separately authorized work item or an explicit reopening of the relevant decision gate.
+
+The Splash feature branch is not a source of additional 017 implementation scope.
+
+## 12. Implementation Record — 2026-09-30 / Finalized 2026-10-02
 
 Implemented on:
 `feature/base-arch-017-runtime-infrastructure-implementation`
 
-Implementation scope was limited to the seven files defined by the frozen plan.
+The implementation was limited to the frozen plan and resulted in the approved runtime infrastructure state across Core, Data, and Navigation.
 
 No application-composition source file was required, and no business, bootstrap, SDUI, ViewModel, Store, or new module scope was introduced.
 
-Verification remains a separate gate and has not been represented as passed.
+**Final state:** CODE_FROZEN after successful verification and owner review acceptance on 2026-10-02.
