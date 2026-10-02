@@ -3,83 +3,101 @@
 **Feature:** `splash-bootstrap`  
 **Tracking ID:** `SPLASH-BOOTSTRAP-001`  
 **Branch:** `feature/splash-config-bootstrap`  
-**Plan:** `01-IMPLEMENTATION-PLAN.md` — PLAN_FROZEN  
-**Feature freeze:** NOT YET FROZEN
+**Foundation status:** PARTIALLY FROZEN  
+**Remaining Bootstrap status:** DISCUSSION OPEN  
+**Final feature freeze:** NOT YET FROZEN
 
-## Current State
+## 1. Current State
 
-**IMPLEMENTATION IN PROGRESS**
+The current Splash + Bootstrap foundation is implemented and usable.
 
-The complete feature is being implemented continuously. There are no unit-level freezes.
+```text
+Splash
+  ↓
+Bootstrap API
+  ↓
+Validate response
+  ├── success → Bootstrap result available
+  └── failure → error + Retry
+```
 
-## Completed in This Implementation Pass
+This foundation is partially frozen. The complete Bootstrap/startup feature remains open because persistence, offline behavior, freshness/invalidation, maintenance, update, authentication and next-screen decisions are not yet implemented.
 
-### Domain
+## 2. Completed Foundation
 
-- Existing direct `ApplicationBootstrap` contract retained.
-- Existing `BootstrapOutput`, `BootstrapConfig`, and `StartupConfig` contracts retained.
-- Added `BootstrapFailure` for frontend failure classification.
+### Bootstrap / Data
 
-### Data/API
+- Bootstrap response decoding and mapping implemented.
+- Invalid/incomplete success handling implemented.
+- Transport/HTTP/API/serialization failure boundaries implemented.
+- Configured local API base URL is `http://localhost:3000`.
+- Bootstrap endpoint is `/api/v1/partner/config/bootstrap`.
+- Required development request headers are implemented within the current platform-boundary constraints.
 
-- Added serializable Bootstrap response DTOs.
-- Added DTO → Domain mapping.
-- Added incomplete-success validation.
-- Added HTTP/API/serialization/transport failure mapping.
-- Added Bootstrap remote data source.
-- Added direct `ApplicationBootstrap` Data implementation.
-- Added Koin Bootstrap module.
-- Added configured base URL and endpoint:
-  - Base: `https://localhost:300`
-  - Endpoint: `/api/v1/partner/config/bootstrap`
-- Added known headers:
-  - `X-CarBroz-Platform: ANDROID`
-  - `X-CarBroz-App-Version: 1.0.0`
-  - `X-CarBroz-Build-Number: 1`
+### Store / MVI
 
-### Splash Store
-
-- Added pure Store-style state/intent contract.
-- Added Loading, Success and Failure states.
-- Added retry behavior.
-- Added cancellation/close behavior.
+- Pure Store-based Bootstrap/Splash state flow implemented.
+- Loading, Success and Failure states implemented.
+- Retry behavior implemented.
+- No ViewModel introduced.
 
 ### Splash UI
 
-- Added loader state.
-- Added Bootstrap success state.
-- Added failure message and Retry action.
+- Shared Compose Multiplatform Splash UI implemented in `commonMain`.
+- Web-compatible Compose implementation verified.
+- Splash loader/success/failure states implemented.
+- Current UI remains at the Bootstrap completion boundary; it does not yet perform the future startup navigation flow.
 
-### Tests
+### Verification
 
-Added tests for:
+The Web development application has been successfully built and served during the current implementation work. Bootstrap transport/configuration behavior has been exercised against the local backend, and the current Splash UI is visible.
 
-- Bootstrap response mapping.
-- Known request headers and endpoint.
-- HTTP failure.
-- Invalid/incomplete success.
-- Serialization failure.
-- API failure mapping.
-- Splash Store success lifecycle.
-- Splash Store failure → retry lifecycle.
+## 3. Remaining Bootstrap Scope
 
-## Explicitly Deferred / Not Implemented
+The following are intentionally not complete:
 
-These remain intentionally outside the current behavior even though fields exist in the successful response:
+- Persist the complete Bootstrap/config response locally.
+- Offline startup policy.
+- Cache freshness/TTL policy.
+- Cache invalidation/version/revision policy.
+- Backend configuration-change detection.
+- ETag/conditional-request support, if adopted.
+- Cache integrity and last-known-good recovery.
+- Maintenance-mode precedence.
+- Required/optional update behavior and precedence.
+- Authentication/session startup decision.
+- `nextScreen` resolution.
+- Complete Login/OTP/Dashboard dynamic startup flow.
+- Rendering complete cached configuration offline.
+- Screen/template/schema compatibility and invalidation.
+- Final startup decision precedence.
 
-- Maintenance-mode decision behavior.
-- Required/optional update behavior.
-- Authentication startup decision.
-- `nextScreen` navigation.
-- Login screen.
-- Dynamic template rendering.
-- Downstream screen API calls.
-- Final backend-specific request body/method contract if the backend later changes it.
-- Final backend-specific error-response schema beyond the currently available `status/code/message` fields.
+These items are discussion/planning scope, not implementation defects in the current foundation.
 
-## Verification
+## 4. Current Discussion Direction
 
-Local Gradle verification is still required after the repository implementation pass:
+The complete Bootstrap response is intended to be the persisted configuration package, including configuration needed for Login, OTP, Dashboard and future startup flows.
+
+The cache must not be treated as permanently authoritative merely because it exists. When online, the application needs a backend validation mechanism to determine whether the cached configuration is still current.
+
+The current preferred candidate is:
+
+```text
+Cached complete Bootstrap
+        +
+ETag / config revision
+        ↓
+Conditional backend validation
+        ↓
+304 / unchanged → keep cache
+200 / changed   → validate new response → replace cache
+```
+
+This remains a discussion direction until the backend contract and final policy are frozen.
+
+## 5. Tests / Verification Still Required
+
+Before final Bootstrap freeze, run the agreed automated verification, including:
 
 ```text
 :domain:jvmTest
@@ -87,15 +105,43 @@ Local Gradle verification is still required after the repository implementation 
 :feature:splash:jvmTest
 ```
 
-Then perform the complete repository build/test verification appropriate to the available host.
+and the applicable Web/Android build and runtime checks.
 
-## Review Gate
+Additional tests will be required once cache/offline/startup behavior is planned and implemented.
 
-After implementation and tests:
+## 6. Documentation Gate
 
-1. Inspect the complete feature diff.
-2. Compare every change with `00-FEATURE-DISCUSSION.md` and `01-IMPLEMENTATION-PLAN.md`.
-3. Verify BASE-ARCH-008–013 and BASE-ARCH-017 boundaries.
-4. Verify no ViewModel, repository/use-case chain, navigation decision tree, or invented backend contract was introduced.
-5. Update this document with final results.
-6. Only then mark the feature FROZEN.
+The three feature documents are aligned to the current workflow:
+
+```text
+docs/features/splash-bootstrap/
+├── 00-FEATURE-DISCUSSION.md  → PARTIALLY FROZEN / EXTENDED DISCUSSION OPEN
+├── 01-IMPLEMENTATION-PLAN.md → NOT READY — EXTENDED DISCUSSION OPEN
+└── 02-IMPLEMENTATION-STATUS.md → FOUNDATION PARTIALLY FROZEN
+```
+
+The current foundation can now be treated as a stable checkpoint while the remaining Bootstrap/startup design is discussed.
+
+## 7. Next Workflow
+
+Do not start another Bootstrap implementation cycle yet.
+
+Continue with:
+
+```text
+DISCUSS remaining Bootstrap behavior
+        ↓
+RESEARCH where required
+        ↓
+DECIDE
+        ↓
+FREEZE remaining discussion
+        ↓
+CREATE / FREEZE implementation plan
+        ↓
+IMPLEMENT
+        ↓
+TEST
+        ↓
+FINAL BOOTSTRAP FREEZE
+```
