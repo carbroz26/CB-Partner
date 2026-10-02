@@ -5,20 +5,20 @@
 **Purpose:** Single execution ledger for recovering and tracking current project state across AI sessions.
 
 ## Current Project State
-- Phase: Base Architecture implementation
-- Current module: Base Architecture
-- Current work item: BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary
-- Workflow state: IMPLEMENTING — BASE-ARCH-017
-- Current implementation unit: BASE-ARCH-017 implementation authorized; source implementation completed; verification pending
+- Phase: Feature implementation — Splash / Bootstrap vertical slice
+- Current module: :feature:splash
+- Current work item: SPLASH-BOOTSTRAP-001 — Implement Application Startup and Splash
+- Workflow state: PLAN_FROZEN / TRELLO_READY — SPLASH-BOOTSTRAP-001
+- Current implementation unit: SPLASH-BOOTSTRAP-001 plan frozen; implementation authorization required
 - Frozen decisions: BASE-ARCH-001 through BASE-ARCH-017
 - Frozen process decision: TRELLO-002 — Simple Frontend Work Board
 - BASE-ARCH-015 decision record: docs/architecture/BASE-ARCH-015-DECISION-RECORD.md
 - BASE-ARCH-016 decision record: docs/architecture/BASE-ARCH-016-DECISION-RECORD.md
 - BASE-ARCH-017 decision record: docs/architecture/BASE-ARCH-017-DECISION-RECORD.md
 - Blockers: None identified
-- Last completed action: BASE-ARCH-017 implementation completed on the authorized implementation branch; verification pending
-- Next valid action: Execute the frozen BASE-ARCH-017 verification commands, then enter REVIEW if verification passes
-- Last updated: 2026-09-30
+- Last completed action: BASE-ARCH-017 verification passed, review accepted, and code freeze recorded on 2026-10-02; Splash/Bootstrap plan and status records established
+- Next valid action: Obtain explicit implementation authorization for SPLASH-BOOTSTRAP-001, then begin Unit 1 — Domain Contract Reconciliation
+- Last updated: 2026-10-02
 
 ## Base Architecture Register
 | ID | Unit | State | Durable Record | Implementation Authorization |
@@ -54,7 +54,16 @@
 | BASE-ARCH-014 | Base Architecture | Minimum Gradle/KMP/Compose/Build-Logic Foundation | CODE FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | 014-01 through 014-09 verified; T01 verified; owner accepted; implementation frozen | feature/base-arch-014 | Completed | None identified | No further 014 changes; proceed only through a new authorized work item |
 | BASE-ARCH-015 | Base Architecture | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | A–F accepted and frozen; no production implementation started | — | Not started automatically | None identified | Synchronization complete; select next authorized work item |
 | BASE-ARCH-016 | Base Architecture | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | A–G accepted and frozen; no production implementation started | — | Not started automatically | None identified | Select next authorized architecture work item or implementation unit |
-| BASE-ARCH-017 | Base Architecture | Runtime Infrastructure Implementation Boundary | IMPLEMENTING | docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md | Implementation authorized 2026-09-30; seven-file reconciled implementation completed; verification pending | feature/base-arch-017-runtime-infrastructure-implementation | In Progress | None identified | Run frozen verification, then REVIEW |
+| BASE-ARCH-017 | Base Architecture | Runtime Infrastructure Implementation Boundary | CODE FROZEN | docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md | Implementation verified; review accepted; code frozen 2026-10-02 | feature/base-arch-017-runtime-infrastructure-implementation | Completed | None | Closed; no further 017 changes |
+
+## SPLASH-BOOTSTRAP-001 Durable Record
+
+- Module plan: feature/splash/00-MODULE-IMPLEMENTATION-PLAN.md
+- Module status: feature/splash/01-MODULE-IMPLEMENTATION-STATUS.md
+- Trello: SPLASH-BOOTSTRAP-001 — Implement Application Startup and Splash — READY
+- Canonical branch: feature/splash-config-bootstrap
+- State: PLAN_FROZEN / TRELLO_READY
+- Backend request contract remains incomplete; do not invent endpoint, method, body, authentication, additional headers, or error schema.
 
 ## Trello State
 - Authoritative board: **CB-Partner — Frontend**
@@ -100,6 +109,10 @@ Changed source files:
 Android `compileSdk = 36` is configured for both the shared Android-KMP target and the Android application convention.
 
 Local verification completed successfully on 2026-09-23: `gradle projects` and targeted JVM compilation both returned **BUILD SUCCESSFUL**.
+
+## BASE-ARCH-017 Closure Reconciliation — 2026-10-02
+
+BASE-ARCH-017 is CODE_FROZEN. Verification passed and review was accepted on 2026-10-02. No further 017 implementation work is authorized under the frozen record.
 
 ## Recovery Algorithm
 1. Read AI_START_HERE.md.
