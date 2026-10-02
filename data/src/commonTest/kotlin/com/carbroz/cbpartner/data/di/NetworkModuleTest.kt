@@ -25,16 +25,14 @@ class NetworkModuleTest {
 
     @Test
     fun mockEngineExecutesRequestWithoutRealNetwork() = runTest {
-        val client = HttpClient(MockEngine) {
-            engine {
-                addHandler {
-                    respond(
-                        content = "",
-                        status = HttpStatusCode.OK,
-                    )
-                }
+        val client = HttpClient(
+            MockEngine {
+                respond(
+                    content = "",
+                    status = HttpStatusCode.OK,
+                )
             }
-        }
+        )
 
         try {
             val response = client.get("https://example.test")
