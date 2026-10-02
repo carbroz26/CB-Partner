@@ -45,7 +45,11 @@ class BootstrapRemoteDataSourceTest {
                 platform = request.headers["X-CarBroz-Platform"].orEmpty()
                 appVersion = request.headers["X-CarBroz-App-Version"].orEmpty()
                 buildNumber = request.headers["X-CarBroz-Build-Number"].orEmpty()
-                respond(SUCCESS_RESPONSE, HttpStatusCode.OK)
+                respond(
+                    SUCCESS_RESPONSE,
+                    HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
             },
         )
 
@@ -75,7 +79,11 @@ class BootstrapRemoteDataSourceTest {
     fun incompleteSuccessfulResponseIsRejected() = runTest {
         val client = HttpClient(
             MockEngine {
-                respond("{\"status\":200,\"code\":\"SUCCESS\",\"message\":\"ok\",\"data\":null}", HttpStatusCode.OK)
+                respond(
+                    "{\"status\":200,\"code\":\"SUCCESS\",\"message\":\"ok\",\"data\":null}",
+                    HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
             },
         )
 
