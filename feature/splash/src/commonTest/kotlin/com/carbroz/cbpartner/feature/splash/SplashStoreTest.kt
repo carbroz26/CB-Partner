@@ -24,7 +24,9 @@ class SplashStoreTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
         val expected = sampleOutput()
         val store = SplashStore(
-            bootstrap = ApplicationBootstrap { Result.success(expected) },
+            bootstrap = object : ApplicationBootstrap {
+                override suspend fun invoke(): Result<BootstrapOutput> = Result.success(expected)
+            },
             scope = CoroutineScope(dispatcher),
         )
 
@@ -43,10 +45,15 @@ class SplashStoreTest {
         var calls = 0
         val expected = sampleOutput()
         val store = SplashStore(
-            bootstrap = ApplicationBootstrap {
-                calls++
-                if (calls == 1) Result.failure(IllegalStateException("Bootstrap failed"))
-                else Result.success(expected)
+            bootstrap = object : ApplicationBootstrap {
+                override suspend fun invoke(): Result<BootstrapOutput> {
+                    calls++
+                    return if (calls == 1) {
+                        Result.failure(IllegalStateException("Bootstrap failed"))
+                    } else {
+                        Result.success(expected)
+                    }
+                }
             },
             scope = CoroutineScope(dispatcher),
         )
