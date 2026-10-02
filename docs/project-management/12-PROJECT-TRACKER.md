@@ -15,7 +15,7 @@
 - BASE-ARCH-015 decision record: docs/architecture/BASE-ARCH-015-DECISION-RECORD.md
 - BASE-ARCH-016 decision record: docs/architecture/BASE-ARCH-016-DECISION-RECORD.md
 - BASE-ARCH-017 decision record: docs/architecture/BASE-ARCH-017-DECISION-RECORD.md
-- Blockers: None identified
+- Blockers: Splash/Bootstrap backend request contract is incomplete (endpoint, method, body, authentication, additional headers, error schema); do not invent missing inputs
 - Last completed action: BASE-ARCH-017 verification passed, review accepted, and code freeze recorded on 2026-10-02; Splash/Bootstrap plan and status records established
 - Next valid action: Obtain explicit implementation authorization for SPLASH-BOOTSTRAP-001, then begin Unit 1 — Domain Contract Reconciliation
 - Last updated: 2026-10-02
@@ -39,7 +39,7 @@
 | BASE-ARCH-014 | Minimum Gradle/KMP/Compose/Build-Logic Foundation | IMPLEMENTATION_VERIFIED / CODE_FROZEN | docs/architecture/BASE-ARCH-014-IMPLEMENTATION-PLAN.md | Plan frozen; owner acceptance complete; implementation frozen |
 | BASE-ARCH-015 | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | Decision frozen; implementation not authorized by this record |
 | BASE-ARCH-016 | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | Decision frozen; implementation not authorized by this record |
-| BASE-ARCH-017 | Runtime Infrastructure Implementation Boundary | IMPLEMENTING | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | Implementation authorized 2026-09-30; verification pending |
+| BASE-ARCH-017 | Runtime Infrastructure Implementation Boundary | CODE_FROZEN | docs/architecture/BASE-ARCH-017-DECISION-RECORD.md | Implementation verified; review accepted; code frozen 2026-10-02 |
 
 ## Process Decision Register
 | ID | Decision | State | Durable Record | Owner Approval |
@@ -55,6 +55,7 @@
 | BASE-ARCH-015 | Base Architecture | Runtime Dependency & Technical Infrastructure Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-015-DECISION-RECORD.md | A–F accepted and frozen; no production implementation started | — | Not started automatically | None identified | Synchronization complete; select next authorized work item |
 | BASE-ARCH-016 | Base Architecture | Koin Composition Root & Dependency Injection Implementation Contract | DECISION_FROZEN | docs/architecture/BASE-ARCH-016-DECISION-RECORD.md | A–G accepted and frozen; no production implementation started | — | Not started automatically | None identified | Select next authorized architecture work item or implementation unit |
 | BASE-ARCH-017 | Base Architecture | Runtime Infrastructure Implementation Boundary | CODE FROZEN | docs/architecture/BASE-ARCH-017-IMPLEMENTATION-PLAN.md | Implementation verified; review accepted; code frozen 2026-10-02 | feature/base-arch-017-runtime-infrastructure-implementation | Completed | None | Closed; no further 017 changes |
+| SPLASH-BOOTSTRAP-001 | :feature:splash | Application Startup and Splash | PLAN_FROZEN / TRELLO_READY | feature/splash/00-MODULE-IMPLEMENTATION-PLAN.md | Plan frozen; status record established; no source implementation authorized | feature/splash-config-bootstrap | READY | Bootstrap endpoint/method/body/auth/error contract still missing | Obtain explicit implementation authorization; then start Unit 1 |
 
 ## SPLASH-BOOTSTRAP-001 Durable Record
 
