@@ -52,6 +52,14 @@ The viewport is configured to fill the browser window.
 - Bootstrap coroutine cancellation is rethrown instead of being incorrectly converted into a transport failure.
 - Added Kermit runtime diagnostics for request, HTTP response, parsing, serialization, and transport outcomes.
 
+### Splash UI
+
+- Removed the temporary `Bootstrap completed` diagnostic text from the successful Splash state.
+- The Web app now renders the actual Splash UI presentation for the success state instead of exposing an implementation diagnostic.
+- Splash still shows a loader while Bootstrap is in progress.
+- Splash still exposes the existing failure message and Retry action on Bootstrap failure.
+- No downstream navigation or `nextScreen` behavior has been introduced.
+
 ## Runtime Diagnostics
 
 Bootstrap runtime diagnostics are emitted through the existing Kermit logging infrastructure with the `Bootstrap` tag. They report:
@@ -71,12 +79,13 @@ Web build and browser startup have been verified successfully:
 
 - `:webApp:wasmJsBrowserDevelopmentRun` starts the Kotlin/Wasm development server.
 - Browser loads the generated `webApp.js` and Wasm assets.
-- Splash renders.
+- Splash composition is loaded.
 - Bootstrap request is initiated from the browser.
 - The previous `https://localhost:3000` request failed because the backend is a plain HTTP server.
 - Backend research confirmed CORS is configured with `@fastify/cors`, supports the required preflight/custom headers, and the backend listens on plain `http://localhost:3000`.
 - The frontend Bootstrap URL is now corrected to `http://localhost:3000`.
-- Final browser verification is pending: confirm the actual HTTP Bootstrap response and Splash success transition with the backend running.
+- The successful Splash state no longer renders the temporary Bootstrap-completed diagnostic message.
+- Final browser verification is pending: confirm the actual HTTP Bootstrap response, successful parsing, and final Splash presentation with the backend running.
 
 ## Verification Plan
 
@@ -84,17 +93,17 @@ Run locally:
 
 ```text
 Backend: http://localhost:3000
-Web:     http://localhost:8080
+Web:     http://localhost:8080 (or the next available development-server port)
 ```
 
 Then verify in the browser:
 
 1. Web application starts.
-2. Splash renders.
+2. Splash UI renders.
 3. Browser sends Bootstrap request to `http://localhost:3000/api/v1/partner/config/bootstrap`.
 4. Backend returns an HTTP response successfully.
 5. Bootstrap response is parsed successfully.
-6. Splash transitions to the expected success state/navigation.
+6. Splash remains on the intended success presentation for the current feature boundary.
 7. Failure state renders when the request fails.
 8. Retry starts a new Bootstrap request.
 9. Kermit Bootstrap diagnostics confirm the request lifecycle.
