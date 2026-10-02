@@ -1,64 +1,82 @@
 # Splash + Bootstrap — Feature Discussion
 
 **Feature:** `splash-bootstrap`
-**Status:** DISCUSSION — IN PROGRESS
 **Tracking ID:** `SPLASH-BOOTSTRAP-001`
+**Discussion Status:** FROZEN
+**Implementation Status:** NOT STARTED
 **Branch:** `feature/splash-config-bootstrap`
 
-## 1. Purpose
+## 1. Feature Status
 
-Define the complete in-scope Splash + Bootstrap feature contract before creating the complete implementation plan.
+### DONE / DECIDED
+- Splash is the initial visible screen.
+- Splash shows a loader while Bootstrap is running.
+- Bootstrap is called from the Splash startup flow.
+- Current Bootstrap base URL is `https://localhost:300`.
+- Current Bootstrap endpoint is `/api/v1/partner/config/bootstrap`.
+- Known platform/app/build headers are defined below.
+- The supplied successful Bootstrap response is the current known response contract.
+- Frontend failure handling must cover transport, HTTP, API/application, serialization, and unknown failures.
+- Invalid/incomplete successful data is treated as a bootstrap failure rather than successful startup.
+- Successful Bootstrap is represented as success only; no downstream navigation is implemented now.
+- Retry is available from the current failure state and retries Bootstrap.
+- Maintenance, update, authentication, next-screen and dynamic-screen behavior are deferred.
 
-The current implementation scope is intentionally limited to showing Splash, showing a loader, calling the Bootstrap API, receiving and handling the response on the frontend, and completing the current bootstrap result handling without implementing the later startup/next-screen flow.
+### PENDING / BACKEND-DEPENDENT
+- Exact Bootstrap request method/body is not currently supplied by the backend. The frontend must isolate this unknown and must not invent it.
+- Exact backend error-response payload/mapping is not currently supplied. The frontend failure boundary is defined, but backend-specific error-code mapping remains open until the backend contract is supplied.
 
-## 2. Frozen Architecture Boundaries
+These two items are intentionally accepted as external-contract dependencies and do not block the current frontend implementation plan.
 
-This feature must follow the already-frozen architecture decisions and runtime infrastructure, including BASE-ARCH-008–013 and BASE-ARCH-017.
-
-Do not reopen those architecture decisions as part of this feature discussion.
-
-The feature follows the repository's frozen direction:
-- Kotlin Multiplatform
-- Compose Multiplatform
-- Clean Architecture
-- Store-based pure MVI/UDF
-- No ViewModel
-- Existing module boundaries
-- Approved runtime/network infrastructure
-
-## 3. Current In-Scope Behavior
-
-For this implementation:
+### CURRENT IMPLEMENTATION SCOPE
+The complete current Splash + Bootstrap implementation is:
 
 ```text
 Application start
     ↓
-Splash screen
+Splash + loader
     ↓
-Loader
-    ↓
-Call Bootstrap API
+Bootstrap request
     ↓
 Receive response
-    ↓
-Handle bootstrap result on frontend
-    ↓
-Remain within the current Splash/bootstrap scope
+    ├── Success → represent Bootstrap success; remain in current scope
+    └── Failure → represent error + Retry
 ```
 
-The current feature does **not** implement the later destination-screen/startup flow.
+The implementation covers the complete current feature from startup through Bootstrap result handling and tests. It is not divided into independently frozen units.
 
-## 4. Bootstrap API Contract — Current Known Information
+### DEFERRED / LATER
+- Maintenance-mode decision/UI
+- Required-update decision/UI
+- Optional-update decision/UI
+- Authentication decision
+- `nextScreen` routing
+- Dynamic template/screen rendering
+- Downstream screen API calls
+- Final startup/navigation architecture for those later flows
+
+## 2. Frozen Architecture Boundaries
+
+This feature follows the already-frozen BASE-ARCH-008–013 and BASE-ARCH-017 boundaries. Those architecture decisions are not reopened here.
+
+Required architectural direction:
+- Kotlin Multiplatform
+- Compose Multiplatform
+- Clean Architecture
+- Pure Store-based MVI/UDF
+- No ViewModel
+- Existing module boundaries
+- Approved runtime/network infrastructure
+
+## 3. API Contract
 
 ### Base URL
-
-For the current implementation, use the configurable base URL:
 
 ```text
 https://localhost:300
 ```
 
-This is intentionally a base URL so it can be changed later without redesigning the feature.
+This is configuration, not a permanent hard-coded production endpoint.
 
 ### Endpoint
 
@@ -72,7 +90,7 @@ Current complete URL:
 https://localhost:300/api/v1/partner/config/bootstrap
 ```
 
-### Known request headers
+### Headers
 
 ```text
 X-CarBroz-Platform: ANDROID
@@ -82,15 +100,13 @@ X-CarBroz-Build-Number: 1
 
 ### Request method/body
 
-The exact Bootstrap request method/body contract is not currently supplied by the backend.
+Unknown from the current backend information. Do not infer it from the returned `nextScreen.method`; that field belongs to the deferred downstream screen contract.
 
-Do not infer the method/body from the `nextScreen.method` field in the successful response. The downstream screen contract is outside the current scope.
+The implementation plan must isolate the request construction so the exact backend method/body can be supplied later without architectural redesign.
 
-The implementation must isolate this unknown rather than inventing a backend contract.
+## 4. Successful Response Contract
 
-## 5. Successful Response
-
-The currently supplied successful response is the known Bootstrap response shape:
+The known successful response is:
 
 ```json
 {
@@ -134,77 +150,54 @@ The currently supplied successful response is the known Bootstrap response shape
 }
 ```
 
-This response is sufficient for the current bootstrap data contract. Its future maintenance/update/authentication/next-screen behavior is explicitly deferred.
+The returned `nextScreen` is parsed/retained as response data but is not acted upon in this feature.
 
-## 6. Error Handling Decision
+## 5. Error Contract Boundary
 
-The exact backend error response payload has not yet been supplied.
+The backend has not yet supplied an exact error payload. Therefore the frontend implementation must not invent backend JSON fields or error codes.
 
-The frontend must still provide a complete error-handling boundary for the current feature. It should be able to represent and present appropriate frontend behavior for failures such as:
+The frontend must nevertheless model these failure categories:
 
-- transport/network failure
+- Transport/network failure
 - HTTP failure
-- API/application failure when an error code is received
-- serialization/malformed-response failure
-- unexpected/unknown failure
+- API/application failure when an error response is received
+- Serialization/malformed response failure
+- Unknown/unexpected failure
 
-The implementation must **not invent or hard-code an undocumented backend error-response schema**.
+When the exact backend error contract is supplied, backend-specific mapping can be added within the existing boundary.
 
-When the exact backend error contract is later provided, it will be reconciled against this feature contract.
+## 6. Invalid / Incomplete Success
 
-For the current feature, failure should remain within the Splash/bootstrap state and expose an appropriate frontend error/retry behavior rather than allowing an invalid result to propagate as a successful bootstrap.
+A response that is technically successful at the transport/API layer but lacks required Bootstrap data is not considered a valid Bootstrap success.
 
-## 7. Success / Startup Decision Scope
+The frontend should convert such a response into a failure state and expose the current error/retry behavior. It must not manufacture missing values or navigate using incomplete data.
 
-For this feature implementation, do not implement the full startup decision tree.
+## 7. Current Splash Behavior
 
-The following are explicitly deferred:
-- maintenance-mode flow
-- required-update flow
-- optional-update flow
-- authentication decision
-- next-screen routing
-- dynamic screen rendering
-- downstream screen API calls
-
-The current feature only needs to successfully receive the Bootstrap response and handle the result within the agreed current Splash scope.
-
-## 8. Invalid / Incomplete Successful Response
-
-If an HTTP/API response is received but required Bootstrap data is missing, null, malformed, or otherwise cannot be safely interpreted, the frontend should treat it as a Bootstrap failure rather than propagate invalid data.
-
-For the current scope, the user-facing behavior remains the simple Splash error/retry state. Detailed business handling of individual malformed fields is deferred unless required by the implementation plan.
-
-This establishes a safe boundary without inventing a backend error contract.
-
-## 9. Current Splash UI Behavior
-
-The current UI requirement is intentionally minimal:
+The current UI intentionally remains minimal:
 
 - Show Splash.
-- Show loader while Bootstrap is in progress.
-- Do not add maintenance/update/authentication/next-screen UI yet.
-- If Bootstrap fails, expose an appropriate error/retry state according to the frontend failure model.
+- Show loader while Bootstrap is loading.
+- On success, represent Bootstrap completion and remain within this feature's current scope.
+- On failure, show an appropriate error state and Retry action.
 
-Later UI and startup behavior will be discussed separately when that scope is intentionally opened.
+No maintenance/update/authentication/next-screen UI is implemented now.
 
-## 10. Successful Bootstrap Handoff
+## 8. Successful Handoff Boundary
 
-For now, successful Bootstrap does not navigate to or implement the returned `nextScreen`.
+For this feature, the handoff boundary ends at a successfully received and validated Bootstrap result.
 
-The downstream startup/navigation behavior is deferred to a later feature decision.
+There is no navigation to `partner_login` or another destination in this implementation.
 
-## 11. Existing Implementation Context
+## 9. Existing Repository Context
 
-The branch already contains previously accepted Domain-level Bootstrap contract work. That existing work is part of the feature context and must be reconciled against this complete feature discussion and the eventual complete implementation plan.
+The feature branch contains the previously accepted Domain Bootstrap contract work. The complete implementation plan must reconcile that existing work with the current feature contract and frozen architecture boundaries without reopening those decisions.
 
-No source-code changes are authorized by this discussion record.
+No separate Unit 1/Unit 2 freeze is used. Domain, Data/API, Store, UI, startup wiring and tests are implementation units inside this one feature.
 
-## 12. Documentation Lifecycle Decision
+## 10. Feature Documentation
 
-Every significant feature/module must have a dedicated directory under `docs/features/`.
-
-For this feature:
+All significant features/modules use a dedicated documentation directory:
 
 ```text
 docs/features/splash-bootstrap/
@@ -213,25 +206,16 @@ docs/features/splash-bootstrap/
 └── 02-IMPLEMENTATION-STATUS.md
 ```
 
-`00-FEATURE-DISCUSSION.md` is the durable record of the complete feature discussion. After this discussion is frozen, `01-IMPLEMENTATION-PLAN.md` becomes the durable complete implementation contract. `02-IMPLEMENTATION-STATUS.md` is maintained during implementation, testing and review.
+`00-FEATURE-DISCUSSION.md` records the complete feature contract and decisions. `01-IMPLEMENTATION-PLAN.md` records the complete implementation plan. `02-IMPLEMENTATION-STATUS.md` records implementation, testing, review and final freeze status.
 
-## 13. Open Decisions
+## 11. Discussion Freeze
 
-The following remain open before the complete feature discussion can be frozen:
+This feature discussion is now **FROZEN**.
 
-1. **Bootstrap request method/body** — exact backend method/body is still unknown.
-2. **Exact backend error payload** — exact error response schema is still unknown; frontend handling boundary is defined, backend mapping remains open.
-3. **Precise current success terminal state** — the current requirement is to show/handle successful bootstrap without implementing next-screen flow; the exact terminal Store/UI state should be finalized in the implementation plan.
-4. **Exact retry presentation** — frontend failure/retry behavior is required, but the exact current UI treatment can be finalized in the complete implementation plan without introducing future startup behavior.
+The two backend-dependent unknowns are explicitly isolated and accepted as external dependencies; they do not reopen the architecture or block creation of the implementation plan.
 
-The following are **not open for this feature's current scope** and are explicitly deferred: maintenance/update decision flow, authentication routing, next-screen navigation, dynamic rendering, and downstream screen API behavior.
+The next workflow state is immediately:
 
-## 14. Discussion Freeze Criteria
+**COMPLETE IMPLEMENTATION PLAN → PLAN_FROZEN → IMPLEMENT COMPLETE FEATURE**
 
-The feature discussion can be frozen when the remaining current-scope decisions above are explicitly accepted or intentionally recorded as backend-dependent unknowns with safe frontend boundaries.
-
-After discussion freeze, the workflow must immediately move to:
-
-**Complete Splash + Bootstrap Implementation Plan**
-
-No separate Unit 1/Unit 2 discussion or freeze is permitted.
+No additional feature discussion phase or unit-level freeze is required before planning or implementation.
