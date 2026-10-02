@@ -80,7 +80,7 @@ class BootstrapRemoteDataSourceTest {
         val client = HttpClient(
             MockEngine {
                 respond(
-                    "{\"status\":200,\"code\":\"SUCCESS\",\"message\":\"ok\",\"data\":null}",
+                    "{\"status\":200,\"code\":\"SUCCESS\",\"message\":\"ok\",\"data\":null,\"traceId\":\"req-1\"}",
                     HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
