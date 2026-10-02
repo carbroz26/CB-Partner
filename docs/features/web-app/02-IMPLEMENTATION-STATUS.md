@@ -55,16 +55,19 @@ The viewport is configured to fill the browser window.
 
 ## Splash UI
 
-The Splash presentation is being refactored to a proper shared Compose UI implementation rather than a large Canvas-based screen.
+The Splash presentation is being implemented as a proper shared Compose UI rather than a large Canvas-based screen.
 
 ### Resource-based UI
 
-Added the Compose Multiplatform resource dependency to `feature:splash` and moved user-facing/static presentation content into `commonMain/composeResources`:
+The Splash module uses the Compose Multiplatform resource system in `commonMain/composeResources`:
 
-- `values/strings.xml` for all Splash copy.
-- `drawable/splash_car_wash.xml` for the shared vector car-wash illustration.
+- `values/strings.xml` contains all user-facing/static Splash copy.
+- `drawable/splash_car_wash.xml` contains the shared vector car-wash illustration.
+- `compose.resources` explicitly configures the generated `Res` class package and unconditional generation so resource access is deterministic in this multi-module build.
 
-The illustration uses the Compose Multiplatform resource system with an Android XML vector drawable so the same resource remains usable across Android, iOS, and Web. No Android view/widget APIs are used by the Splash screen.
+The illustration uses the Compose Multiplatform resource system with an Android XML vector drawable, which is supported by Compose Multiplatform for shared Android, iOS, and Web UI. No Android view/widget APIs are used by the Splash screen.
+
+Compose Multiplatform resources currently provide shared generated accessors for supported resource types such as images, fonts, and strings; the Splash color palette therefore remains centralized in `SplashTheme` as shared Material 3 design tokens rather than introducing Android-only color resources.
 
 ### UI Structure
 
@@ -90,6 +93,10 @@ The Splash UI follows the supplied reference direction without copying it litera
 - clear loading, success, and failure presentation.
 
 No UI copy, illustration data, or brand color values are embedded directly inside the main `SplashScreen` composable.
+
+### Cross-platform correction
+
+The latest compile failure was caused by the screen importing `Modifier.alpha` from the wrong Compose package. The implementation now uses the common Compose `androidx.compose.ui.draw.alpha` modifier, keeping the Splash screen platform-neutral.
 
 ## Runtime Diagnostics
 
@@ -120,9 +127,11 @@ Web development-server startup has previously been verified successfully:
 ### Current Verification State
 
 - The previous Canvas-based Splash implementation exposed a Wasm compilation error due to an invalid `Stroke` import.
-- That Canvas implementation is being removed rather than patched in place.
+- That Canvas implementation was removed rather than patched in place.
 - The replacement uses shared Compose resource-backed assets and Material 3 components.
-- Compilation and browser visual verification of the replacement are still pending.
+- The generated resource accessor configuration has now been made explicit.
+- The incorrect `Modifier.alpha` import has now been corrected to the common Compose API.
+- Compilation and browser visual verification of the corrected implementation are still pending.
 
 ## Verification Plan
 
