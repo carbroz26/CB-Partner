@@ -46,22 +46,22 @@ The viewport is configured to fill the browser window.
 
 ### Bootstrap
 
-The existing Bootstrap endpoint and known headers were preserved.
+- Preserved the existing Bootstrap endpoint and known headers.
+- Updated the configured Bootstrap base URL from `https://localhost:300` to the actual local backend port `https://localhost:3000`.
+- This is a local environment/configuration correction only; the Bootstrap endpoint and request contract remain unchanged.
+- Bootstrap coroutine cancellation is rethrown instead of being incorrectly converted into a transport failure.
 
-Additionally, Bootstrap coroutine cancellation is now rethrown instead of being incorrectly converted into a transport failure.
+## Runtime Verification
 
-## Architecture Verification
+Web build and browser startup have now been verified successfully:
 
-The Web implementation does not introduce:
-
-- ViewModel.
-- New repository/use-case architecture.
-- New navigation architecture.
-- Backend changes.
-- Invented Web API contracts.
-- Duplicate Splash/Bootstrap implementations.
-
-The Web application reuses the existing shared architecture.
+- `:webApp:wasmJsBrowserDevelopmentRun` starts the Kotlin/Wasm development server.
+- Browser loads the generated `webApp.js` and Wasm assets.
+- Splash renders.
+- Bootstrap request is attempted.
+- Initial request failed with `net::ERR_CONNECTION_REFUSED` because the configured local port was `300` while the local backend uses `3000`.
+- The port correction above is now applied.
+- Next verification is to rerun/reload the Web app with the backend running on `https://localhost:3000` and verify Bootstrap success/failure/retry behavior.
 
 ## Verification Pending
 
@@ -83,7 +83,7 @@ Then verify in the browser:
 
 1. Web application starts.
 2. Splash renders.
-3. Bootstrap request is attempted.
+3. Bootstrap request succeeds against the local backend on port 3000.
 4. Success state renders when the backend responds successfully.
 5. Failure state renders when the request fails.
 6. Retry starts a new Bootstrap request.
