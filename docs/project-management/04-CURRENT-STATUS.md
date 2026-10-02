@@ -1,7 +1,7 @@
 # CB-Partner — Current Status
 
 **Status:** ACTIVE  
-**Last Updated:** 2026-09-30
+**Last Updated:** 2026-10-02
 
 ## Current Phase
 Phase 1 — Technical Foundation.
@@ -12,25 +12,29 @@ Complete the architecture foundation progressively, one separately authorized wo
 ## Base Architecture State
 BASE-ARCH-001 through BASE-ARCH-017 → DECISION_FROZEN.
 
+BASE-ARCH-017 implementation is now **CODE_FROZEN** after successful verification and owner review acceptance.
+
 ## Process State
 TRELLO-002 — Simple Frontend Work Board → DECISION_FROZEN.
 
 ## Current Workflow State
-BASE-ARCH-017 IMPLEMENTATION AUTHORIZED — IMPLEMENTATION COMPLETED / VERIFICATION PENDING.
+BASE-ARCH-017 → REVIEW ACCEPTED → CODE_FROZEN.
 
 ## Current Work Item
 BASE-ARCH-017 — Runtime Infrastructure Implementation Boundary.
 
 ## Current Decision State
-BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 are decision-frozen. BASE-ARCH-017 implementation authorization was explicitly granted on 2026-09-30 and is limited to the frozen implementation plan.
+BASE-ARCH-015, BASE-ARCH-016, and BASE-ARCH-017 remain decision-frozen. BASE-ARCH-017 implementation authorization was explicitly granted on 2026-09-30 and was limited to the frozen implementation plan. Verification passed and review was accepted on 2026-10-02.
 
-## BASE-ARCH-017 Implementation
+## BASE-ARCH-017 Final Implementation State
 
-**Branch:** `feature/base-arch-017-runtime-infrastructure-implementation`
+**Implementation branch:** `feature/base-arch-017-runtime-infrastructure-implementation`
 
-**State:** IMPLEMENTATION COMPLETED — VERIFICATION PENDING.
+**Integrated state:** Reconciled BASE-ARCH-017 implementation and required build/test fixes are present in `development`.
 
-The implementation branch was created directly from the current `development` head. The pre-existing `feature/base-arch-017-runtime-infrastructure` branch was not merged, rebased, or cherry-picked.
+**State:** CODE_FROZEN.
+
+The pre-existing `feature/base-arch-017-runtime-infrastructure` branch was not merged, rebased, or cherry-picked. The Splash feature branch was not merged wholesale.
 
 Implemented scope:
 - reconciled runtime dependency catalog;
@@ -42,6 +46,68 @@ Implemented scope:
 - Data network tests.
 
 No application-composition source file was required.
+
+## BASE-ARCH-017 Verification — 2026-10-02
+
+**State:** VERIFIED — REVIEW ACCEPTED — CODE FROZEN.
+
+Owner-environment Windows verification completed successfully from `development`.
+
+Final regression command:
+
+```powershell
+.\gradlew.bat :core:jvmTest :domain:jvmTest :data:jvmTest :navigation:jvmTest :feature:splash:jvmTest :feature:dynamic:jvmTest --no-daemon
+```
+
+Result:
+
+```text
+BUILD SUCCESSFUL
+33 actionable tasks: 14 executed, 19 up-to-date
+```
+
+The verification also confirmed that the reconciled implementation and build-system fixes are contained in the current `development` history.
+
+Known non-blocking host warning:
+- `iosSimulatorArm64Test` cannot run on Windows because iOS simulator tests require macOS.
+
+Known non-blocking compiler warning:
+- `RuntimeFoundationTest.kt` reports an `ExperimentalCoroutinesApi` opt-in warning.
+
+Neither warning invalidates the successful JVM verification and neither requires a BASE-ARCH-017 implementation change.
+
+## BASE-ARCH-017 Review — 2026-10-02
+
+**State:** REVIEW ACCEPTED.
+
+The project owner accepted the BASE-ARCH-017 review after successful verification.
+
+Review found no frozen-boundary violation and no blocker requiring another implementation iteration.
+
+Confirmed:
+- Core remains Koin-free;
+- Data owns concrete HttpClient construction;
+- Koin Compiler Plugin is not required by the implementation;
+- Ktor default-engine strategy is preserved;
+- Navigation 3 remains the selected navigation technology;
+- no standalone `:di` module was introduced;
+- no ViewModel/global Store was introduced;
+- no business/bootstrap/SDUI scope was introduced.
+
+## BASE-ARCH-017 Code Freeze — 2026-10-02
+
+**State:** CODE_FROZEN.
+
+No further BASE-ARCH-017 implementation changes are authorized.
+
+Do not:
+- restart 017;
+- redo the implementation;
+- merge the Splash feature branch wholesale;
+- perform cleanup iterations solely for the recorded non-blocking warnings;
+- reopen frozen decisions without a separately authorized gate.
+
+Any future change to the frozen 017 implementation requires a new separately authorized work item or an explicit reopening of the relevant decision gate.
 
 ## BASE-ARCH-014 Integration Verification — 2026-09-24
 
@@ -68,23 +134,6 @@ Frozen scope:
 - Runtime testing boundaries.
 
 No production runtime dependency wiring was authorized by the freeze record itself.
-
-## BASE-ARCH-017 Freeze Checkpoint
-
-**State:** DECISION_FROZEN.
-
-The project owner explicitly accepted and froze BASE-ARCH-017 A–F.
-
-Frozen boundary:
-- Core owns generic coroutine, serialization, logging, and network infrastructure.
-- Data may own concrete data-layer network/client construction without owning generic networking infrastructure.
-- Navigation owns Navigation 3 runtime integration.
-- Application Composition owns runtime infrastructure assembly.
-- Koin Compiler Plugin use is conditional on concrete implementation need.
-- Ktor engine/client configuration remains implementation-plan detail.
-- Navigation 3 itself is not re-decided by 017.
-
-Implementation authorization was subsequently granted on 2026-09-30 under the separately frozen implementation plan. Merge and code-freeze authorization remain pending.
 
 ## BASE-ARCH-016 Freeze Checkpoint
 
@@ -113,6 +162,8 @@ BASE-ARCH-014 established the minimum production foundation:
 - shared foundation module skeleton;
 - Gradle 9.7.1 Wrapper and operational Git/build workflow.
 
+BASE-ARCH-017 established the approved runtime infrastructure implementation boundary described above.
+
 ## Explicitly Excluded From Current Work
 - Authentication, OTP, booking, payment, dashboard.
 - SDUI internals/dynamic JSON.
@@ -125,27 +176,15 @@ BASE-ARCH-014 established the minimum production foundation:
 
 ## Verification Gate
 
-**Current:** BASE-ARCH-017 implementation verification pending.
+**Current:** BASE-ARCH-017 review accepted and code-frozen.
 
-Required owner-environment commands:
-
-```powershell
-.\gradlew.bat projects
-.\gradlew.bat :core:jvmTest
-.\gradlew.bat :core:compileKotlinJvm
-.\gradlew.bat :data:jvmTest
-.\gradlew.bat :data:compileKotlinJvm
-.\gradlew.bat :navigation:jvmTest
-.\gradlew.bat :core:jvmTest :domain:jvmTest :data:jvmTest :navigation:jvmTest :feature:splash:jvmTest :feature:dynamic:jvmTest
-```
-
-The Windows `iosSimulatorArm64Test` disabled-target warning is expected and does not represent a Windows verification failure.
+The frozen 017 verification has passed. No further 017 verification loop is required unless a new authorized change is introduced.
 
 ## Next Workflow Gate
 
-After verification passes, the next gate is **REVIEW**. Then **CODE_FREEZE** and separate merge approval.
+BASE-ARCH-017 is closed at the code-freeze gate.
 
-No merge to `development` has been performed.
+Do not automatically start the next architecture unit. The next work item must be explicitly selected and authorized through the project workflow.
 
 ## Recovery
 
