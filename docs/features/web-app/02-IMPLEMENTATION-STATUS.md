@@ -51,6 +51,19 @@ The viewport is configured to fill the browser window.
 - This is a local environment/configuration correction only; the Bootstrap endpoint and request contract remain unchanged.
 - Bootstrap coroutine cancellation is rethrown instead of being incorrectly converted into a transport failure.
 
+## Runtime Diagnostics
+
+Added explicit Bootstrap runtime diagnostics to the shared remote data source so Web browser verification can confirm the request lifecycle in the browser console. Diagnostics currently report:
+
+- Bootstrap request URL.
+- HTTP response status.
+- HTTP failure status.
+- Successful response parsing.
+- Serialization failure.
+- Transport failure and its message.
+
+These logs are diagnostic only and do not change the Bootstrap contract or architecture.
+
 ## Runtime Verification
 
 Web build and browser startup have now been verified successfully:
