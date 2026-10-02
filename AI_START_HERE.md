@@ -177,6 +177,25 @@ DISCUSSED / PROPOSED / FROZEN / IMPLEMENTED / VERIFIED
 
 Never mark a proposal frozen merely because AI wrote it. Never mark implemented merely because files exist.
 
+### Feature Documentation Structure
+Every significant feature/module must have a dedicated documentation directory under `docs/features/`.
+
+At minimum, the directory contains:
+- `00-FEATURE-DISCUSSION.md` — durable record of requirements, research, decisions, scope, non-goals, constraints and discussion freeze.
+- `01-IMPLEMENTATION-PLAN.md` — the complete implementation contract created after the feature discussion is frozen.
+- `02-IMPLEMENTATION-STATUS.md` — implementation progress, verification, review findings and final feature-freeze state, maintained once implementation begins.
+
+Example:
+```text
+docs/features/
+└── splash-bootstrap/
+    ├── 00-FEATURE-DISCUSSION.md
+    ├── 01-IMPLEMENTATION-PLAN.md
+    └── 02-IMPLEMENTATION-STATUS.md
+```
+
+These feature documents are the durable source for the feature lifecycle. Do not create separate discussion, plan, authorization or freeze documents for individual implementation units unless a separate durable document is explicitly required by an accepted decision.
+
 ## 11. DISCUSSION PRESERVATION
 During discussion, separate:
 - User requirement
@@ -395,19 +414,68 @@ After each transition, update the required records before declaring it complete.
 | Implementation starts/completes | Feature Status + Tracker |
 | Tests run for complete feature | Feature Status + Tracker + test result |
 | Complete feature review | Feature Status + Tracker |
-| Complete feature accepted/frozen | Feature Status + Current Status + Tracker + Trello |
-| Checkpoint | Checkpoints + Current Status + Tracker |
-| Commit/merge | Tracker + Current Status when materially relevant |
+| Complete feature accepted/frozen | Feature Status + Current Status + Tracker |
 
-Implementation units may still be recorded inside the feature status document, but a unit transition does not create a separate workflow freeze or authorization gate.
+## 34. FINAL RULE
+The AI must never silently advance the project state. Every transition must be explicit, documented, verifiable and recoverable.
 
-If a required record cannot be updated, do not falsely declare the transition complete.
+## 35. PROJECT-SPECIFIC BRANCH NAMING
+Feature/module branches must use the feature/module name, not task IDs or numeric workflow IDs.
 
-## 34. TWO DOCUMENTS PER SIGNIFICANT MODULE
-Each significant module has exactly two primary lifecycle documents.
+Examples:
+- `feature/splash-config-bootstrap`
+- `feature/sdui`
+- `feature/booking`
+- `feature/payment`
 
-### 00-MODULE-IMPLEMENTATION-PLAN.md
-The frozen contract: purpose/boundary, responsibilities/non-responsibilities, architecture, dependencies, public contracts, Store/state design, domain/data/API rules, platform rules, DI/lifecycle rules, error handling, logging, security, testing strategy, coding constraints, ordered implementation units, acceptance criteria, and out-of-scope items. Changes require the decision/reopening process.
+Do not create branches such as `feature/SPLASH-BOOTSTRAP-001` or `feature/001`.
 
-### 01-MODULE-IMPLEMENTATION-STATUS.md
-The living execution ledger. For each unit record unit ID, requirement reference, status, files changed, tests written/executed, verification result, review result, frozen/accepted state, checkpoint/date, limitations, and next unit. Never erase implementation history.
+Task IDs such as `SPLASH-BOOTSTRAP-001` remain tracking identifiers in documentation/Trello; they are not branch names.
+
+## 36. IMPLEMENTATION STATUS
+When a complete feature implementation starts, maintain the feature's `02-IMPLEMENTATION-STATUS.md` throughout implementation, testing and review. It must reflect actual progress and must not be marked COMPLETE/FROZEN until complete-feature verification and review are finished.
+
+## 37. USER-AUTHORIZED GIT OPERATIONS
+When the user explicitly authorizes a destructive or history-changing Git operation, execute only the exact authorized operation, verify the resulting state, and do not expand the authorization to unrelated operations.
+
+## 38. SOURCE OF TRUTH HIERARCHY FOR IMPLEMENTATION
+For implementation, use this precedence:
+1. Current explicit user instruction
+2. AI_START_HERE.md
+3. Frozen architecture decisions
+4. Frozen feature discussion
+5. Frozen complete implementation plan
+6. Approved feature/module status
+7. Current source/tests
+8. Historical material
+
+## 39. BACKEND CONTRACT UNKNOWN
+Do not invent undocumented backend API endpoints, request bodies, headers, status codes, response schemas or error payloads. Record unknowns explicitly and isolate them behind the appropriate frontend contract. When the backend contract is later supplied, reconcile it against the frozen feature contract before changing implementation.
+
+## 40. FEATURE IMPLEMENTATION COMPLETENESS
+A feature is not considered implemented when an individual implementation unit is complete. The implementation phase remains active until all units required by the complete frozen feature plan are implemented and the complete feature is ready for testing.
+
+## 41. NO UNIT-LEVEL FREEZE
+Domain, Data/API, Store/MVI, UI, navigation/startup and tests may be listed as implementation units. They are not separate feature phases. Do not request or record separate Unit 1/Unit 2/etc. freezes unless the user explicitly changes the global workflow.
+
+## 42. COMPLETE FEATURE DISCUSSION
+The feature discussion must cover the complete intended feature scope before it is frozen. It may defer explicitly identified future behavior, but those deferred items must be recorded as out-of-scope/future work rather than reopening the discussion during implementation.
+
+## 43. COMPLETE IMPLEMENTATION PLAN
+The implementation plan must cover the complete feature from its entry point through its final in-scope behavior and verification. It may sequence implementation units, but it must not stop at a partial vertical slice when the approved feature scope is broader.
+
+## 44. COMPLETE FEATURE FREEZE
+Feature freeze occurs only after complete implementation, complete-feature testing, double-check/review and documentation reconciliation. A unit completion is never itself a feature freeze.
+
+## 45. FEATURE DOCUMENTATION LOCATION
+The canonical durable documentation for a feature lives under `docs/features/<feature-name>/`. The feature directory must contain the discussion and implementation plan documents before implementation is authorized; the implementation status document is required once implementation begins.
+
+## 46. SPLASH + BOOTSTRAP CURRENT FEATURE
+Current feature: `splash-bootstrap`.
+
+Canonical feature documents:
+- `docs/features/splash-bootstrap/00-FEATURE-DISCUSSION.md`
+- `docs/features/splash-bootstrap/01-IMPLEMENTATION-PLAN.md`
+- `docs/features/splash-bootstrap/02-IMPLEMENTATION-STATUS.md`
+
+Current feature scope and decisions must be recorded in those documents and must not be inferred only from chat history.
