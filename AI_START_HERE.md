@@ -466,13 +466,24 @@ Use branches to isolate development work. GitHub documents branches as a way to 
 
 Default:
 - main = protected, stable source of truth.
-- One active module/feature branch for an authorized module/feature, based on the current main or explicitly authorized integration base.
+- development = integration branch.
+- One active module/feature branch per active module/feature, based on the current development branch unless an explicitly authorized integration base is required.
 - Task-level commits live on that module branch.
-- Do not work directly on main.
+- Do not work directly on main or development.
 - Do not create a new branch for every tiny edit unless the task is independently reviewable or the plan requires it.
 
-Suggested names: feature/<module>, fix/<module>-<short-description>, chore/<short-description>, docs/<short-description>.
-The exact branch name must be recorded in the Tracker before implementation.
+### Module Branch Naming and Reuse Rule
+- Module/feature branches use the **module/feature name**, not work-item IDs or numeric task IDs.
+- Never create branches named after tracker IDs such as `SPLASH-BOOTSTRAP-001`, `001`, `002`, etc.
+- A module/feature has one canonical long-lived implementation branch for its related work. Reuse that branch for future work belonging to the same module/feature.
+- Example: all Splash/Bootstrap work uses the existing `feature/splash-config-bootstrap` branch; do not create `feature/SPLASH-BOOTSTRAP-001` or another numeric branch for a Splash/Bootstrap task.
+- Apply the same rule to future modules/features: use names such as `feature/sdui`, `feature/booking`, or another clear module/feature name.
+- If the canonical module branch already exists, do not create a duplicate branch merely because a new tracker/work-item ID was created.
+- A task/work-item ID belongs in the Tracker, Trello, plan/status documents, commit messages where useful, and PR metadata—not in the branch name.
+- If a canonical branch was merged/deleted, follow the documented reactivation/new-branch rules and base the replacement on current `development`; do not resurrect stale branch history blindly.
+
+Suggested names: `feature/<module>`, `fix/<module>-<short-description>`, `chore/<short-description>`, `docs/<short-description>`.
+The exact canonical branch name must be recorded in the Tracker before implementation.
 
 ## 49. COMMIT STRATEGY
 Commits represent meaningful, reviewable units. A module follows: module branch → task/implementation-unit commits → verification → PR → merge → optional milestone tag. Unrelated refactors must not be mixed into the commit.
