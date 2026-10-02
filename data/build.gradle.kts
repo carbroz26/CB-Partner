@@ -12,6 +12,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.engine.defaults)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kermit)
         }
 
         commonTest.dependencies {
