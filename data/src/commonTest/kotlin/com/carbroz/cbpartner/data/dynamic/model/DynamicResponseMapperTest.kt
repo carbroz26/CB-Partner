@@ -55,7 +55,7 @@ class DynamicResponseMapperTest {
                                     "endpoint": "/api/v1/partner/auth/send_otp",
                                     "body": {
                                       "phoneNumber": {
-                                        "$binding": "mobileNumber"
+                                        "${'$'}binding": "mobileNumber"
                                       }
                                     }
                                   }
