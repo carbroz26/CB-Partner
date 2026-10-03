@@ -13,61 +13,46 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicSection
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicTemplate
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicTheme
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicValidation
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicValue
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.doubleOrNull
 
 fun DynamicResponseDto.toDomain(): DynamicResponse =
-    DynamicResponse(
-        status = status,
-        code = code,
-        message = message,
-        data = data.toDomain(),
-        traceId = traceId,
-    )
+    DynamicResponse(status, code, message, data.toDomain(), traceId)
 
 private fun DynamicScreenDto.toDomain() = DynamicScreen(
-    screenId = screenId,
-    schemaVersion = schemaVersion,
-    targetApp = targetApp,
-    template = template.toDomain(),
-    theme = theme?.toDomain(),
+    screenId, schemaVersion, targetApp, template.toDomain(), theme?.toDomain()
 )
 
 private fun DynamicTemplateDto.toDomain() = DynamicTemplate(
-    id = id,
-    type = type,
-    properties = DynamicProperties(properties),
-    components = components.map { it.toDomain() },
+    id, type, properties.toProperties(), components.map { it.toDomain() }
 )
 
 private fun DynamicComponentDto.toDomain() = DynamicComponent(
-    id = id,
-    type = type,
-    properties = DynamicProperties(properties),
-    elements = elements.map { it.toDomain() },
-    sections = sections.map { it.toDomain() },
+    id, type, properties.toProperties(),
+    elements.map { it.toDomain() },
+    sections.map { it.toDomain() },
 )
 
 private fun DynamicSectionDto.toDomain() = DynamicSection(
-    id = id,
-    type = type,
-    properties = DynamicProperties(properties),
-    elements = elements.map { it.toDomain() },
-    groups = groups.map { it.toDomain() },
+    id, type, properties.toProperties(),
+    elements.map { it.toDomain() },
+    groups.map { it.toDomain() },
 )
 
 private fun DynamicGroupDto.toDomain() = DynamicGroup(
-    id = id,
-    type = type,
-    properties = DynamicProperties(properties),
-    elements = elements.map { it.toDomain() },
+    id, type, properties.toProperties(),
+    elements.map { it.toDomain() },
 )
 
 private fun DynamicElementDto.toDomain() = DynamicElement(
     id = id,
     type = type,
-    properties = DynamicProperties(properties),
-    validation = validation?.let {
-        DynamicValidation(it.required, it.pattern, it.message)
-    },
+    properties = properties.toProperties(),
+    validation = validation?.let { DynamicValidation(it.required, it.pattern, it.message) },
     binding = binding?.let { DynamicBinding(it.key) },
     actions = actions?.let {
         DynamicActions(
@@ -81,11 +66,26 @@ private fun DynamicElementDto.toDomain() = DynamicElement(
 )
 
 private fun DynamicActionDto.toDomain() =
-    DynamicAction(type = type, payload = payload)
+    DynamicAction(type, payload.toDynamicMap())
 
 private fun DynamicThemeDto.toDomain() =
-    DynamicTheme(
-        theme = theme,
-        statusBar = statusBar,
-        properties = properties,
-    )
+    DynamicTheme(theme, statusBar, properties.toDynamicMap())
+
+private fun JsonObject.toProperties() = DynamicProperties(toDynamicMap())
+
+private fun JsonObject.toDynamicMap(): Map<String, DynamicValue> =
+    entries.associate { (key, value) -> key to value.toDynamicValue() }
+
+private fun JsonElement.toDynamicValue(): DynamicValue =
+    when (this) {
+        is JsonObject -> DynamicValue.ObjectValue(toDynamicMap())
+        is kotlinx.serialization.json.JsonArray ->
+            DynamicValue.ArrayValue(map { it.toDynamicValue() })
+        is JsonPrimitive -> when {
+            isString -> DynamicValue.StringValue(content)
+            booleanOrNull != null -> DynamicValue.BooleanValue(booleanOrNull!!)
+            doubleOrNull != null -> DynamicValue.NumberValue(doubleOrNull!!)
+            else -> DynamicValue.NullValue
+        }
+        else -> DynamicValue.NullValue
+    }
