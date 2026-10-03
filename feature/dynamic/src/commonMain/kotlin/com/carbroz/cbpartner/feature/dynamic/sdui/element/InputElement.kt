@@ -9,10 +9,21 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicValue
 
 class InputElement {
     val type = "input"
+
     @Composable
-    fun Render(element: DynamicElement) {
+    fun Render(
+        element: DynamicElement,
+        onValueChange: (String, String) -> Unit,
+    ) {
         val label = (element.properties["label"] as? DynamicValue.StringValue)?.value ?: ""
-        val (value, setValue) = remember { mutableStateOf("") }
-        OutlinedTextField(value = value, onValueChange = setValue, label = { androidx.compose.material3.Text(label) })
+        val (value, setValue) = remember(element.id) { mutableStateOf("") }
+        OutlinedTextField(
+            value = value,
+            onValueChange = {
+                setValue(it)
+                element.binding?.key?.let { key -> onValueChange(key, it) }
+            },
+            label = { androidx.compose.material3.Text(label) },
+        )
     }
 }
