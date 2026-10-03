@@ -1,5 +1,14 @@
 package com.carbroz.cbpartner.domain.model.dynamic
 
+data class DynamicDestination(
+    val screenId: String,
+    val templateId: String?,
+    val templateType: String?,
+    val endpoint: String,
+    val method: String = "GET",
+    val authentication: String? = null,
+)
+
 data class DynamicResponse(
     val status: Int,
     val code: String,
