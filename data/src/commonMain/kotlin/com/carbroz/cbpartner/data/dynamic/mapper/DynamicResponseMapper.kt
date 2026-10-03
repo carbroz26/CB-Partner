@@ -55,15 +55,15 @@ class DynamicResponseMapper {
         id = id,
         type = type,
         properties = properties.toDynamicValueMap(),
-        components = components.map(DynamicComponentDto::toDomain),
+        components = components.map { it.toDomain() },
     )
 
     private fun DynamicComponentDto.toDomain() = DynamicComponent(
         id = id,
         type = type,
         properties = properties.toDynamicValueMap(),
-        elements = elements.map(DynamicElementDto::toDomain),
-        sections = sections.map(DynamicSectionDto::toDomain),
+        elements = elements.map { it.toDomain() },
+        sections = sections.map { it.toDomain() },
     )
 
     private fun DynamicSectionDto.toDomain() = DynamicSection(
@@ -71,7 +71,7 @@ class DynamicResponseMapper {
         type = type,
         properties = properties.toDynamicValueMap(),
         elements = elements.map(DynamicElementDto::toDomain),
-        groups = groups.map(DynamicGroupDto::toDomain),
+        groups = groups.map { it.toDomain() },
     )
 
     private fun DynamicGroupDto.toDomain() = DynamicGroup(
