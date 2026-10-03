@@ -1,5 +1,7 @@
 package com.carbroz.cbpartner.data.bootstrap
 
+import com.carbroz.cbpartner.data.network.NetworkConfig
+import com.carbroz.cbpartner.data.network.RemoteDataSource
 import com.carbroz.cbpartner.domain.model.bootstrap.BootstrapFailure
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -25,7 +27,7 @@ class BootstrapRemoteDataSourceTest {
             },
         )
 
-        val result = BootstrapRemoteDataSource(client).fetch()
+        val result = DefaultApplicationBootstrap(RemoteDataSource(client, NetworkConfig("http://localhost:3000"))).invoke()
 
         assertTrue(result.isSuccess)
         assertEquals("1", result.getOrThrow().config.version)
