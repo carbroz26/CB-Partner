@@ -43,7 +43,7 @@ sealed interface DynamicState {
 
 class DynamicStore(
     private val repository: DynamicRepository,
-    private val destination: DynamicDestination,
+    destination: DynamicDestination,
     private val actionHandler: DynamicActionHandler = DynamicActionHandler(),
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val deviceId: String = "bruno-test-device-123",
@@ -55,8 +55,16 @@ class DynamicStore(
     val effects: StateFlow<DynamicEffect?> = _effects.asStateFlow()
 
     private val values = mutableMapOf<String, String>()
+    private var currentDestination = destination
     private var loadJob: Job? = null
     private var requestJob: Job? = null
+
+    fun updateDestination(destination: DynamicDestination) {
+        currentDestination = destination
+        loadJob?.cancel()
+        requestJob?.cancel()
+        _state.value = DynamicState.Initial
+    }
 
     fun accept(intent: DynamicIntent) {
         when (intent) {
@@ -78,7 +86,7 @@ class DynamicStore(
         if (loadJob?.isActive == true) return
         _state.value = DynamicState.Loading
         loadJob = scope.launch {
-            repository.fetch(destination)
+            repository.fetch(currentDestination)
                 .onSuccess { _state.value = DynamicState.Success(it) }
                 .onFailure { _state.value = DynamicState.Failure(it.message ?: "Unable to load dynamic screen") }
         }
@@ -94,8 +102,14 @@ class DynamicStore(
             }
         val method = string(action.payload["method"]) ?: "POST"
         val authentication = string(action.payload["authentication"])
-        val body = (action.payload["body"]?.resolveBindings() ?: JsonObject(emptyMap()))
-            .withDeviceId()
+
+        // Request bodies are always JSON. If the backend action supplies an
+        // explicit body, resolve its bindings. Otherwise submit the current
+        // dynamic field values as the request object. Device ID is added at
+        // the top level so auth/send_otp receives { phoneNumber, deviceId }.
+        val resolvedBody = action.payload["body"]?.resolveBindings()
+            ?: JsonObject(values.mapValues { (_, value) -> JsonPrimitive(value) })
+        val body = resolvedBody.withDeviceId()
             .let { Json.encodeToString(JsonElement.serializer(), it) }
 
         requestJob = scope.launch {
