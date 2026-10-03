@@ -56,7 +56,7 @@ data class DynamicElement(
 )
 
 data class DynamicProperties(
-    val values: Map<String, Any?>,
+    val values: Map<String, DynamicValue>,
 )
 
 data class DynamicValidation(
@@ -79,11 +79,11 @@ data class DynamicActions(
 
 data class DynamicAction(
     val type: String,
-    val payload: Map<String, Any?>,
+    val payload: Map<String, DynamicValue>,
 )
 
 data class DynamicTheme(
     val theme: String?,
     val statusBar: String?,
-    val properties: Map<String, Any?>,
+    val properties: Map<String, DynamicValue>,
 )
