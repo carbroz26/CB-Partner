@@ -57,7 +57,7 @@ private fun App() {
                         ),
                     )
                 }
-                val dynamicStore = remember(destination) {
+                val dynamicStore = remember(startup.nextScreen) {
                     DynamicStore(
                         repository = koin.get(),
                         destination = destination,
@@ -68,7 +68,10 @@ private fun App() {
                 LaunchedEffect(dynamicStore) {
                     dynamicStore.effects.collect { effect ->
                         when (effect) {
-                            is DynamicEffect.Navigate -> destination = effect.destination
+                            is DynamicEffect.Navigate -> {
+                                destination = effect.destination
+                                dynamicStore.updateDestination(effect.destination)
+                            }
                             else -> Unit
                         }
                         dynamicStore.clearEffect()
