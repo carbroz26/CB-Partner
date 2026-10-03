@@ -5,6 +5,7 @@ import com.carbroz.cbpartner.data.dynamic.model.DynamicBindingDto
 import com.carbroz.cbpartner.data.dynamic.model.DynamicComponentDto
 import com.carbroz.cbpartner.data.dynamic.model.DynamicElementDto
 import com.carbroz.cbpartner.data.dynamic.model.DynamicGroupDto
+import com.carbroz.cbpartner.data.dynamic.model.DynamicNextScreenDto
 import com.carbroz.cbpartner.data.dynamic.model.DynamicResponseDto
 import com.carbroz.cbpartner.data.dynamic.model.DynamicScreenDto
 import com.carbroz.cbpartner.data.dynamic.model.DynamicSectionDto
@@ -16,6 +17,7 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicBinding
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicComponent
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicElement
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicGroup
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicNextScreen
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicResponse
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicScreen
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicSection
@@ -23,14 +25,14 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicTemplate
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicTheme
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicValidation
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicValue
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.JsonArray
 
 class DynamicResponseMapper {
 
@@ -41,7 +43,17 @@ class DynamicResponseMapper {
             message = dto.message,
             data = dto.data.toDomain(),
             traceId = dto.traceId,
+            nextScreen = dto.nextScreen?.toDomain(),
         )
+
+    private fun DynamicNextScreenDto.toDomain() = DynamicNextScreen(
+        screenId = screenId,
+        templateId = templateId,
+        templateType = templateType,
+        endpoint = endpoint,
+        method = method,
+        authentication = authentication,
+    )
 
     private fun DynamicScreenDto.toDomain() = DynamicScreen(
         screenId = screenId,
@@ -96,19 +108,18 @@ class DynamicResponseMapper {
         message = message,
     )
 
-    private fun DynamicBindingDto.toDomain() = DynamicBinding(
-        key = key,
-    )
+    private fun DynamicBindingDto.toDomain() = DynamicBinding(key)
 
     private fun DynamicActionsDto.toDomain(): Map<String, DynamicAction> {
         val result = mutableMapOf<String, DynamicAction>()
-        onClick?.let { result["onClick"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
-        onLongClick?.let { result["onLongClick"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
-        onValueChange?.let { result["onValueChange"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
-        onFocus?.let { result["onFocus"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
-        onSubmit?.let { result["onSubmit"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
+        onClick?.let { result["onClick"] = DynamicAction(it.type, it.payload.toDynamicValueMap()) }
+        onLongClick?.let { result["onLongClick"] = DynamicAction(it.type, it.payload.toDynamicValueMap()) }
+        onValueChange?.let { result["onValueChange"] = DynamicAction(it.type, it.payload.toDynamicValueMap()) }
+        onFocus?.let { result["onFocus"] = DynamicAction(it.type, it.payload.toDynamicValueMap()) }
+        onSubmit?.let { result["onSubmit"] = DynamicAction(it.type, it.payload.toDynamicValueMap()) }
         return result
     }
+
     private fun DynamicThemeDto.toDomain() = DynamicTheme(
         theme = theme,
         statusBar = statusBar,
@@ -120,9 +131,7 @@ class DynamicResponseMapper {
 
     private fun JsonElement.toDynamicValue(): DynamicValue = when (this) {
         JsonNull -> DynamicValue.NullValue
-        is JsonObject -> DynamicValue.ObjectValue(
-            entries.associate { (key, value) -> key to value.toDynamicValue() },
-        )
+        is JsonObject -> DynamicValue.ObjectValue(entries.associate { (key, value) -> key to value.toDynamicValue() })
         is JsonArray -> DynamicValue.ArrayValue(map { it.toDynamicValue() })
         else -> {
             val primitive = this as? JsonPrimitive
