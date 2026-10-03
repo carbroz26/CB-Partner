@@ -67,12 +67,13 @@ class DynamicResponseMapperTest {
         )
 
         val response = DynamicResponseMapper().map(dto)
-        val button = response.data.template.components
+        val screen = assertNotNull(response.data)
+        val button = screen.template.components
             .single().sections.single().groups.single().elements.single()
         val action = button.actions["onClick"]
 
-        assertEquals("partner_login", response.data.screenId)
-        assertEquals("form_template", response.data.template.type)
+        assertEquals("partner_login", screen.screenId)
+        assertEquals("form_template", screen.template.type)
         assertEquals("request", action?.type)
         assertEquals(
             DynamicValue.StringValue("/login"),
