@@ -93,7 +93,7 @@ class DynamicStore(
             }
         val method = string(action.payload["method"]) ?: "POST"
         val authentication = string(action.payload["authentication"])
-        val body = action.payload["body"]?.resolveBindings()?.let(Json::encodeToString)
+        val body = action.payload["body"]?.resolveBindings()?.let { Json.encodeToString(JsonElement.serializer(), it) }
 
         requestJob = scope.launch {
             repository.fetch(
