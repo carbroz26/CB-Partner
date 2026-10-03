@@ -1,8 +1,10 @@
 package com.carbroz.cbpartner.feature.dynamic.store
 
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicAction
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicDestination
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicResponse
 import com.carbroz.cbpartner.domain.repository.DynamicRepository
+import com.carbroz.cbpartner.feature.dynamic.action.DynamicActionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,11 +17,13 @@ import kotlinx.coroutines.launch
 sealed interface DynamicIntent {
     data object Load : DynamicIntent
     data object Retry : DynamicIntent
+    data class Action(val action: DynamicAction) : DynamicIntent
 }
 
 sealed interface DynamicEffect {
     data class Navigate(val destination: DynamicDestination) : DynamicEffect
     data class ExternalUri(val uri: String) : DynamicEffect
+    data class Request(val action: DynamicAction) : DynamicEffect
 }
 
 sealed interface DynamicState {
@@ -32,6 +36,7 @@ sealed interface DynamicState {
 class DynamicStore(
     private val repository: DynamicRepository,
     private val destination: DynamicDestination,
+    private val actionHandler: DynamicActionHandler = DynamicActionHandler(),
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
 ) {
     private val _state = MutableStateFlow<DynamicState>(DynamicState.Initial)
@@ -45,6 +50,7 @@ class DynamicStore(
     fun accept(intent: DynamicIntent) {
         when (intent) {
             DynamicIntent.Load, DynamicIntent.Retry -> load()
+            is DynamicIntent.Action -> actionHandler.handle(intent.action) { effect -> emit(effect) }
         }
     }
 
@@ -58,8 +64,13 @@ class DynamicStore(
         }
     }
 
-    fun emit(effect: DynamicEffect) { _effects.value = effect }
-    fun clearEffect() { _effects.value = null }
+    private fun emit(effect: DynamicEffect) {
+        _effects.value = effect
+    }
+
+    fun clearEffect() {
+        _effects.value = null
+    }
 
     fun close() {
         loadJob?.cancel()
