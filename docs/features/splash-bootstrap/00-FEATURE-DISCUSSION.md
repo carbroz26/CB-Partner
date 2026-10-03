@@ -3,8 +3,8 @@
 **Feature:** `splash-bootstrap`  
 **Tracking ID:** `SPLASH-BOOTSTRAP-001`  
 **Discussion Status:** PARTIALLY FROZEN — EXTENDED DISCUSSION OPEN  
-**Current Implementation Status:** FOUNDATION IMPLEMENTED  
-**Branch:** `feature/splash-config-bootstrap`
+**Current Implementation Status:** FOUNDATION IMPLEMENTED / FOUNDATION ARCHITECTURE RECONCILIATION PLANNED  
+**Implementation Branch:** `feature/dynamic-ui`
 
 ## 1. Current Partial Freeze
 
@@ -58,7 +58,115 @@ Therefore, when Bootstrap persistence is implemented, the intended cache boundar
 
 The exact backend JSON shape remains an external contract and must not be invented by the frontend.
 
-## 3. Core Discussion — Persisting Bootstrap for Offline Startup
+## 3. Architecture Foundation Reconciliation — Accepted Implementation Direction
+
+Before continuing into the remaining Bootstrap cache/startup behavior, the existing Bootstrap foundation will be reconciled with the application's shared Clean Architecture so that Bootstrap does not create a special networking architecture that Dynamic must later replace.
+
+The accepted direction for implementation is:
+
+```text
+                    :core
+                      │
+          common network / serialization / logging
+                      │
+                      ▼
+                    :data
+                      │
+              RemoteDataSource
+                      │
+          ┌───────────┴───────────┐
+          │                       │
+       Bootstrap              Future Dynamic
+          │                       │
+      Repository              Repository
+          │                       │
+          └───────────┬───────────┘
+                      ▼
+                   :domain
+                      │
+                 Use Cases
+                      │
+                      ▼
+              Feature Stores
+```
+
+### 3.1 Common application network infrastructure
+
+The Ktor `HttpClient`, serialization configuration, common transport behavior, target engine strategy and network dependency-injection ownership are application-wide infrastructure.
+
+They must not be owned by Bootstrap.
+
+### 3.2 One application-wide RemoteDataSource
+
+The application will use one reusable remote data boundary rather than creating separate transport implementations for Bootstrap, Dynamic, Login or OTP.
+
+Conceptually:
+
+```text
+Feature Repository
+        ↓
+RemoteDataSource
+        ↓
+Ktor HttpClient
+        ↓
+Backend
+```
+
+Feature-specific repositories remain responsible for feature semantics; the common RemoteDataSource remains responsible for reusable remote execution.
+
+### 3.3 Normal Clean Architecture Bootstrap flow
+
+Bootstrap will use the standard dependency direction:
+
+```text
+Splash Store
+    ↓
+GetBootstrapConfigUseCase
+    ↓
+BootstrapRepository
+    ↓
+BootstrapRepositoryImpl
+    ↓
+RemoteDataSource
+    ↓
+Ktor
+```
+
+The domain layer must not depend on Ktor, DTOs or data-layer implementations.
+
+### 3.4 API response model direction
+
+The common transport/data architecture must be compatible with the backend response envelope used by Bootstrap and future Dynamic responses:
+
+```text
+status
+code
+message
+data
+traceId
+```
+
+The envelope can be reusable at the API/data boundary while the contents of `data` remain feature-specific.
+
+Future Dynamic models will not be implemented as part of Bootstrap foundation reconciliation.
+
+### 3.5 Dynamic compatibility requirement
+
+Bootstrap is implemented first, but shared infrastructure introduced or corrected here must be reusable by Dynamic.
+
+Future Dynamic is expected to reuse:
+
+```text
+HttpClient
+Serialization
+RemoteDataSource
+DI infrastructure
+Common transport/error boundary
+```
+
+Dynamic-specific models, repositories/use cases, Store/runtime, registry and rendering remain future Dynamic scope.
+
+## 4. Core Discussion — Persisting Bootstrap for Offline Startup
 
 The latest valid Bootstrap response should be considered for persistent local storage so the application can still start from known configuration when the backend is temporarily unavailable.
 
@@ -85,7 +193,7 @@ app/platform compatibility metadata where required
 
 The exact storage technology and metadata set are still open until the implementation plan is created.
 
-## 4. Core Discussion — How Do We Know the Backend Changed?
+## 5. Core Discussion — How Do We Know the Backend Changed?
 
 The client cannot know that the backend configuration changed while it is completely offline. Some online validation mechanism is therefore required whenever freshness matters.
 
@@ -124,7 +232,7 @@ The important rule is that a version number by itself does **not** let an offlin
 
 ETag/conditional requests and the exact version/revision contract are therefore **preferred discussion directions, not yet frozen implementation requirements**, until the backend contract is confirmed.
 
-## 5. Cache vs Backend — Intended Decision Model
+## 6. Cache vs Backend — Intended Decision Model
 
 The application should not use the simplistic rule:
 
@@ -164,7 +272,7 @@ The intended model is:
 
 The exact online policy still needs to decide whether validation happens on every startup, after a freshness window, or through another approved strategy.
 
-## 6. Cache Integrity / Replacement
+## 7. Cache Integrity / Replacement
 
 Persisted Bootstrap data is configuration/control data and must be validated before use.
 
@@ -187,7 +295,7 @@ Validate completely
 Only then replace last-known-good cache
 ```
 
-## 7. Maintenance and Required/Optional Update
+## 8. Maintenance and Required/Optional Update
 
 Bootstrap already contains maintenance and update information. Their final precedence relative to cached data must be decided.
 
@@ -201,7 +309,7 @@ Questions remaining:
 
 These rules must become part of one startup policy rather than independent UI conditions.
 
-## 8. Authentication and Next Screen
+## 9. Authentication and Next Screen
 
 Bootstrap currently contains startup/authentication information and a `nextScreen` descriptor. The future startup flow must resolve authentication and the destination from the Bootstrap/config package.
 
@@ -225,7 +333,7 @@ Questions still open:
 - How cached screen configuration is invalidated when the backend changes it.
 - How incompatible screen/template schema is handled.
 
-## 9. Final Startup Precedence Still Open
+## 10. Final Startup Precedence Still Open
 
 The exact order is intentionally not frozen yet. The final policy must define precedence among:
 
@@ -249,9 +357,9 @@ Examples requiring explicit rules:
 - cached configuration vs incompatible schema;
 - offline startup vs authentication requirements.
 
-## 10. Decisions Required Before the Next Implementation Plan
+## 11. Decisions Required Before Final Bootstrap Startup Freeze
 
-Before planning the remaining Bootstrap/startup work, explicitly decide and freeze:
+The remaining startup discussion must explicitly decide and freeze:
 
 - [ ] Complete Bootstrap response persistence boundary.
 - [ ] Shared KMP persistence mechanism.
@@ -269,9 +377,9 @@ Before planning the remaining Bootstrap/startup work, explicitly decide and free
 - [ ] Complete screen/configuration cache behavior.
 - [ ] Final startup decision precedence.
 
-No implementation plan for these remaining decisions is frozen yet.
+No implementation of these remaining startup decisions is authorized by this section until their discussion is frozen.
 
-## 11. Documentation / Workflow State
+## 12. Documentation / Workflow State
 
 Feature documentation:
 
@@ -282,8 +390,6 @@ docs/features/splash-bootstrap/
 └── 02-IMPLEMENTATION-STATUS.md
 ```
 
-The current Splash + Bootstrap foundation remains **PARTIALLY FROZEN**. The extended cache/offline/startup discussion remains **OPEN**.
+The current Splash + Bootstrap feature remains **PARTIALLY FROZEN**. The extended cache/offline/startup discussion remains **OPEN**.
 
-The next workflow for the remaining Bootstrap scope is:
-
-**DISCUSS → RESEARCH where required → DECIDE → FREEZE DISCUSSION → IMPLEMENTATION PLAN → PLAN FREEZE → IMPLEMENT → TEST → FINAL FREEZE**
+The Bootstrap foundation architecture is being reconciled first so that the same application-wide network/data infrastructure can be reused by Dynamic.
