@@ -2,142 +2,291 @@
 
 **Feature:** `splash-bootstrap`  
 **Tracking ID:** `SPLASH-BOOTSTRAP-001`  
-**Plan Status:** NOT READY — EXTENDED DISCUSSION OPEN  
-**Discussion:** PARTIALLY FROZEN — EXTENDED DISCUSSION OPEN  
-**Branch:** `feature/splash-config-bootstrap`
+**Plan Status:** PROPOSED — FOUNDATION PLAN UNDER REVIEW  
+**Discussion:** PARTIALLY FROZEN — EXTENDED STARTUP DISCUSSION REMAINS OPEN  
+**Implementation Branch:** `feature/dynamic-ui`
 
-## 1. Current Implemented Foundation
+## 1. Implementation Objective
 
-The already implemented scope is:
+Correct and complete the Bootstrap foundation so Bootstrap becomes the **first consumer of the application-wide Clean Architecture network/data infrastructure**, without creating a Bootstrap-only networking architecture that must later be replaced for Dynamic.
 
-```text
-Application start
-    ↓
-Shared Compose Splash UI
-    ↓
-Bootstrap request
-    ↓
-Decode + validate
-    ├── Success → Bootstrap result available
-    └── Failure → Error + Retry
-```
-
-This foundation is partially frozen and is not being re-planned here.
-
-## 2. Remaining Scope — Not Yet Planned
-
-The remaining Bootstrap/startup work must be planned only after the extended discussion is frozen.
-
-Expected scope:
-
-1. Persist the complete validated Bootstrap/config response.
-2. Define shared KMP cache storage and metadata.
-3. Define cache freshness/invalidation rules.
-4. Define online validation of cached configuration.
-5. Define backend configuration revision/version and possible ETag support.
-6. Define offline startup behavior.
-7. Define cache integrity and last-known-good recovery.
-8. Define maintenance and required/optional update precedence.
-9. Define authentication/session precedence.
-10. Resolve `nextScreen` and the dynamic startup flow.
-11. Define how complete Login/OTP/Dashboard configuration contained in Bootstrap is rendered from cache.
-12. Define schema/template compatibility and cache invalidation.
-13. Define final startup decision precedence.
-
-## 3. Architectural Constraints
-
-The remaining implementation must continue to use the already frozen architecture:
-
-- Kotlin Multiplatform.
-- Compose Multiplatform shared UI.
-- Clean Architecture.
-- Pure Store-based MVI/UDF.
-- No ViewModel.
-- Existing module boundaries.
-- Existing approved runtime/network infrastructure.
-- Shared/common code must remain compatible with Android, iOS and Web.
-- Persistence/cache abstractions must not become platform-specific business logic.
-
-No new architecture is introduced by this discussion.
-
-## 4. Configuration Cache Direction
-
-The current discussion direction is to cache the **complete validated Bootstrap/config response**, including configuration needed for Login, OTP, Dashboard and future startup flows.
-
-The client should not use:
+The implementation must preserve the frozen project direction:
 
 ```text
-cache exists → never call backend
-```
-
-Instead, when online, the client must have a defined mechanism to validate whether the cached configuration is still current.
-
-A preferred candidate is:
-
-```text
-cached ETag/revision
+Kotlin Multiplatform
         ↓
-conditional Bootstrap request
+Clean Architecture
         ↓
-304 → keep cache
-200  → validate new config → replace cache
+Pure Store-based MVI / UDF
+        ↓
+No ViewModel
 ```
 
-`configVersion`/revision and ETag support are not frozen until the backend contract is confirmed.
+Bootstrap is implemented first, but the network client, remote data boundary, API envelope handling and dependency-injection structure must be reusable by Dynamic and future application features.
 
-## 5. Offline Direction
+## 2. Seven Implementation Points
 
-When the backend is unavailable, a valid last-known-good cached configuration may be used according to the final offline policy.
-
-The implementation must distinguish:
+The Bootstrap foundation will be implemented through exactly these seven implementation points:
 
 ```text
-offline startup/configuration rendering
-        ≠
-offline business operations
+1. Common Network Infrastructure
+2. Common RemoteDataSource
+3. Bootstrap API / DTO / Mapper
+4. Bootstrap Repository + Use Case
+5. Splash Store Integration
+6. Splash UI Integration
+7. Verification / Tests / Documentation / Freeze
 ```
 
-No assumption should be made that the entire business application becomes offline-capable merely because Bootstrap is cached.
+These are implementation sequence points, not separate feature architectures.
 
-## 6. Non-Goals Until Discussion Freeze
+## 3. Point 1 — Common Network Infrastructure
 
-Do not implement the remaining cache/startup behavior yet, including:
+Establish the application-wide network foundation before changing Bootstrap-specific data flow.
 
-- Persistence implementation.
-- Cache TTL/freshness logic.
-- ETag/revision logic.
-- Offline fallback rules.
-- Maintenance/update precedence.
-- Authentication precedence.
-- `nextScreen` navigation.
-- Dynamic screen/template rendering.
-- Login/OTP/Dashboard startup flow.
-- Screen/config cache invalidation.
+Responsibilities include:
 
-## 7. Planning Gate
+- shared Ktor `HttpClient` ownership;
+- common client configuration;
+- target-appropriate Ktor engine strategy;
+- common serialization configuration;
+- common request/response transport behavior;
+- common HTTP/network failure boundary;
+- dependency-injection ownership of the client;
+- no Bootstrap-specific HTTP client ownership.
 
-The next implementation plan must be created only after `00-FEATURE-DISCUSSION.md` is explicitly frozen for the remaining scope.
+The network layer must remain feature-agnostic.
 
-Required workflow:
+It must not know about:
 
 ```text
-DISCUSS
-   ↓
-RESEARCH where required
-   ↓
-DECIDE
-   ↓
-FREEZE DISCUSSION
-   ↓
-UPDATE THIS IMPLEMENTATION PLAN
-   ↓
-PLAN FREEZE
-   ↓
-IMPLEMENT
-   ↓
-TEST
-   ↓
-FINAL FREEZE
+Bootstrap
+Dynamic
+Login
+OTP
+Dashboard
 ```
 
-Until then, this document is intentionally **NOT READY** and must not be treated as implementation authorization.
+## 4. Point 2 — Common RemoteDataSource
+
+Replace the current Bootstrap-specific remote HTTP boundary with one application-wide reusable remote data boundary.
+
+Target direction:
+
+```text
+Feature Repository
+        ↓
+RemoteDataSource
+        ↓
+Ktor HttpClient
+        ↓
+Backend
+```
+
+There must not be separate application-wide transport implementations such as:
+
+```text
+BootstrapRemoteDataSource
+DynamicRemoteDataSource
+LoginRemoteDataSource
+OtpRemoteDataSource
+```
+
+Feature-specific repositories remain responsible for feature semantics; the common RemoteDataSource is responsible for reusable remote execution.
+
+## 5. Point 3 — Bootstrap API / DTO / Mapper
+
+Keep Bootstrap-specific API knowledge at the data boundary.
+
+Target direction:
+
+```text
+Backend response
+      ↓
+API / DTO model
+      ↓
+Bootstrap mapper
+      ↓
+Bootstrap domain model
+```
+
+The response-envelope direction must support the same backend envelope shape that future Dynamic responses can use:
+
+```text
+status
+code
+message
+data
+traceId
+```
+
+A generic reusable API-envelope concept may be introduced where appropriate, while the contents of `data` remain feature-specific.
+
+No Dynamic screen model or Dynamic renderer is implemented in this Bootstrap point.
+
+## 6. Point 4 — Bootstrap Repository + Use Case
+
+Restore the normal Clean Architecture dependency flow:
+
+```text
+Splash Store
+    ↓
+GetBootstrapConfigUseCase
+    ↓
+BootstrapRepository
+    ↓
+BootstrapRepositoryImpl
+    ↓
+RemoteDataSource
+```
+
+Responsibilities:
+
+- `BootstrapRepository` belongs to the domain boundary;
+- `BootstrapRepositoryImpl` belongs to data;
+- `GetBootstrapConfigUseCase` belongs to domain;
+- no Ktor dependency in domain;
+- no networking dependency in the Store;
+- no ViewModel.
+
+The use case remains intentionally thin; it does not become a second orchestration framework.
+
+## 7. Point 5 — Splash Store Integration
+
+The Splash Store becomes the presentation/application-state consumer of the Bootstrap use case.
+
+Target direction:
+
+```text
+Intent
+  ↓
+Splash Store
+  ↓
+GetBootstrapConfigUseCase
+  ↓
+Result
+  ↓
+State
+```
+
+The Store owns presentation state and lifecycle handling, not HTTP or DTO mapping.
+
+Existing Pure MVI/UDF behavior and retry semantics remain intact unless a documented implementation conflict is discovered.
+
+## 8. Point 6 — Splash UI Integration
+
+Keep Splash UI platform-shared and state-driven.
+
+Target direction:
+
+```text
+Splash UI
+   ↓
+Intent
+   ↓
+Store
+   ↓
+State
+   ↓
+UI
+```
+
+The UI must not directly access:
+
+- Ktor;
+- RemoteDataSource;
+- Repository implementation;
+- DTOs;
+- DI container internals.
+
+This point only reconnects the corrected Bootstrap flow to the existing Splash UI.
+
+It does not implement the future Dynamic renderer or startup destination flow.
+
+## 9. Point 7 — Verification / Tests / Documentation / Freeze
+
+Verify the complete corrected Bootstrap foundation rather than only individual classes.
+
+Verification must cover:
+
+```text
+core network
+      ↓
+data RemoteDataSource
+      ↓
+Bootstrap DTO / mapping
+      ↓
+Repository
+      ↓
+Use Case
+      ↓
+Splash Store
+      ↓
+Splash UI
+```
+
+Required automated verification will include the applicable existing KMP tests and platform/build checks.
+
+Documentation must then record:
+
+- implementation result;
+- changed files/classes;
+- tests and verification;
+- deviations, if any;
+- remaining Bootstrap startup scope;
+- relationship to future Dynamic implementation.
+
+## 10. Dynamic Compatibility Requirement
+
+Although only Bootstrap is being implemented now, every shared architectural decision in this plan must remain usable by Dynamic.
+
+Future Dynamic flow is expected to reuse:
+
+```text
+Common HttpClient
+Common serialization
+Common RemoteDataSource
+Common DI infrastructure
+Common API transport/error boundary
+```
+
+Dynamic-specific responsibilities will later include its own domain models, repositories/use cases where required, Dynamic Store/runtime behavior, registry and rendering system.
+
+No Dynamic-specific implementation is part of this Bootstrap foundation work.
+
+## 11. Explicit Non-Goals
+
+This implementation plan does not implement:
+
+- Dynamic module creation;
+- Dynamic registry;
+- Dynamic renderer;
+- Dynamic screen models;
+- Login/OTP/Dashboard Dynamic rendering;
+- Dynamic actions;
+- Dynamic bindings/references;
+- Bootstrap persistence/cache;
+- ETag/config revision behavior;
+- final offline startup policy;
+- maintenance/update precedence;
+- authentication/session precedence;
+- `nextScreen` resolution;
+- final Bootstrap startup decision precedence.
+
+Those remain separate scope and must not be silently pulled into this implementation.
+
+## 12. Architecture Protection
+
+The implementation must not create a Bootstrap-specific architecture that later requires replacement when Dynamic is started.
+
+If implementation reveals a conflict with a frozen architecture decision, stop and follow the documented reopening process instead of silently changing the architecture.
+
+## 13. Current Planning State
+
+The seven-point implementation structure is now the proposed implementation contract for the Bootstrap foundation.
+
+Point-by-point implementation approach will be reviewed in the active workflow before implementation begins.
+
+The first point for implementation planning is:
+
+**DYNAMIC/BOOTSTRAP FOUNDATION — POINT 1: Common Network Infrastructure**
