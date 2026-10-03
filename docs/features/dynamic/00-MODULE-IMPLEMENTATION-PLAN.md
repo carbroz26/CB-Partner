@@ -1,230 +1,95 @@
 # CB-Partner Dynamic UI — Module Implementation Plan
 
-> **Status:** REVIEW DRAFT — not frozen and not an implementation mandate yet.
+> **Status:** PLAN FROZEN
 >
-> **Module:** `:feature:dynamic`
+> **Module:** `:feature:dynamic` container
 >
-> **Discussion source:** `docs/dynamic/00-FEATURE-DISCUSSION.md` (to be relocated to `docs/features/dynamic/` as part of the documentation reorganization).
+> **Source of truth:** Frozen `DYNAMIC-01` → `DYNAMIC-07` discussion.
 >
-> **Purpose:** Translate the fully frozen Dynamic architecture discussion into a concrete implementation sequence without reopening the frozen architecture.
+> This document contains exactly the seven agreed implementation points. It is an implementation sequence, not a new architecture discussion. Frozen Dynamic decisions must not be changed during implementation.
 
 ---
 
-## 1. Implementation Goal
+## Point 1 — Application Network / API Foundation
 
-Implement the backend-driven Dynamic UI runtime for CB-Partner as one generic feature system.
+Establish the common application API/network foundation that Bootstrap and Dynamic both use. There is one application-level `RemoteDataSource` boundary and one centrally configured Ktor `HttpClient`; Dynamic does not create its own HTTP client, base networking stack, or duplicate API infrastructure. The base URL is centrally configured for normal application API requests. Dynamic request actions may provide the backend-defined endpoint path or a complete backend-defined URL according to the frozen request contract; the runtime must use the common client/network boundary rather than inventing endpoint knowledge. Configure Ktor engines through the already-frozen multiplatform runtime infrastructure and wire the common client through the existing DI composition root. Reconcile the existing Bootstrap networking implementation with this common foundation rather than keeping Bootstrap-specific HTTP infrastructure.
 
-The implementation must support the frozen flow:
+Implementation flow:
 
 ```text
-Bootstrap
-   ↓
-DynamicDestination
-   ↓
-Navigation
-   ↓
-Dynamic Container
-   ↓
-Screen API
-   ↓
-Dynamic Screen JSON
-   ↓
-Parse / Map
-   ↓
-Registry Resolution
-   ↓
-Definition Rendering
-   ↓
-Dynamic State / Actions
-   ↓
-Compose UI
+Application DI
+    ↓
+Common HttpClient
+    ↓
+RemoteDataSource
+    ↓
+Bootstrap / Dynamic data flows
 ```
 
-The frontend must not introduce native Login/OTP/Dashboard screen classes or infer business navigation from template types.
+No second HTTP client, no Dynamic-specific networking layer, and no business endpoint knowledge in the common client.
 
 ---
 
-## 2. Frozen Inputs
+## Point 2 — Dynamic Models & Data/Domain Flow
 
-This plan is derived from the frozen Dynamic discussion:
-
-- DYNAMIC-01 — Dynamic Container + Dynamic Screen Lifecycle
-- DYNAMIC-02 — Screen → Template → Component → Section → Group → Element
-- DYNAMIC-03 — Registration System
-- DYNAMIC-04 — Layout, Visual Capabilities & Definition Rendering Direction
-- DYNAMIC-05 — Dynamic Definition, Registry & Parent → Child Rendering
-- DYNAMIC-06 — Dynamic Actions & Interaction
-- DYNAMIC-07.1 — Dynamic Structure Validation
-- DYNAMIC-07.2 — Definition / Capability Resolution
-- DYNAMIC-07.3 — Unknown / Unsupported Definitions
-- DYNAMIC-07.4 — Runtime Error Reporting & Diagnostics
-- DYNAMIC-07.5 — Fallback Strategy
-- DYNAMIC-07.6 — Dynamic Runtime Safety & Recovery
-- DYNAMIC-07.7 — Dynamic Observability & Debugging
-
-The implementation must not reopen these architectural decisions during implementation planning.
-
----
-
-## 3. Existing Module Boundary
-
-Current module:
-
-```text
-feature/dynamic/
-└── build.gradle.kts
-```
-
-Current dependencies are intentionally small:
-
-```text
-:domain
-:core
-:navigation
-```
-
-No new dependency/library is added by this plan unless a separately reviewed decision explicitly requires it.
-
-The Dynamic module remains responsible for the live Dynamic screen lifecycle, rendering coordination, Dynamic state/action runtime, and Dynamic-specific runtime behavior. Networking infrastructure remains in the existing data/core boundaries. Navigation remains integrated through `:navigation`.
-
----
-
-## 4. Target Runtime Boundary
-
-The implementation should remain intentionally simple:
-
-```text
-Dynamic Container
-      ↓
-Dynamic Screen Store / runtime state
-      ↓
-Destination screen loading
-      ↓
-Dynamic response decoding/mapping
-      ↓
-Dynamic screen model
-      ↓
-Dynamic Renderer
-      ↓
-Dynamic Registry
-      ↓
-Definition
-      ↓
-Compose
-```
-
-Interaction follows:
-
-```text
-Compose event
-      ↓
-Dynamic Action Runtime
-      ↓
-Reference resolution
-      ↓
-request / navigate / present / dismiss / state / external_uri / sequence
-      ↓
-Dynamic State / Navigation / Data infrastructure
-      ↓
-reactive rendering
-```
-
-Do not introduce unnecessary chains such as a generic command framework, migration engine, plugin framework, second validation engine, or duplicate networking layer.
-
----
-
-## 5. Implementation Units
-
-Implementation will be executed in small reviewable units. Each unit must compile and have focused tests before the next unit is started.
-
-### UNIT-01 — Dynamic Core Models
-
-Implement the minimum models required by the frozen contract:
-
-- `DynamicDestination`
-- Dynamic screen model
-- Template model
-- Component model
-- Section model
-- Group model
-- Element model
-- screen-level Theme/configuration models required by the fixed JSON contract
-- request/action models required by DYNAMIC-06
-- structured runtime/request error models required by DYNAMIC-06 and DYNAMIC-07
-
-Rules:
-
-- models represent the fixed backend contract;
-- no business-screen-specific models;
-- no speculative fields;
-- preserve backend ordering;
-- preserve `templateId`, `templateType`, `screenId`, endpoint, method, and authentication semantics.
-
-Tests:
-
-- model construction;
-- equality/value behavior where applicable;
-- representative fixed JSON decoding/mapping cases.
-
----
-
-### UNIT-02 — Dynamic Screen Decoder / Mapping
-
-Implement the response boundary that converts the fixed API response into Dynamic runtime models.
+Create the Dynamic response/model architecture according to Clean Architecture. The API response remains an envelope containing status/code/message/data/traceId; `data` contains the Dynamic screen contract including screen metadata, template, components, sections, groups, elements, properties, theme, actions, bindings, validation, and references required by the frozen backend contract. Data-layer DTOs represent the serialized backend contract and map into domain Dynamic models. Domain models must not depend on Ktor or serialization implementation details. The model hierarchy preserves backend ordering and the complete Dynamic information needed by the runtime. No business-specific Login/OTP/Dashboard models are introduced.
 
 Flow:
 
 ```text
-API response envelope
-      ↓
- data
-      ↓
-Dynamic decoder
-      ↓
-Dynamic screen model
+Backend JSON
+    ↓
+Data DTOs
+    ↓
+Mapper
+    ↓
+Domain Dynamic models
+    ↓
+Dynamic runtime
 ```
-
-Responsibilities:
-
-- decode the fixed JSON;
-- preserve screen/template/node properties;
-- preserve backend ordering;
-- map backend `nextScreen` into `DynamicDestination` where applicable;
-- normalize only what the frozen contract explicitly requires.
-
-Do not create a second backend validation engine.
-
-Tests:
-
-- valid screen JSON;
-- nested Component → Section → Group trees;
-- Theme;
-- actions;
-- references;
-- destination response;
-- malformed/unsupported decoding results.
 
 ---
 
-### UNIT-03 — Dynamic Registry
+## Point 3 — Dynamic Repository / Remote Data Flow
 
-Implement the frozen registry structure:
+Implement the Dynamic repository/data flow using the common application networking foundation. The repository is the domain-facing boundary; its implementation lives in `:data` and uses the single application `RemoteDataSource`. Dynamic screen/destination requests, response decoding, DTO mapping, and request results remain inside the data/domain boundaries. The Dynamic feature consumes domain contracts and does not call Ktor directly. Bootstrap and Dynamic therefore share the same API client and remote-data infrastructure while keeping their repository/domain responsibilities separate.
+
+Flow:
+
+```text
+Dynamic Store / use case
+    ↓
+Dynamic Repository
+    ↓
+RemoteDataSource
+    ↓
+Common HttpClient
+    ↓
+Backend
+    ↓
+DTO
+    ↓
+Domain model
+```
+
+No second network stack and no direct HTTP calls from definitions, renderers, or UI.
+
+---
+
+## Point 4 — Dynamic Registry & Definition Architecture
+
+Implement one `DynamicRegistry` that internally separates registration and lookup for the five frozen categories: Template, Component, Section, Group, and Element. Do not create separate top-level registry systems. Each registered definition owns its own Compose rendering and supported capabilities. Initial registrations are `stack_template`, `stack_component`, `stack_section`, `stack_group`, `text`, and `image`. Registry resolution uses the backend type and the appropriate category. Unknown definitions are never guessed, substituted, silently ignored, or dynamically created. The registry contains rendering capability only; it does not own business behavior, networking, navigation, repositories, or MVI state.
+
+Structure:
 
 ```text
 DynamicRegistry
-├── TemplateRegistry
-├── ComponentRegistry
-├── SectionRegistry
-├── GroupRegistry
-└── ElementRegistry
+├── Template registrations
+├── Component registrations
+├── Section registrations
+├── Group registrations
+└── Element registrations
 ```
-
-Implement:
-
-- explicit registration;
-- category-specific lookup;
-- duplicate registration rejection;
-- controlled unknown-definition result.
 
 Initial definitions:
 
@@ -237,569 +102,95 @@ text
 image
 ```
 
-No reflection, scanning, generic plugin framework, or automatic discovery.
-
-Tests:
-
-- successful registration;
-- lookup by category;
-- duplicate registration;
-- unknown type;
-- wrong-category lookup.
-
 ---
 
-### UNIT-04 — Dynamic Definition Contracts
+## Point 5 — Dynamic Runtime / Renderer / MVI Store Integration
 
-Implement the small definition contract established by DYNAMIC-05.
-
-Planned definitions:
-
-```text
-BaseDynamicDefinition
-StackTemplateDefinition
-StackComponentDefinition
-StackSectionDefinition
-StackGroupDefinition
-TextDefinition
-ImageDefinition
-```
-
-Each concrete definition owns its Compose rendering and supported capabilities.
-
-The base definition remains small and reusable. It must not become a universal property framework.
-
-Definitions must not own:
-
-- navigation;
-- networking;
-- repositories;
-- business logic;
-- MVI Store ownership;
-- action execution;
-- global application state.
-
-Tests:
-
-- supported capability declarations;
-- definition-specific configuration;
-- legal child handling;
-- unsupported capability behavior.
-
----
-
-### UNIT-05 — Dynamic Renderer
-
-Implement one central recursive `DynamicRenderer`.
+Integrate Dynamic models and definitions into the existing Pure MVI + UDF + Store architecture without ViewModel. The Dynamic Store owns Dynamic runtime state and coordinates screen loading, rendering state, bindings, node state, and runtime results. The renderer consumes the domain Dynamic model, resolves the correct registered definition through `DynamicRegistry`, and recursively renders the backend-defined tree. Definitions render themselves and delegate child rendering back through the Dynamic renderer. The Dynamic container is the feature UI boundary; business screens are not hardcoded. Parent/child rendering follows the frozen Dynamic hierarchy and state ownership decisions.
 
 Flow:
 
 ```text
-DynamicRenderer
-      ↓
-category registry lookup
-      ↓
-Dynamic Definition
-      ↓
-Compose rendering
-      ↓
-child → DynamicRenderer
-```
-
-Responsibilities:
-
-- resolve the correct category;
-- preserve backend order;
-- delegate rendering to definitions;
-- recursively render legal children;
-- produce controlled runtime failure for unknown/unsupported definitions;
-- preserve parent/child responsibility.
-
-No parent definition directly constructs concrete child definitions.
-
-Tests:
-
-- complete legal tree;
-- mixed Component children;
-- mixed Section children;
-- Group terminal behavior;
-- unknown child behavior;
-- unknown Template behavior;
-- rendering order.
-
----
-
-### UNIT-06 — Dynamic State Store / Runtime State
-
-Implement destination-scoped Dynamic state using the project's Pure MVI + UDF + Store architecture.
-
-State must support the frozen concepts required by DYNAMIC-06:
-
-```text
-fields / bindings
-node states
-visible
-enabled
-selected
-loading
-expanded
-timer/countdown
-request lifecycle
-response context
-```
-
-There must be one canonical owner for Dynamic field/runtime state. Avoid duplicated local canonical state, secondary form stores, or ViewModels.
-
-Tests:
-
-- field value changes;
-- node state changes;
-- cross-element state updates;
-- preservation of unaffected state;
-- request lifecycle state.
-
----
-
-### UNIT-07 — Reference Resolution
-
-Implement centralized deterministic resolution for:
-
-```text
-$literal
-$binding
-$context
-$response
-```
-
-Rules:
-
-- recursive resolution where the contract requires it;
-- type-safe consumption;
-- missing/invalid references produce structured errors;
-- no invented defaults that silently change behavior;
-- references read values; actions perform effects.
-
-Tests:
-
-- literal;
-- binding;
-- context;
-- response;
-- nested references;
-- missing reference;
-- invalid type.
-
----
-
-### UNIT-08 — Action Runtime
-
-Implement the frozen action vocabulary:
-
-```text
-request
-navigate
-present
-dismiss
-state
-external_uri
-sequence
-```
-
-Events include the frozen base events:
-
-```text
-onClick
-onLongClick
-onValueChange
-onFocus
-onSubmit
-```
-
-Responsibilities:
-
-- receive an event;
-- resolve its Action;
-- resolve references;
-- execute the defined action;
-- update Dynamic state or navigation through the appropriate boundary;
-- isolate action failures from rendering;
-- execute sequence children in defined order.
-
-Do not put action execution inside individual render definitions.
-
-Tests:
-
-- each action type;
-- event-to-action dispatch;
-- reference resolution before action;
-- sequence ordering/failure behavior;
-- action failure isolation.
-
----
-
-### UNIT-09 — Request / Destination Integration
-
-Integrate `request` with the existing data/network infrastructure.
-
-The Dynamic runtime coordinates; it does not implement another HTTP client.
-
-Request support includes the frozen contract:
-
-```text
-method
-endpoint
-authentication
-validate
-headers
-query
-body
-responseMode
-```
-
-Success:
-
-```text
-responseMode = none
-    → action completes
-
-responseMode = destination
-    → DynamicDestination
-    → Navigation
-```
-
-Errors follow DYNAMIC-06.4.2.
-
-Destination contains:
-
-```text
-screenId
-templateId
-templateType
-endpoint
-method
-authentication
-```
-
-Tests:
-
-- successful request;
-- validation-before-request;
-- `responseMode = none`;
-- `responseMode = destination`;
-- structured request error;
-- failed destination resolution;
-- current destination preservation.
-
----
-
-### UNIT-10 — Dynamic Navigation Integration
-
-Integrate DynamicDestination with the existing navigation architecture.
-
-Rules:
-
-- store the complete DynamicDestination in the Dynamic navigation stack;
-- push/pop/back remain navigation responsibilities;
-- `templateType` never determines business destination;
-- refresh reuses the current destination;
-- backend navigate actions supply the destination explicitly.
-
-Tests:
-
-- push;
-- pop;
-- system/back integration;
-- destination restoration;
-- refresh;
-- navigate action.
-
----
-
-### UNIT-11 — Fallback / Error Boundary / Runtime Safety
-
-Implement the frozen DYNAMIC-07 runtime behavior.
-
-Boundaries:
-
-```text
-Template failure
-    → screen-level fallback
-
-Component failure
-    → component-level fallback
-
-Section failure
-    → section-level fallback
-
-Group failure
-    → group-level fallback
-
-Element failure
-    → element-level fallback
-```
-
-Requirements:
-
-- Dynamic failures do not crash the application;
-- child failures remain localized;
-- valid siblings continue;
-- template failure stops normal screen rendering;
-- no infinite retry;
-- invalid runtime values use capability-specific safe handling;
-- unaffected state is preserved;
-- destination failure preserves the current valid screen;
-- recovery is deterministic;
-- registry/architecture/executable behavior is never mutated at runtime.
-
-Tests:
-
-- unknown definition;
-- unsupported capability;
-- invalid reference;
-- rendering failure boundary;
-- template failure;
-- child failure;
-- navigation failure;
-- request failure;
-- no retry loop;
-- state preservation.
-
----
-
-### UNIT-12 — Runtime Diagnostics / Observability
-
-Implement the frozen DYNAMIC-07.4 and DYNAMIC-07.7 observability boundary using the existing logging infrastructure.
-
-Diagnostics must support the frozen context where available:
-
-```text
-reasonCode
-level
-type
-nodeId
-screenId
-templateId
-schemaVersion
-traceId
-capability
-message
-```
-
-Observability must distinguish:
-
-```text
-user-facing fallback
-        ≠
-diagnostic information
-```
-
-The implementation must respect the frozen sensitive-data protection and production/debug boundaries from DYNAMIC-07.7.
-
-Tests:
-
-- lifecycle diagnostics;
-- definition-resolution diagnostics;
-- action/request tracing;
-- state diagnostics;
-- JSON/backend diagnostics;
-- filtering/verbosity;
-- debug-mode behavior;
-- production boundary;
-- sensitive-data redaction.
-
----
-
-### UNIT-13 — Dynamic Container / Feature Composition
-
-Integrate the complete Dynamic runtime into the permanent Dynamic Container.
-
-Final runtime composition:
-
-```text
-Bootstrap destination
-      ↓
-Navigation
-      ↓
-Dynamic Container
-      ↓
+Dynamic Destination
+    ↓
 Dynamic Store
-      ↓
-Screen load
-      ↓
-Decode
-      ↓
-Render
-      ↓
-Interaction
+    ↓
+Repository
+    ↓
+Dynamic Domain Model
+    ↓
+Dynamic Renderer
+    ↓
+DynamicRegistry
+    ↓
+Definition
+    ↓
+Compose UI
 ```
-
-No native business screen branches are introduced.
-
-Tests:
-
-- startup into first Dynamic destination;
-- screen loading;
-- render;
-- interaction;
-- navigation;
-- back;
-- refresh;
-- failure/fallback flow.
 
 ---
 
-## 6. Initial File / Package Plan
+## Point 6 — Dynamic Actions / Interaction
 
-The exact final package names must be verified against the existing repository conventions before implementation. The expected responsibility groups are:
+Implement the frozen DYNAMIC-06 action system. Backend-defined actions are represented by Dynamic action models and executed by the Dynamic runtime through the Pure MVI/UDF flow. References such as binding, context, and response values are resolved by the existing Dynamic reference mechanism before execution. `request`, `navigate`, and `external_uri` remain distinct action types with their frozen contracts; request execution uses the common application networking infrastructure. Request validation/error handling follows DYNAMIC-06.4.2, and destination responses follow DYNAMIC-06.4.3. Action failures are isolated from rendering and follow the frozen DYNAMIC-07 recovery rules. No second action, network, or error framework is created for Dynamic.
+
+Flow:
 
 ```text
-feature/dynamic/src/commonMain/kotlin/...
-├── container/
-├── model/
-├── runtime/
-│   ├── store/
-│   ├── action/
-│   ├── reference/
-│   ├── destination/
-│   └── error/
-├── registry/
-├── definition/
-│   ├── template/
-│   ├── component/
-│   ├── section/
-│   ├── group/
-│   └── element/
-├── renderer/
-└── diagnostics/
+UI event
+    ↓
+Dynamic Store / Action runtime
+    ↓
+Reference resolution
+    ↓
+Action
+    ├── request
+    ├── navigate
+    └── external_uri
+    ↓
+Result / error
+    ↓
+State / Effect
+    ↓
+UI
 ```
-
-This is a planning boundary, not authorization to create every directory/class blindly. Before each unit, the actual repository is inspected and only required files are created.
 
 ---
 
-## 7. Test Strategy
+## Point 7 — Integration, Testing & Final Dynamic Completion
 
-Dynamic must be testable primarily through common/JVM tests wherever the behavior is platform-independent.
+Integrate all frozen Dynamic pieces and verify the complete backend-driven flow without introducing new architecture. Register the initial definitions, load and render the real Login and OTP JSON responses, verify bindings/context/response references, execute the configured request/navigation/external-URI actions, and verify destination responses. Verify the frozen DYNAMIC-07 behavior for unknown definitions, localized child failures, template-level failure, request/action failures, navigation failure, state preservation, deterministic recovery, diagnostics, and sensitive-data protection. The final end-to-end flow must demonstrate Bootstrap → Dynamic destination → Login → request → OTP → request → destination while keeping Login and OTP backend-driven rather than hardcoded native screens. Complete build/tests, review the changed files/classes, update implementation/status documentation, and freeze the completed Dynamic implementation.
 
-Required coverage includes:
+Final verification flow:
 
 ```text
-JSON decoding
-model mapping
-registry
-definition resolution
-capability handling
-recursive rendering contract
-state
-references
-actions
-requests
-request errors
-destination handling
-navigation coordination
-fallbacks
-runtime recovery
-diagnostics
-sensitive-data protection
+Bootstrap
+    ↓
+Dynamic Destination
+    ↓
+Login JSON
+    ↓
+Login rendered dynamically
+    ↓
+send_otp request
+    ↓
+OTP destination
+    ↓
+OTP JSON
+    ↓
+OTP rendered dynamically
+    ↓
+verify_otp request
+    ↓
+Destination response
+    ↓
+Next Dynamic screen
 ```
 
-Platform verification should cover the supported Compose targets through the project's existing test/build workflow. Platform-specific UI verification remains at the genuine platform boundary.
-
 ---
 
-## 8. Explicitly Out of Scope for This Plan
+## Frozen Implementation Rules
 
-Unless a frozen contract is later amended, do not add:
+The implementation follows the existing CB-Partner architecture: Clean Architecture, Kotlin Multiplatform / Compose Multiplatform, Pure MVI + UDF + Store, no ViewModel, multi-module boundaries, existing DI, common networking, and existing navigation. The implementation must not create a second networking layer, second registry architecture, second state-management system, second navigation system, or business-specific Dynamic screen classes. Do not reopen frozen DYNAMIC-01 → DYNAMIC-07 decisions during implementation. If the repository contradicts a frozen contract, stop and report the conflict instead of silently changing the architecture.
 
-- native LoginScreen / OtpScreen / DashboardScreen classes;
-- ViewModel;
-- second MVI architecture;
-- second navigation system;
-- second HTTP client/network layer;
-- generic plugin framework;
-- reflection/package scanning;
-- giant property/capability framework;
-- automatic backend-to-frontend code generation;
-- arbitrary backend code execution;
-- automatic type substitution;
-- automatic property downgrade;
-- hidden retry loops;
-- runtime mutation of registry definitions;
-- business-specific screen branching;
-- speculative backend fields;
-- unrelated refactoring/dependency upgrades.
-
----
-
-## 9. Implementation Order
-
-The recommended execution order is:
-
-```text
-UNIT-01  Models
-   ↓
-UNIT-02  Decode / Mapping
-   ↓
-UNIT-03  Registry
-   ↓
-UNIT-04  Definitions
-   ↓
-UNIT-05  Renderer
-   ↓
-UNIT-06  Dynamic State Store
-   ↓
-UNIT-07  Reference Resolution
-   ↓
-UNIT-08  Action Runtime
-   ↓
-UNIT-09  Request / Destination
-   ↓
-UNIT-10  Navigation Integration
-   ↓
-UNIT-11  Fallback / Safety
-   ↓
-UNIT-12  Diagnostics / Observability
-   ↓
-UNIT-13  Container / End-to-End Composition
-   ↓
-Verification
-   ↓
-Review
-   ↓
-Code Freeze
-```
-
-Each unit should be implemented only after its file/class boundary is reviewed and accepted as part of the frozen implementation plan.
-
----
-
-## 10. Implementation Safety Rules
-
-1. Do not implement before this plan is frozen.
-2. Do not reopen DYNAMIC-01 through DYNAMIC-07 frozen decisions during implementation unless a new explicit architecture discussion is created.
-3. Do not modify unrelated modules merely to make Dynamic code convenient.
-4. Reuse existing `:core`, `:domain`, `:data`, and `:navigation` boundaries.
-5. Do not add a library without a separate decision.
-6. Do not create speculative classes or abstractions.
-7. Keep each implementation unit small enough to review and test independently.
-8. Report the exact files/classes changed after each implementation unit.
-9. Run the relevant Gradle tests/build verification after each unit or defined batch.
-10. Stop and report if the existing repository contradicts a frozen Dynamic contract instead of silently changing the architecture.
-
----
-
-## 11. Plan Status
-
-**Current state: REVIEW DRAFT**
-
-Next planning work:
-
-1. Verify the complete current `:feature:dynamic` repository structure.
-2. Verify the existing `:navigation`, `:domain`, `:data`, and `:core` contracts that Dynamic must consume.
-3. Reconcile the proposed units with actual existing code.
-4. Produce the final file/class list per unit.
-5. Define exact verification commands.
-6. Review the complete implementation plan.
-7. Freeze the plan.
-
-Implementation authorization is a separate step after `PLAN_FROZEN`.
+**Implementation plan state: FROZEN — exactly 7 points.**
