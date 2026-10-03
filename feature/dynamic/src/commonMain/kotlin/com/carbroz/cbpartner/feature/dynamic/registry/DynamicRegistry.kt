@@ -1,70 +1,43 @@
 package com.carbroz.cbpartner.feature.dynamic.registry
 
-class DynamicRegistry(
-    val templates: TemplateRegistry = TemplateRegistry(),
-    val components: ComponentRegistry = ComponentRegistry(),
-    val sections: SectionRegistry = SectionRegistry(),
-    val groups: GroupRegistry = GroupRegistry(),
-    val elements: ElementRegistry = ElementRegistry(),
-) {
-    fun register(definition: DynamicDefinition) {
-        when (definition.category) {
-            DynamicDefinitionCategory.TEMPLATE -> templates.register(definition)
-            DynamicDefinitionCategory.COMPONENT -> components.register(definition)
-            DynamicDefinitionCategory.SECTION -> sections.register(definition)
-            DynamicDefinitionCategory.GROUP -> groups.register(definition)
-            DynamicDefinitionCategory.ELEMENT -> elements.register(definition)
-        }
-    }
+import com.carbroz.cbpartner.feature.dynamic.sdui.component.StackComponent
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.ButtonElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.ImageElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.InputElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.TextElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.group.StackGroup
+import com.carbroz.cbpartner.feature.dynamic.sdui.section.StackSection
+import com.carbroz.cbpartner.feature.dynamic.sdui.template.FormTemplate
+import com.carbroz.cbpartner.feature.dynamic.sdui.template.StackTemplate
 
-    fun resolveTemplate(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = templates.resolve(type, properties)
-    fun resolveComponent(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = components.resolve(type, properties)
-    fun resolveSection(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = sections.resolve(type, properties)
-    fun resolveGroup(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = groups.resolve(type, properties)
-    fun resolveElement(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = elements.resolve(type, properties)
-}
+class DynamicRegistry {
+    private val templates = mutableMapOf<String, Any>()
+    private val components = mutableMapOf<String, Any>()
+    private val sections = mutableMapOf<String, Any>()
+    private val groups = mutableMapOf<String, Any>()
+    private val elements = mutableMapOf<String, Any>()
 
-sealed class RegistrationException(message: String) : IllegalArgumentException(message) {
-    class Duplicate(category: DynamicDefinitionCategory, type: String) :
-        RegistrationException("Definition already registered: " + category + "/" + type)
-}
+    fun registerTemplate(type: String, template: Any) { templates[type] = template }
+    fun registerComponent(type: String, component: Any) { components[type] = component }
+    fun registerSection(type: String, section: Any) { sections[type] = section }
+    fun registerGroup(type: String, group: Any) { groups[type] = group }
+    fun registerElement(type: String, element: Any) { elements[type] = element }
 
-open class DynamicCategoryRegistry(
-    private val category: DynamicDefinitionCategory,
-) {
-    private val definitions = mutableMapOf<String, DynamicDefinition>()
+    fun getTemplate(type: String): Any? = templates[type]
+    fun getComponent(type: String): Any? = components[type]
+    fun getSection(type: String): Any? = sections[type]
+    fun getGroup(type: String): Any? = groups[type]
+    fun getElement(type: String): Any? = elements[type]
 
-    fun register(definition: DynamicDefinition) {
-        require(definition.category == category) {
-            "Definition category mismatch: expected " + category + ", got " + definition.category
-        }
-        if (definitions.containsKey(definition.type)) {
-            throw RegistrationException.Duplicate(category, definition.type)
-        }
-        definitions[definition.type] = definition
-    }
-
-    fun resolve(
-        type: String,
-        properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap(),
-    ): DynamicResolution<DynamicDefinition> {
-        val definition = definitions[type]
-            ?: return DynamicResolution.Unknown(category, type)
-
-        return if (definition.supports(properties)) {
-            DynamicResolution.Resolved(definition)
-        } else {
-            DynamicResolution.Unsupported(
-                category = category,
-                type = type,
-                reason = "Definition does not support the requested configuration",
-            )
-        }
+    fun registerDefaults(): DynamicRegistry = apply {
+        registerTemplate("form_template", FormTemplate())
+        registerTemplate("stack_template", StackTemplate())
+        registerComponent("stack_component", StackComponent())
+        registerSection("stack_section", StackSection())
+        registerGroup("stack_group", StackGroup())
+        registerElement("text", TextElement())
+        registerElement("image", ImageElement())
+        registerElement("input", InputElement())
+        registerElement("button", ButtonElement())
     }
 }
-
-class TemplateRegistry : DynamicCategoryRegistry(DynamicDefinitionCategory.TEMPLATE)
-class ComponentRegistry : DynamicCategoryRegistry(DynamicDefinitionCategory.COMPONENT)
-class SectionRegistry : DynamicCategoryRegistry(DynamicDefinitionCategory.SECTION)
-class GroupRegistry : DynamicCategoryRegistry(DynamicDefinitionCategory.GROUP)
-class ElementRegistry : DynamicCategoryRegistry(DynamicDefinitionCategory.ELEMENT)
