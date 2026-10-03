@@ -41,7 +41,7 @@ class DynamicResponseMapper {
             status = dto.status,
             code = dto.code,
             message = dto.message,
-            data = dto.data.toDomain(),
+            data = dto.data?.toDomain(),
             traceId = dto.traceId,
             nextScreen = dto.nextScreen?.toDomain(),
         )
