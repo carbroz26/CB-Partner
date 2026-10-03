@@ -26,7 +26,7 @@ fun DynamicScreen(
 ) {
     val state by store.state.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(destination) {
         store.accept(DynamicIntent.Load)
     }
 
