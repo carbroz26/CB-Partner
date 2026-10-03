@@ -1,6 +1,6 @@
 package com.carbroz.cbpartner.feature.dynamic.registry
 
-private abstract class TypedDefinition(
+internal abstract class TypedDefinition(
     override val type: String,
     override val category: DynamicDefinitionCategory,
 ) : DynamicDefinition {
