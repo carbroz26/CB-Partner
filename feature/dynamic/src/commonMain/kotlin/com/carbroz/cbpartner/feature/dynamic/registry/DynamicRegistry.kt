@@ -45,7 +45,7 @@ open class DynamicCategoryRegistry(
     }
 
     fun resolve(type: String): DynamicResolution<DynamicDefinition> =
-        definitions[type]?.let(DynamicResolution<DynamicDefinition>::Resolved)
+        definitions[type]?.let { DynamicResolution.Resolved(it) }
             ?: DynamicResolution.Unknown(category, type)
 }
 
