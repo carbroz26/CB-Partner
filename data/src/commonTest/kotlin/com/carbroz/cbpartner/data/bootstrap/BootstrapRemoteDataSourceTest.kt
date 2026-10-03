@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 class BootstrapRemoteDataSourceTest {
     @Test
     fun successfulResponseIsMapped() = runTest {
-        val client = HttpClient(
+        val result = createBootstrap(
             MockEngine {
                 respond(
                     content = SUCCESS_RESPONSE,
@@ -25,9 +25,7 @@ class BootstrapRemoteDataSourceTest {
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
             },
-        )
-
-        val result = DefaultApplicationBootstrap(RemoteDataSource(client, NetworkConfig("http://localhost:3000"))).invoke()
+        ).invoke()
 
         assertTrue(result.isSuccess)
         assertEquals("1", result.getOrThrow().config.version)
@@ -41,7 +39,7 @@ class BootstrapRemoteDataSourceTest {
         var appVersion = ""
         var buildNumber = ""
 
-        val client = HttpClient(
+        val result = createBootstrap(
             MockEngine { request ->
                 requestUrl = request.url.toString()
                 platform = request.headers["X-CarBroz-Platform"].orEmpty()
@@ -53,10 +51,9 @@ class BootstrapRemoteDataSourceTest {
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
             },
-        )
+        ).invoke()
 
-        BootstrapRemoteDataSource(client).fetch()
-
+        assertTrue(result.isSuccess)
         assertTrue(requestUrl.endsWith("/api/v1/partner/config/bootstrap"))
         assertEquals("ANDROID", platform)
         assertEquals("1.0.0", appVersion)
@@ -65,13 +62,13 @@ class BootstrapRemoteDataSourceTest {
 
     @Test
     fun nonSuccessfulHttpStatusIsMapped() = runTest {
-        val client = HttpClient(
+        val result = createBootstrap(
             MockEngine {
                 respond("", HttpStatusCode.ServiceUnavailable)
             },
-        )
+        ).invoke()
 
-        val failure = BootstrapRemoteDataSource(client).fetch().exceptionOrNull()
+        val failure = result.exceptionOrNull()
 
         assertTrue(failure is BootstrapFailure.Http)
         assertEquals(503, (failure as BootstrapFailure.Http).statusCode)
@@ -79,33 +76,41 @@ class BootstrapRemoteDataSourceTest {
 
     @Test
     fun incompleteSuccessfulResponseIsRejected() = runTest {
-        val client = HttpClient(
+        val result = createBootstrap(
             MockEngine {
                 respond(
-                    "{\"status\":200,\"code\":\"SUCCESS\",\"message\":\"ok\",\"data\":null,\"traceId\":\"req-1\"}",
+                    """{"status":200,"code":"SUCCESS","message":"ok","data":null,"traceId":"req-1"}""",
                     HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
             },
-        )
+        ).invoke()
 
-        val failure = BootstrapRemoteDataSource(client).fetch().exceptionOrNull()
+        val failure = result.exceptionOrNull()
 
         assertTrue(failure is BootstrapFailure.InvalidResponse)
     }
 
     @Test
     fun malformedResponseIsMappedToSerializationFailure() = runTest {
-        val client = HttpClient(
+        val result = createBootstrap(
             MockEngine {
                 respond("not-json", HttpStatusCode.OK)
             },
-        )
+        ).invoke()
 
-        val failure = BootstrapRemoteDataSource(client).fetch().exceptionOrNull()
+        val failure = result.exceptionOrNull()
 
         assertTrue(failure is BootstrapFailure.Serialization)
     }
+
+    private fun createBootstrap(engine: MockEngine): DefaultApplicationBootstrap =
+        DefaultApplicationBootstrap(
+            RemoteDataSource(
+                HttpClient(engine),
+                NetworkConfig("http://localhost:3000"),
+            ),
+        )
 
     private companion object {
         const val SUCCESS_RESPONSE = """
