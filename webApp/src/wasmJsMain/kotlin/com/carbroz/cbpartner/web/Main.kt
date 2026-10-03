@@ -40,6 +40,10 @@ private fun App() {
     MaterialTheme {
         when (val state = splashState) {
             is SplashState.Success -> {
+                // Bootstrap owns the first navigation decision. From here,
+                // navigation is represented by a DynamicDestination: screen,
+                // template contract and endpoint. The DynamicScreen stays the
+                // single host; subsequent destinations replace this contract.
                 val startup = state.output.startup
                 val destination = remember(startup.nextScreen) {
                     DynamicDestination(
@@ -64,6 +68,7 @@ private fun App() {
                 }
 
                 DynamicScreen(
+                    destination = destination,
                     store = dynamicStore,
                     registry = registry,
                 )
