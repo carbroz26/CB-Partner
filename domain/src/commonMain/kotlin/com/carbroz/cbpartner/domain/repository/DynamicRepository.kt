@@ -1,5 +1,6 @@
 package com.carbroz.cbpartner.domain.repository
 
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicDestination
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicResponse
 
 /**
@@ -10,8 +11,7 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicResponse
  */
 interface DynamicRepository {
     suspend fun fetch(
-        endpoint: String,
-        method: String = "GET",
+        destination: DynamicDestination,
         headers: Map<String, String> = emptyMap(),
         body: String? = null,
     ): Result<DynamicResponse>
