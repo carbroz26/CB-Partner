@@ -1,0 +1,84 @@
+package com.carbroz.cbpartner.feature.dynamic.renderer
+
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicAction
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicComponent
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicElement
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicGroup
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicResponse
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicSection
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicScreen
+import com.carbroz.cbpartner.feature.dynamic.registry.DynamicRegistry
+import com.carbroz.cbpartner.feature.dynamic.sdui.component.StackComponent
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.ButtonElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.ImageElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.InputElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.element.TextElement
+import com.carbroz.cbpartner.feature.dynamic.sdui.group.StackGroup
+import com.carbroz.cbpartner.feature.dynamic.sdui.section.StackSection
+import com.carbroz.cbpartner.feature.dynamic.sdui.template.FormTemplate
+import com.carbroz.cbpartner.feature.dynamic.sdui.template.StackTemplate
+
+class DynamicRenderer(
+    private val registry: DynamicRegistry,
+    private val onAction: (DynamicAction) -> Unit = {},
+) {
+    @Composable
+    fun Render(response: DynamicResponse) {
+        renderScreen(response.data)
+    }
+
+    @Composable
+    private fun renderScreen(screen: DynamicScreen) {
+        val template = screen.template
+        when (val registered = registry.getTemplate(template.type)) {
+            is FormTemplate -> registered.Render(template, this)
+            is StackTemplate -> registered.Render(template, this)
+            else -> Text(text = "Unsupported template: " + template.type)
+        }
+    }
+
+    @Composable
+    fun renderComponents(components: List<DynamicComponent>) {
+        components.forEach { component ->
+            when (val registered = registry.getComponent(component.type)) {
+                is StackComponent -> registered.Render(component, this)
+                else -> Text(text = "Unsupported component: " + component.type)
+            }
+        }
+    }
+
+    @Composable
+    fun renderSections(sections: List<DynamicSection>) {
+        sections.forEach { section ->
+            when (val registered = registry.getSection(section.type)) {
+                is StackSection -> registered.Render(section, this)
+                else -> Text(text = "Unsupported section: " + section.type)
+            }
+        }
+    }
+
+    @Composable
+    fun renderGroups(groups: List<DynamicGroup>) {
+        groups.forEach { group ->
+            when (val registered = registry.getGroup(group.type)) {
+                is StackGroup -> registered.Render(group, this)
+                else -> Text(text = "Unsupported group: " + group.type)
+            }
+        }
+    }
+
+    @Composable
+    fun renderElements(elements: List<DynamicElement>) {
+        elements.forEach { element ->
+            when (val registered = registry.getElement(element.type)) {
+                is TextElement -> registered.Render(element)
+                is ImageElement -> registered.Render(element)
+                is InputElement -> registered.Render(element)
+                is ButtonElement -> registered.Render(element, onAction)
+                else -> Text(text = "Unsupported element: " + element.type)
+            }
+        }
+    }
+}
