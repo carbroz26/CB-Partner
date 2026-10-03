@@ -70,7 +70,7 @@ class DynamicResponseMapper {
         id = id,
         type = type,
         properties = properties.toDynamicValueMap(),
-        elements = elements.map(DynamicElementDto::toDomain),
+        elements = elements.map { it.toDomain() },
         groups = groups.map { it.toDomain() },
     )
 
@@ -78,7 +78,7 @@ class DynamicResponseMapper {
         id = id,
         type = type,
         properties = properties.toDynamicValueMap(),
-        elements = elements.map(DynamicElementDto::toDomain),
+        elements = elements.map { it.toDomain() },
     )
 
     private fun DynamicElementDto.toDomain() = DynamicElement(
@@ -100,14 +100,15 @@ class DynamicResponseMapper {
         key = key,
     )
 
-    private fun DynamicActionsDto.toDomain() = mapOf(
-        "onClick" to onClick,
-        "onLongClick" to onLongClick,
-        "onValueChange" to onValueChange,
-        "onFocus" to onFocus,
-        "onSubmit" to onSubmit,
-    ).mapNotNull { (event, action) -> action?.let { event to DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) } }
-
+    private fun DynamicActionsDto.toDomain(): Map<String, DynamicAction> {
+        val result = mutableMapOf<String, DynamicAction>()
+        onClick?.let { result["onClick"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
+        onLongClick?.let { result["onLongClick"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
+        onValueChange?.let { result["onValueChange"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
+        onFocus?.let { result["onFocus"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
+        onSubmit?.let { result["onSubmit"] = DynamicAction(type = it.type, payload = it.payload.toDynamicValueMap()) }
+        return result
+    }
     private fun DynamicThemeDto.toDomain() = DynamicTheme(
         theme = theme,
         statusBar = statusBar,
