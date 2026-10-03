@@ -7,6 +7,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":data"))
             implementation(project(":feature:splash"))
+            implementation(project(":feature:dynamic"))
             implementation(libs.koin.core)
             implementation(compose.runtime)
             implementation(compose.ui)
