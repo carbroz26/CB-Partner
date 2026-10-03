@@ -23,6 +23,7 @@ import com.carbroz.cbpartner.feature.dynamic.sdui.template.StackTemplate
 class DynamicRenderer(
     private val registry: DynamicRegistry,
     private val onAction: (DynamicAction) -> Unit = {},
+    private val onValueChange: (String, String) -> Unit = { _, _ -> },
 ) {
     @Composable
     fun Render(
@@ -39,9 +40,6 @@ class DynamicRenderer(
     ) {
         val responseTemplate = screen.template
         val selectedTemplateType = destinationTemplateType ?: responseTemplate.type
-
-        // Bootstrap/startup owns navigation. Its templateType selects the
-        // registered client template; the dynamic response supplies its data.
         val template = responseTemplate.copy(type = selectedTemplateType)
 
         when (val registered = registry.getTemplate(selectedTemplateType)) {
@@ -87,7 +85,7 @@ class DynamicRenderer(
             when (val registered = registry.getElement(element.type)) {
                 is TextElement -> registered.Render(element)
                 is ImageElement -> registered.Render(element)
-                is InputElement -> registered.Render(element)
+                is InputElement -> registered.Render(element, onValueChange)
                 is ButtonElement -> registered.Render(element, onAction)
                 else -> Text(text = "Unsupported element: " + element.type)
             }
