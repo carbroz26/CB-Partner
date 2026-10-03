@@ -783,9 +783,467 @@ Frozen DYNAMIC-06.4.3 decisions:
 
 ---
 
-# DYNAMIC-07 — NOT STARTED
 
-DYNAMIC-07 will be started only after the complete DYNAMIC-01 through DYNAMIC-06 discussion has been recorded and frozen. The exact DYNAMIC-07 scope will be discussed before any implementation planning is created.
+# DYNAMIC-07 — Runtime Validation, Compatibility & Recovery
+
+## Status
+
+**IN PROGRESS — 07.1 through 07.6 FROZEN; 07.7 NOT STARTED**
+
+DYNAMIC-07 defines the frontend Dynamic runtime boundary for safely consuming backend-driven Dynamic configuration. The goal is to keep the runtime simple and deterministic:
+
+```text
+Backend JSON
+    ↓
+Parse
+    ↓
+Validate / accept the fixed contract
+    ↓
+Resolve registered definitions
+    ↓
+Render
+    ↓
+Diagnose / fallback / recover safely
+```
+
+DYNAMIC-07 does not introduce a second SDUI system, a generic validation framework, a migration engine, or an automatic fallback/substitution engine. The backend contract remains authoritative.
+
+---
+
+## 07.1 — Dynamic Structure Validation
+
+### Status
+
+**FROZEN**
+
+DYNAMIC-07.1 establishes the canonical Dynamic tree rules already frozen in DYNAMIC-02 and defines the frontend boundary for rejecting structurally invalid Dynamic trees before rendering.
+
+Canonical legal structures include:
+
+```text
+Screen
+└── Template
+    └── Component
+        └── Element
+
+Screen
+└── Template
+    └── Component
+        └── Section
+            └── Element
+
+Screen
+└── Template
+    └── Component
+        └── Section
+            └── Group
+                └── Element
+```
+
+Structural rules:
+
+- Screen has exactly one Template.
+- Template contains one or more Components.
+- Component may contain Elements, Sections, or both.
+- Component cannot contain a Group directly.
+- Section may contain Elements, Groups, or both.
+- Section cannot contain Component or another Section.
+- Group contains one or more Elements only.
+- Group cannot contain Section, Group, Component, Template, or Screen.
+- Element is terminal and has no Dynamic children.
+- Required child collections cannot be empty.
+- Backend ordering is preserved.
+
+Structural validation is separate from registration/capability resolution:
+
+```text
+Structural validation
+    ↓
+"Is this tree legally shaped?"
+
+Registry resolution
+    ↓
+"Do we know how to render these types?"
+```
+
+For the frozen frontend boundary, backend validation is authoritative. The frontend does not become a duplicate business/configuration validation engine. The runtime parses the fixed response, resolves registered definitions, and handles runtime/unsupported-definition failures.
+
+For this point, hierarchy validation owns only structure. It does not absorb property validation, action validation, reference resolution, registration lookup, API errors, or Compose rendering.
+
+If a Dynamic screen is structurally invalid, it is rejected before normal rendering and handled through the controlled screen-level Dynamic failure boundary. The runtime never repairs, restructures, inserts missing nodes, or guesses the backend's intent.
+
+### Frozen 07.1 decisions
+
+1. The canonical Screen → Template → Component → Section → Group → Element hierarchy is enforced as the Dynamic structural contract.
+2. Screen has exactly one Template.
+3. Template requires one or more Components.
+4. Component may contain Elements and/or Sections, but not Groups directly.
+5. Section may contain Elements and/or Groups, but not Components or Sections.
+6. Group contains one or more Elements only.
+7. Element is terminal.
+8. Required child collections cannot be empty.
+9. Backend child ordering is preserved.
+10. Structure and registration/capability resolution remain separate responsibilities.
+11. The frontend does not create a second backend-style validation engine.
+12. Structurally invalid Dynamic screens are rejected before normal rendering.
+13. The runtime never repairs, restructures, substitutes, or guesses an invalid tree.
+
+---
+
+## 07.2 — Definition / Capability Resolution
+
+### Status
+
+**FROZEN**
+
+DYNAMIC-07.2 defines how the frontend determines whether a structurally valid Dynamic tree can actually be rendered.
+
+The existing five category registries remain the rendering capability source:
+
+```text
+DynamicRegistry
+│
+├── TemplateRegistry
+├── ComponentRegistry
+├── SectionRegistry
+├── GroupRegistry
+└── ElementRegistry
+```
+
+Resolution follows the actual Dynamic tree:
+
+```text
+Screen
+ ↓
+TemplateRegistry
+ ↓
+ComponentRegistry
+ ↓
+SectionRegistry
+ ↓
+GroupRegistry
+ ↓
+ElementRegistry
+```
+
+Each registered definition owns its own Compose rendering and its supported capabilities. The registry answers who can render a type; the Definition answers how that type renders.
+
+Unknown definitions are never guessed, silently substituted, dynamically invented, or ignored.
+
+Frozen runtime behavior:
+
+```text
+Registered Template
+    → normal rendering
+
+Unknown Template
+    → screen-level controlled fallback
+
+Unknown Component
+    → component-level error UI
+
+Unknown Section
+    → section-level error UI
+
+Unknown Group
+    → group-level error UI
+
+Unknown Element
+    → element-level error UI
+```
+
+Unknown child definitions do not destroy an otherwise valid screen. Template is the exception because it determines the screen-level layout strategy.
+
+Runtime fallback/error UI is not itself a Dynamic definition. Final visual designs for fallback/error UI remain outside this point.
+
+### Frozen 07.2 decisions
+
+1. Five separate category registries remain the rendering capability source.
+2. Every registered definition owns its Compose rendering.
+3. Backend type is resolved through the correct category registry.
+4. Unknown definitions are never guessed or silently substituted.
+5. Unknown Template produces a screen-level controlled fallback.
+6. Unknown Component/Section/Group/Element produces localized runtime error UI.
+7. Unknown child definitions do not destroy the surrounding valid screen.
+8. Runtime fallback/error UI is not itself a Dynamic definition.
+9. Registry resolution remains separate from backend validation.
+10. Final visual fallback designs are deferred and are not part of 07.2.
+
+---
+
+## 07.3 — Unknown / Unsupported Definitions
+
+### Status
+
+**FROZEN**
+
+DYNAMIC-07.3 distinguishes between an unknown Dynamic definition and an unsupported capability of a known definition.
+
+### Unknown Definition
+
+The type is not registered in the correct registry:
+
+```text
+node.type
+   ↓
+correct registry
+   ↓
+lookup(type)
+   ↓
+no definition
+   ↓
+UNKNOWN_DEFINITION
+```
+
+The runtime reports the category/level, type, and node identity where available.
+
+### Unsupported Capability
+
+The definition is registered, but the requested configuration/capability is not supported by that definition.
+
+Example:
+
+```text
+ImageDefinition ✓
+    ↓
+animation.kenBurns
+    ↓
+not supported
+    ↓
+UNSUPPORTED_CAPABILITY
+```
+
+These remain separate because they represent different compatibility/debugging conditions.
+
+Runtime errors are structured rather than only free-form strings. Conceptually:
+
+```text
+DynamicRuntimeError
+├── level
+├── type
+├── nodeId
+├── reason
+└── capability (when applicable)
+```
+
+Unknown or unsupported behavior is localized according to 07.2.
+
+There is no silent substitution:
+
+```text
+unknown type
+    ✕
+    ↓
+another type
+```
+
+There is also no automatic property downgrade. An unsupported backend capability does not silently become a different supported value.
+
+Explicit compatibility mappings may be added in the future only when intentionally designed and documented. Compatibility is never guessed automatically.
+
+### Frozen 07.3 decisions
+
+1. Unknown Definition and Unsupported Capability are separate concepts.
+2. Unknown means the type is not registered in the correct category registry.
+3. Unsupported means the definition is registered but cannot execute the requested capability/configuration.
+4. Runtime errors use stable reason codes rather than relying only on human-readable messages.
+5. Unknown and unsupported behavior remains localized according to the 07.2 fallback boundary.
+6. Unknown definitions are never silently substituted.
+7. Unsupported properties/capabilities are never silently downgraded.
+8. Explicit compatibility mappings are allowed only when deliberately designed later.
+9. No large compatibility framework is introduced now.
+
+---
+
+## 07.4 — Runtime Error Reporting & Diagnostics
+
+### Status
+
+**FROZEN**
+
+DYNAMIC-07.4 separates user-facing fallback/error UI from diagnostic information.
+
+```text
+Dynamic Runtime Error
+        │
+        ├── User-facing representation
+        │       ↓
+        │   small fallback/error UI
+        │
+        └── Diagnostic information
+                ↓
+             existing Logger
+```
+
+The user-facing representation must not expose internal registry/debug details unnecessarily.
+
+Where available, diagnostic context includes:
+
+```text
+reasonCode
+level
+type
+nodeId
+screenId
+templateId
+schemaVersion
+traceId
+capability
+message
+```
+
+`traceId` is preserved through the Dynamic runtime so a backend request/response can be correlated with a frontend Dynamic failure.
+
+Stable reason codes remain separate from human-readable messages. Messages may change; reason codes are the machine-readable diagnostic contract.
+
+Dynamic diagnostics use the existing project logging infrastructure. No separate Dynamic logging framework is introduced.
+
+Dynamic errors are not automatically fatal. Child failures remain recoverable/localized according to 07.2. Template-level failures use the screen-level fallback boundary.
+
+---
+
+## 07.5 — Fallback Strategy
+
+### Status
+
+**FROZEN**
+
+Fallback is a controlled runtime behavior, not a replacement Dynamic definition and not a mechanism for guessing what the backend intended.
+
+The frozen fallback boundary is:
+
+```text
+Template failure
+    ↓
+screen-level fallback
+
+Component failure
+    ↓
+component-level fallback/error UI
+
+Section failure
+    ↓
+section-level fallback/error UI
+
+Group failure
+    ↓
+group-level fallback/error UI
+
+Element failure
+    ↓
+element-level fallback/error UI
+```
+
+A child fallback does not prevent valid siblings from rendering.
+
+The fallback strategy does not:
+
+- substitute one Dynamic definition for another;
+- silently rewrite backend configuration;
+- create/register definitions at runtime;
+- convert unsupported properties into arbitrary supported values;
+- expose internal technical diagnostics as the normal user-facing message.
+
+The final visual design of these fallback surfaces is a separate implementation/design concern and is not being expanded into a second Dynamic definition system.
+
+---
+
+## 07.6 — Dynamic Runtime Safety & Recovery
+
+### Status
+
+**FROZEN**
+
+DYNAMIC-07.6 defines how the runtime safely continues after Dynamic failures without introducing a second error-management framework.
+
+### Frozen 07.6 decisions
+
+1. **Rendering must never crash the application.** Dynamic failures are contained within the Dynamic boundary. Recovery is specific to the failed operation; there is no blanket global exception handler around the application.
+2. **Node-level recovery is isolated.** Component, Section, Group, and Element failures are isolated to the affected node whenever safely possible, allowing valid siblings to continue rendering.
+3. **Template failure uses screen-level recovery.** A template failure terminates normal rendering of that Dynamic screen and switches to the screen-level fallback.
+4. **Action failures are isolated from rendering.** Failed `request`, `navigate`, `external_uri`, and related actions do not become rendering crashes and are handled through their defined action/error contracts.
+5. **No automatic infinite retry.** The Dynamic runtime has no implicit or infinite retry loop. Any retry behavior must come from an explicit contract.
+6. **Invalid runtime values use capability-specific safe handling.** Missing references, bindings, response values, unsupported values, and unexpected runtime values do not use one universal default that could silently corrupt behavior. The consuming capability determines safe handling.
+7. **Parent remains authoritative.** A child failure cannot mutate or redefine the parent's layout configuration or ownership.
+8. **Unaffected state is preserved.** Local recovery must not reset unrelated valid Dynamic state where it can be preserved safely.
+9. **Navigation failure preserves the current valid screen.** If a destination cannot be safely resolved/fetched, the runtime does not leave the user on a blank/broken screen; the current valid destination remains active and the failure is diagnosed/handled.
+10. **Request failure follows DYNAMIC-06.4.2.** 07.6 does not create a second request error system. Request failures remain structured according to the frozen Request Error Model.
+11. **Recovery is deterministic.** The same defined Dynamic state and failure follows the same recovery contract. The runtime does not guess an alternative definition or layout.
+12. **Recovery cannot mutate registry/architecture/executable behavior.** Runtime recovery may change runtime UI state, but it cannot modify registry definitions, application architecture, or executable frontend behavior.
+
+### Frozen 07.6 boundary
+
+```text
+                 Dynamic Runtime
+                       │
+                       ▼
+                    Render
+                       │
+              ┌────────┴────────┐
+              │                 │
+           Success            Failure
+              │                 │
+              ▼                 ▼
+          Continue          Diagnose
+                                │
+                    ┌───────────┼───────────┐
+                    │           │           │
+                 Node       Template      Action
+                failure      failure      failure
+                    │           │           │
+                    ▼           ▼           ▼
+                fallback    screen       action
+                             fallback     handling
+                    │           │           │
+                    └───────────┴───────────┘
+                                │
+                                ▼
+                         Safe continuation
+```
+
+---
+
+## DYNAMIC-07 Current Boundary
+
+At this point:
+
+```text
+07.1 Structure Validation ............... FROZEN
+07.2 Definition / Capability Resolution  FROZEN
+07.3 Unknown / Unsupported Definitions . FROZEN
+07.4 Runtime Error Reporting ........... FROZEN
+07.5 Fallback Strategy ................. FROZEN
+07.6 Runtime Safety & Recovery ......... FROZEN
+07.7 Observability & Debugging ......... NOT STARTED
+```
+
+The combined frozen runtime boundary is:
+
+```text
+Backend Dynamic Response
+        ↓
+Parse
+        ↓
+Accept fixed backend contract
+        ↓
+Structural/runtime checks at the defined boundary
+        ↓
+Registry Resolution
+        ↓
+Definition / Capability handling
+        ↓
+Render
+        ↓
+Diagnose failures
+        ↓
+Localized or screen-level fallback
+        ↓
+Deterministic safe recovery
+```
+
+No frontend runtime mechanism may guess, silently substitute, silently downgrade, mutate backend definitions, mutate registry definitions, or create executable behavior dynamically.
+
+DYNAMIC-07.7 remains the next discussion and is intentionally not frozen yet.
 
 ---
 
