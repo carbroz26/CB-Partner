@@ -17,11 +17,11 @@ class DynamicRegistry(
         }
     }
 
-    fun resolveTemplate(type: String) = templates.resolve(type)
-    fun resolveComponent(type: String) = components.resolve(type)
-    fun resolveSection(type: String) = sections.resolve(type)
-    fun resolveGroup(type: String) = groups.resolve(type)
-    fun resolveElement(type: String) = elements.resolve(type)
+    fun resolveTemplate(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = templates.resolve(type, properties)
+    fun resolveComponent(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = components.resolve(type, properties)
+    fun resolveSection(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = sections.resolve(type, properties)
+    fun resolveGroup(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = groups.resolve(type, properties)
+    fun resolveElement(type: String, properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap()) = elements.resolve(type, properties)
 }
 
 sealed class RegistrationException(message: String) : IllegalArgumentException(message) {
@@ -44,9 +44,23 @@ open class DynamicCategoryRegistry(
         definitions[definition.type] = definition
     }
 
-    fun resolve(type: String): DynamicResolution<DynamicDefinition> =
-        definitions[type]?.let { DynamicResolution.Resolved(it) }
-            ?: DynamicResolution.Unknown(category, type)
+    fun resolve(
+        type: String,
+        properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue> = emptyMap(),
+    ): DynamicResolution<DynamicDefinition> {
+        val definition = definitions[type]
+            ?: return DynamicResolution.Unknown(category, type)
+
+        return if (definition.supports(properties)) {
+            DynamicResolution.Resolved(definition)
+        } else {
+            DynamicResolution.Unsupported(
+                category = category,
+                type = type,
+                reason = "Definition does not support the requested configuration",
+            )
+        }
+    }
 }
 
 class TemplateRegistry : DynamicCategoryRegistry(DynamicDefinitionCategory.TEMPLATE)
