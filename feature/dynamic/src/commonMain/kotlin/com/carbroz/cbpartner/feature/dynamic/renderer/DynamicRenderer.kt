@@ -25,17 +25,29 @@ class DynamicRenderer(
     private val onAction: (DynamicAction) -> Unit = {},
 ) {
     @Composable
-    fun Render(response: DynamicResponse) {
-        renderScreen(response.data)
+    fun Render(
+        response: DynamicResponse,
+        templateType: String? = null,
+    ) {
+        renderScreen(response.data, templateType)
     }
 
     @Composable
-    private fun renderScreen(screen: DynamicScreen) {
-        val template = screen.template
-        when (val registered = registry.getTemplate(template.type)) {
+    private fun renderScreen(
+        screen: DynamicScreen,
+        destinationTemplateType: String?,
+    ) {
+        val responseTemplate = screen.template
+        val selectedTemplateType = destinationTemplateType ?: responseTemplate.type
+
+        // Bootstrap/startup owns navigation. Its templateType selects the
+        // registered client template; the dynamic response supplies its data.
+        val template = responseTemplate.copy(type = selectedTemplateType)
+
+        when (val registered = registry.getTemplate(selectedTemplateType)) {
             is FormTemplate -> registered.Render(template, this)
             is StackTemplate -> registered.Render(template, this)
-            else -> Text(text = "Unsupported template: " + template.type)
+            else -> Text(text = "Unsupported template: $selectedTemplateType")
         }
     }
 
