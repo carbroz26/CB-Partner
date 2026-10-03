@@ -1,5 +1,6 @@
 package com.carbroz.cbpartner.data.dynamic.model
 
+import com.carbroz.cbpartner.data.dynamic.mapper.DynamicResponseMapper
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicValue
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
@@ -87,7 +88,8 @@ class DynamicResponseMapperTest {
 
         val action = assertNotNull(button.actions["onClick"])
         assertEquals("request", action.type)
-        assertEquals("POST", action.payload["method"]?.let { it as com.carbroz.cbpartner.domain.model.dynamic.DynamicValue.StringValue }?.value)
+        val method = assertNotNull(action.payload["method"])
+        assertEquals("POST", (method as DynamicValue.StringValue).value)
         assertNotNull(action.payload["body"])
         assertEquals("req-1", domain.traceId)
     }
