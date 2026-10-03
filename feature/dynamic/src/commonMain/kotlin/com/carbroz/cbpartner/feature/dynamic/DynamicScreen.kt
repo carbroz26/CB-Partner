@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicDestination
 import com.carbroz.cbpartner.feature.dynamic.registry.DynamicRegistry
 import com.carbroz.cbpartner.feature.dynamic.renderer.DynamicRenderer
 import com.carbroz.cbpartner.feature.dynamic.store.DynamicIntent
@@ -18,6 +19,7 @@ import com.carbroz.cbpartner.feature.dynamic.store.DynamicStore
 
 @Composable
 fun DynamicScreen(
+    destination: DynamicDestination,
     store: DynamicStore,
     registry: DynamicRegistry,
     modifier: Modifier = Modifier,
@@ -40,7 +42,10 @@ fun DynamicScreen(
                 DynamicRenderer(
                     registry = registry,
                     onAction = { store.accept(DynamicIntent.Action(it)) },
-                ).Render(current.response)
+                ).Render(
+                    response = current.response,
+                    templateType = destination.templateType,
+                )
             }
 
             is DynamicState.Failure -> Text(text = current.message)
