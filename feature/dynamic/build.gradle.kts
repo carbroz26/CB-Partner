@@ -10,6 +10,7 @@ kotlin {
             implementation(project(":core"))
             implementation(project(":navigation"))
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
