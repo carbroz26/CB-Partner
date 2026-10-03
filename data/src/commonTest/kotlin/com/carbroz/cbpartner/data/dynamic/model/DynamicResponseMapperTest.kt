@@ -76,10 +76,10 @@ class DynamicResponseMapperTest {
 
         val domain = DynamicResponseMapper().map(response)
 
-        assertEquals("partner_login", domain.data.screenId)
-        assertEquals("form_template", domain.data.template.type)
+        assertEquals("partner_login", domain.data?.screenId)
+        assertEquals("form_template", domain.data?.template?.type)
 
-        val button = domain.data.template.components
+        val button = domain.data!!.template.components
             .single()
             .sections
             .single()
@@ -92,5 +92,38 @@ class DynamicResponseMapperTest {
         assertEquals("POST", (method as DynamicValue.StringValue).value)
         assertNotNull(action.payload["body"])
         assertEquals("req-1", domain.traceId)
+    }
+
+    @Test
+    fun mapsActionOnlyResponseWithNextScreen() {
+        val response = json.decodeFromString<DynamicResponseDto>(
+            """
+            {
+              "status": 200,
+              "code": "OTP_SENT",
+              "message": "OTP sent successfully.",
+              "nextScreen": {
+                "screenId": "partner_otp",
+                "templateId": "tpl_otp",
+                "templateType": "form_template",
+                "endpoint": "/api/v1/partner/auth/otp",
+                "method": "GET",
+                "authentication": "NONE"
+              },
+              "traceId": "req-2"
+            }
+            """,
+        )
+
+        val domain = DynamicResponseMapper().map(response)
+        val next = assertNotNull(domain.nextScreen)
+
+        assertEquals("OTP_SENT", domain.code)
+        assertEquals("partner_otp", next.screenId)
+        assertEquals("tpl_otp", next.templateId)
+        assertEquals("form_template", next.templateType)
+        assertEquals("/api/v1/partner/auth/otp", next.endpoint)
+        assertEquals("req-2", domain.traceId)
+        assertEquals(null, domain.data)
     }
 }
