@@ -46,6 +46,7 @@ class DynamicStore(
     private val destination: DynamicDestination,
     private val actionHandler: DynamicActionHandler = DynamicActionHandler(),
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+    private val deviceId: String = "bruno-test-device-123",
 ) {
     private val _state = MutableStateFlow<DynamicState>(DynamicState.Initial)
     val state: StateFlow<DynamicState> = _state.asStateFlow()
@@ -93,7 +94,8 @@ class DynamicStore(
             }
         val method = string(action.payload["method"]) ?: "POST"
         val authentication = string(action.payload["authentication"])
-        val body = action.payload["body"]?.resolveBindings()?.let { Json.encodeToString(JsonElement.serializer(), it) }
+        val body = action.payload["body"]?.resolveBindings()?.withDeviceId()
+            ?.let { Json.encodeToString(JsonElement.serializer(), it) }
 
         requestJob = scope.launch {
             repository.fetch(
@@ -144,6 +146,15 @@ class DynamicStore(
         is DynamicValue.NumberValue -> JsonPrimitive(value)
         is DynamicValue.BooleanValue -> JsonPrimitive(value)
         DynamicValue.NullValue -> JsonNull
+    }
+
+    private fun JsonElement.withDeviceId(): JsonElement = when (this) {
+        is JsonObject -> if (containsKey("deviceId")) {
+            this
+        } else {
+            JsonObject(toMutableMap().apply { put("deviceId", JsonPrimitive(deviceId)) })
+        }
+        else -> JsonObject(mapOf("body" to this, "deviceId" to JsonPrimitive(deviceId)))
     }
 
     private fun string(value: DynamicValue?): String? =
