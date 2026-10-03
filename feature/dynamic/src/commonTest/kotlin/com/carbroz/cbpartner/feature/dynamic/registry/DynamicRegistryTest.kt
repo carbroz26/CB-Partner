@@ -24,17 +24,6 @@ class DynamicRegistryTest {
     }
 
     @Test
-    fun registeredDefinitionCanReturnUnsupported() {
-        val registry = DynamicRegistry()
-        registry.register(object : DynamicDefinition {
-            override val type = "restricted"
-            override val category = DynamicDefinitionCategory.ELEMENT
-            override val supportedCapabilities = emptySet<String>()
-            override fun supports(properties: Map<String, com.carbroz.cbpartner.domain.model.dynamic.DynamicValue>): Boolean = false
-        })
-    }
-
-    @Test
     fun categoryLookupDoesNotCrossResolve() {
         val registry = createInitialDynamicRegistry()
         assertTrue(registry.resolveTemplate("text") is DynamicResolution.Unknown)
