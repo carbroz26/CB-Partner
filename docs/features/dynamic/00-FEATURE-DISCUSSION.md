@@ -8,9 +8,9 @@
 - DYNAMIC-04 — FROZEN
 - DYNAMIC-05 — FROZEN
 - DYNAMIC-06 — FROZEN
-- DYNAMIC-07 — NOT STARTED
+- DYNAMIC-07 — FROZEN
 
-This is the single discussion document for the complete Dynamic UI feature. All seven discussions will be recorded here. The implementation is a fresh CB-Partner design; the previous SDUI project/reference is used only to understand the fixed JSON contract and intended behavior. The fixed backend JSON format is not being redesigned here.
+This is the single discussion document for the complete Dynamic UI feature. All seven discussions are recorded here. The implementation is a fresh CB-Partner design; the previous SDUI project/reference is used only to understand the fixed JSON contract and intended behavior. The fixed backend JSON format is not being redesigned here.
 
 Initial frontend vocabulary for the first implementation scope:
 
@@ -783,9 +783,736 @@ Frozen DYNAMIC-06.4.3 decisions:
 
 ---
 
-# DYNAMIC-07 — NOT STARTED
+# DYNAMIC-07 — Runtime Validation & Compatibility
 
-DYNAMIC-07 will be started only after the complete DYNAMIC-01 through DYNAMIC-06 discussion has been recorded and frozen. The exact DYNAMIC-07 scope will be discussed before any implementation planning is created.
+## Status
+
+**FROZEN**
+
+DYNAMIC-07 establishes the runtime boundary for accepting backend Dynamic configuration, resolving frontend capabilities, handling unsupported definitions, reporting runtime problems, presenting controlled fallbacks, recovering safely, and making the runtime observable during development and production.
+
+The final runtime boundary remains intentionally simple:
+
+```text
+PARSE
+  ↓
+RESOLVE
+  ↓
+RENDER
+  ↓
+DIAGNOSE
+  ↓
+FALLBACK
+  ↓
+RECOVER SAFELY
+```
+
+The backend is responsible for sending a valid Dynamic structure. The frontend does not create a second SDUI validation engine. Frontend runtime responsibilities are parsing, registered-definition resolution, rendering, runtime/unsupported failure handling, diagnostics, fallback, and safe recovery.
+
+## 07.1 — Dynamic Structure Validation
+
+### Boundary
+
+The backend validates and sends the canonical Dynamic structure. The frontend does not implement a duplicate structural-validation engine merely to revalidate a response that is expected to conform to the fixed contract.
+
+The canonical hierarchy remains:
+
+```text
+Screen
+  └── exactly 1 Template
+       └── 1..N Components
+            ├── Elements
+            └── Sections
+                 ├── Elements
+                 └── Groups
+                      └── Elements
+```
+
+The fixed structure is represented by the already-frozen DYNAMIC-02 contract. The frontend uses the model as defined; it does not attempt to repair or reinterpret backend structure.
+
+### 07.1.1 — Frontend responsibility
+
+The frontend runtime performs:
+
+```text
+Backend response
+      ↓
+Parse
+      ↓
+Resolve registered definitions
+      ↓
+Render
+      ↓
+Handle runtime / unsupported failures
+```
+
+It does not introduce a separate:
+
+```text
+ValidatorEngine
+CompatibilityEngine
+MigrationEngine
+Normalizer
+```
+
+### 07.1.2 — No structural repair
+
+The frontend must never guess or automatically restructure backend data. It does not insert missing nodes, move children to another parent, substitute a different type, or rewrite the backend response to make it render.
+
+### 07.1.3 — Structure and registration remain separate
+
+The frontend must distinguish the fixed Dynamic structure from whether a frontend definition is registered. A structurally valid response can still contain a type that the installed frontend does not know.
+
+That case belongs to Definition Resolution / Unsupported Definition handling, not to a duplicate backend-structure validator.
+
+### Frozen DYNAMIC-07.1 boundary
+
+1. Backend sends the proper Dynamic structure.
+2. Frontend does not create a duplicate SDUI structural-validation engine.
+3. Frontend parses the response according to the fixed model.
+4. Frontend resolves registered definitions.
+5. Frontend renders valid registered definitions.
+6. Frontend handles runtime and unsupported-definition failures in a controlled way.
+7. Frontend never guesses or repairs backend structure.
+8. Frontend never inserts missing Dynamic nodes.
+9. Frontend never silently substitutes a different definition.
+10. Structural contract and registry capability remain separate responsibilities.
+
+---
+
+## 07.2 — Definition / Capability Resolution
+
+Registration remains the frontend source of rendering capability through the single public `DynamicRegistry` with its category-specific registrations:
+
+```text
+DynamicRegistry
+│
+├── TemplateRegistry
+├── ComponentRegistry
+├── SectionRegistry
+├── GroupRegistry
+└── ElementRegistry
+```
+
+Resolution follows the actual Dynamic tree:
+
+```text
+Screen
+ ↓
+TemplateRegistry
+ ↓
+ComponentRegistry
+ ↓
+SectionRegistry
+ ↓
+GroupRegistry
+ ↓
+ElementRegistry
+```
+
+Each registered Definition owns its Compose rendering and its supported capabilities. The registry answers who knows how to render a type; the Definition owns how it renders and which capabilities it supports.
+
+The registry does not know business concepts such as Login, OTP, Dashboard, Booking, or Payment.
+
+### Frozen DYNAMIC-07.2 decisions
+
+1. Registration is the frontend source of rendering capability.
+2. Resolution uses the category-appropriate registry inside the single `DynamicRegistry`.
+3. Backend type names are used directly for registry lookup.
+4. Every registered Definition owns its Compose rendering.
+5. Capability support remains Definition-owned.
+6. The registry does not own business behavior.
+7. Unknown definitions are not guessed or silently substituted.
+8. Unknown Template handling is screen-level because Template determines the screen rendering strategy.
+9. Unknown Component, Section, Group, and Element handling is localized so the valid surrounding tree can continue.
+10. Registry resolution remains separate from backend validation, rendering, actions, and navigation.
+
+---
+
+## 07.3 — Unknown / Unsupported Definitions
+
+Two failure concepts remain distinct.
+
+### Unknown Definition
+
+The requested type does not exist in the appropriate registry.
+
+```text
+ElementRegistry
+    ↓
+"video"
+    ↓
+NOT REGISTERED
+```
+
+This is an `UNKNOWN_DEFINITION` result.
+
+### Unsupported Capability
+
+The Definition exists, but the requested capability/configuration is not supported by that Definition.
+
+```text
+ImageDefinition
+    ↓
+registered
+    ↓
+requested capability not supported
+```
+
+This is an `UNSUPPORTED_CAPABILITY` result.
+
+The distinction is important for deterministic diagnostics and compatibility behavior.
+
+### No guessing / substitution
+
+Unknown definitions never become another definition automatically.
+
+```text
+carousel_component
+      ↓
+NOT REGISTERED
+```
+
+must not become:
+
+```text
+stack_component
+```
+
+Likewise an unsupported property must not automatically downgrade to a different property value.
+
+Explicit compatibility mapping may be introduced later only when deliberately defined by the relevant contract. It is never guessed at runtime.
+
+### Frozen DYNAMIC-07.3 decisions
+
+1. Unknown Definition and Unsupported Capability are separate concepts.
+2. `UNKNOWN_DEFINITION` means the requested type is not registered.
+3. `UNSUPPORTED_CAPABILITY` means the Definition is registered but cannot support the requested capability/configuration.
+4. Resolution outcome is deterministic.
+5. Unknown types are reported as unknown rather than guessed.
+6. Unsupported capabilities are reported as unsupported rather than downgraded.
+7. No silent type substitution is allowed.
+8. No automatic property downgrade is allowed.
+9. Explicit compatibility mappings are allowed only when deliberately designed later.
+10. The runtime does not build a large compatibility/migration framework merely for this boundary.
+
+---
+
+## 07.4 — Runtime Error Reporting & Diagnostics
+
+Dynamic runtime errors have two distinct outputs:
+
+```text
+Dynamic Runtime Error
+       │
+       ├── User-facing fallback/error representation
+       │
+       └── Diagnostic information
+                    ↓
+              existing Logger
+```
+
+The user-facing representation is intentionally small and non-technical. Registry internals and diagnostic metadata are not exposed as normal user-facing UI.
+
+Diagnostics use structured reason codes rather than relying only on free-form messages.
+
+Examples include:
+
+```text
+UNKNOWN_DEFINITION
+UNSUPPORTED_CAPABILITY
+```
+
+Diagnostic context can include:
+
+```text
+reasonCode
+level
+category
+ type
+nodeId
+screenId
+templateId
+schemaVersion
+traceId
+actionId
+requestId
+capability
+message
+```
+
+Only context that is actually available is recorded. Sensitive data is governed by the 07.7 protection rules.
+
+Dynamic errors are routed through the project's existing logging infrastructure. No separate Dynamic logging framework is introduced.
+
+### Frozen DYNAMIC-07.4 decisions
+
+1. User-facing fallback and diagnostic information are separate layers.
+2. Runtime errors use stable structured reason codes.
+3. Human-readable messages are separate from stable reason codes.
+4. Diagnostics preserve useful Dynamic context where available.
+5. `traceId` is preserved for request/response correlation where supplied.
+6. Definition-resolution failures are structured rather than string-only failures.
+7. Diagnostics use the existing project logging abstraction.
+8. Diagnostic logging does not become a second Dynamic state or error framework.
+9. Technical registry/definition details are not exposed as normal user-facing UI.
+10. Sensitive-data protection always applies to diagnostics.
+
+---
+
+## 07.5 — Fallback Strategy
+
+Fallback is localized according to the failed Dynamic boundary.
+
+```text
+Unknown Template
+      ↓
+Screen-level fallback
+```
+
+while:
+
+```text
+Unknown Component
+      ↓
+Component-level fallback
+
+Unknown Section
+      ↓
+Section-level fallback
+
+Unknown Group
+      ↓
+Group-level fallback
+
+Unknown Element
+      ↓
+Element-level fallback
+```
+
+A child failure must not destroy an otherwise valid surrounding screen.
+
+Fallback/error UI is runtime infrastructure behavior. It is not itself a backend Dynamic definition and therefore is not registered in `DynamicRegistry`.
+
+The exact visual design of fallback UI remains separate from this runtime boundary.
+
+### Frozen DYNAMIC-07.5 decisions
+
+1. Template failure uses a screen-level fallback.
+2. Component failure uses a component-level fallback.
+3. Section failure uses a section-level fallback.
+4. Group failure uses a group-level fallback.
+5. Element failure uses an element-level fallback.
+6. Child failures are localized whenever safely possible.
+7. Valid siblings continue rendering after a localized child failure.
+8. Fallback does not substitute another Dynamic definition.
+9. Fallback/error UI is not itself a Dynamic definition.
+10. Final visual fallback design is outside the runtime boundary and is not redefined here.
+
+---
+
+## 07.6 — Runtime Safety & Recovery
+
+Dynamic failures must be contained inside the Dynamic runtime and must not crash the application. Recovery is specific to the failed operation rather than implemented through a blanket global exception handler.
+
+### 07.6.1 — Rendering must never crash the application
+
+Expected Dynamic failures are contained and recovered at the appropriate boundary. The runtime does not add a giant global catch-all around the application.
+
+### 07.6.2 — Node-level recovery
+
+Component, Section, Group, and Element failures are isolated to the affected node whenever safely possible. Siblings continue rendering.
+
+### 07.6.3 — Template-level recovery
+
+A Template failure terminates normal rendering of that Dynamic screen and switches to the screen-level fallback. The runtime does not attempt to construct an unknown template.
+
+### 07.6.4 — Action failure isolation
+
+Action failures are isolated from rendering and handled through the relevant action/error contract. A failed request, navigation, or external URI action does not become a rendering crash.
+
+### 07.6.5 — No automatic infinite retry
+
+The Dynamic runtime has no implicit or infinite retry loop. Any retry behavior must be explicitly defined by the relevant action/request contract.
+
+### 07.6.6 — Invalid runtime state
+
+Missing references, missing bindings, missing response values, unsupported capabilities, and unexpected runtime values are handled according to the consuming capability. There is no universal default value that can silently corrupt behavior.
+
+### 07.6.7 — Parent remains authoritative
+
+A child failure cannot mutate or redefine its parent's layout configuration, ownership, or rendering contract.
+
+### 07.6.8 — Preserve unaffected state
+
+Recovery is localized. Unaffected Dynamic state and valid bindings remain intact where possible; one failed node does not reset the entire destination state.
+
+### 07.6.9 — Navigation failure
+
+If a destination cannot be safely resolved or loaded, the current valid Dynamic screen remains active. The runtime reports the failure through the appropriate diagnostic/error boundary rather than producing a blank or broken destination.
+
+### 07.6.10 — Request failure
+
+Request failures follow the already-frozen DYNAMIC-06.4.2 Request Error Model. DYNAMIC-07.6 does not create a second request-error system.
+
+### 07.6.11 — Deterministic recovery
+
+The same defined runtime problem under the same relevant conditions produces the same recovery behavior. The runtime does not guess an alternative definition or layout.
+
+### 07.6.12 — Runtime safety boundary
+
+Recovery may change runtime UI state, but it must never mutate registry definitions, application architecture, or executable frontend behavior.
+
+### Frozen DYNAMIC-07.6 decisions
+
+1. Dynamic failures are contained and must not crash the application.
+2. Child failures are isolated whenever safely possible.
+3. Template failure uses the screen-level fallback.
+4. Action failures are isolated from rendering.
+5. No implicit or infinite retry exists.
+6. Invalid runtime values use capability-specific safe handling.
+7. Parent definitions remain authoritative over their own layout/ownership.
+8. Unaffected Dynamic state is preserved.
+9. Destination failure preserves the current valid screen.
+10. Request failures follow DYNAMIC-06.4.2.
+11. Recovery is deterministic.
+12. Recovery cannot mutate registry definitions, application architecture, or executable frontend behavior.
+
+---
+
+## 07.7 — Dynamic Observability & Debugging
+
+## Status
+
+**FROZEN**
+
+DYNAMIC-07.7 is the final observability boundary. It makes Dynamic runtime behavior understandable during development, testing, and production without changing Dynamic execution or introducing a separate telemetry architecture.
+
+The observability principle is:
+
+```text
+Dynamic Runtime
+      ↓
+structured diagnostic event
+      ↓
+existing project Logger
+      ↓
+configured visibility / verbosity
+```
+
+Observability is observational only. It never becomes part of the Dynamic state machine, action execution, rendering decision, navigation decision, request behavior, or recovery behavior.
+
+### 07.7.1 — Observable Lifecycle
+
+The runtime exposes a causal lifecycle rather than unrelated log messages.
+
+Major observable stages are:
+
+```text
+PARSE
+  ↓
+DEFINITION / CAPABILITY RESOLUTION
+  ↓
+STATE INITIALIZATION
+  ↓
+ACTION / REQUEST-LOCAL EXECUTION
+  ↓
+RESPONSE / ERROR
+  ↓
+STATE UPDATE
+  ↓
+DESTINATION / NAVIGATION
+```
+
+Success and failure outcomes remain distinguishable and useful correlation identifiers are carried through related events.
+
+Frozen principles:
+
+1. Dynamic lifecycle diagnostics follow the causal runtime flow.
+2. Major lifecycle stages are observable.
+3. Success and failure outcomes are distinguishable.
+4. Related operations use correlation identifiers where available.
+5. Diagnostics use the existing logging infrastructure.
+6. Observability does not change runtime behavior.
+7. Raw JSON is not required for ordinary lifecycle diagnostics.
+8. Full Dynamic state is not required for ordinary lifecycle diagnostics.
+9. Sensitive-data protection applies to lifecycle diagnostics.
+10. Observability is not a separate Dynamic state machine.
+
+### 07.7.2 — Reuse Existing Logging Infrastructure
+
+Dynamic uses the project's existing logger, log levels, and logging abstraction.
+
+Frozen principles:
+
+1. Reuse the existing project logger.
+2. Reuse existing log levels/abstraction instead of creating Dynamic-specific logging primitives.
+3. No separate Dynamic logger/framework.
+4. No Dynamic-specific log storage system.
+5. No Dynamic-specific upload service.
+6. No Dynamic-specific analytics system.
+7. No separate telemetry infrastructure is introduced by DYNAMIC-07.7.
+8. No separate crash-reporting infrastructure is introduced here.
+9. Logging remains observational only.
+10. A logging failure must never break Dynamic runtime execution.
+
+### 07.7.3 — Structured Diagnostic Context
+
+Diagnostics carry canonical identifiers and metadata rather than dumping runtime objects.
+
+Canonical context includes, where available:
+
+```text
+flowId
+screenId
+templateId
+componentId
+sectionId
+groupId
+elementId
+actionId
+requestId
+traceId
+```
+
+Frozen principles:
+
+1. Diagnostic context uses canonical Dynamic identifiers.
+2. `flowId` may correlate a Dynamic flow where available.
+3. `screenId` identifies the Dynamic screen.
+4. `templateId` identifies the relevant template/destination instance.
+5. Component/Section/Group/Element identifiers are preserved where available.
+6. `actionId` correlates action diagnostics.
+7. `requestId` correlates request diagnostics.
+8. `traceId` correlates backend/request/runtime diagnostics where supplied.
+9. Context is metadata, not a raw runtime-state dump.
+10. Sensitive/full payload data is not added merely for diagnostic convenience.
+
+### 07.7.4 — Definition-Resolution Diagnostics
+
+Definition resolution exposes deterministic outcomes:
+
+```text
+RESOLVED
+UNKNOWN
+UNSUPPORTED
+```
+
+The diagnostic identifies the relevant category, requested type, node identity, and reason without changing the resolution behavior.
+
+Frozen principles:
+
+1. Resolution diagnostics distinguish `RESOLVED`, `UNKNOWN`, and `UNSUPPORTED`.
+2. `RESOLVED` identifies successful registry resolution.
+3. `UNKNOWN` identifies a type absent from the appropriate registry.
+4. `UNSUPPORTED` identifies a registered Definition that cannot support the requested capability/configuration.
+5. Diagnostics identify the relevant registry category.
+6. Diagnostics identify the requested type.
+7. Diagnostics identify the relevant node identity where available.
+8. Resolution diagnostics are observational and deterministic.
+9. Resolution diagnostics never substitute another Definition.
+10. Diagnostics never mutate registry contents or runtime definitions.
+
+### 07.7.5 — Action / Request Tracing
+
+Action/request diagnostics follow the execution chain rather than logging isolated messages.
+
+```text
+ACTION_TRIGGERED
+      ↓
+ACTION_RESOLVED
+      ↓
+STATE_UPDATED
+```
+
+or for requests:
+
+```text
+REQUEST_STARTED
+      ↓
+REQUEST_SUCCEEDED / REQUEST_FAILED
+      ↓
+STATE / DESTINATION / NAVIGATION RESULT
+```
+
+Frozen principles:
+
+1. Action tracing begins at the action trigger.
+2. Action resolution is observable.
+3. Local state effects are observable where relevant.
+4. Request start is observable.
+5. Request success/failure is observable.
+6. Resulting state/destination/navigation outcome is correlatable.
+7. `actionId`, `requestId`, and `traceId` are used where available.
+8. Tracing remains aligned with the actual Dynamic action lifecycle.
+9. Tracing does not change action execution.
+10. Tracing does not change request, state, destination, or navigation behavior.
+
+### 07.7.6 — State Diagnostics
+
+State diagnostics observe transitions rather than dumping complete Dynamic state.
+
+The useful diagnostic shape is:
+
+```text
+state changed
+path = <changed path>
+old = <safe value>
+new = <safe value>
+```
+
+Only safe values are included. Sensitive values use redaction or transition-only diagnostics.
+
+Frozen principles:
+
+1. Observe state transitions rather than full state dumps.
+2. Identify the changed state path where possible.
+3. Include old value only when it is safe.
+4. Include new value only when it is safe.
+5. Sensitive state values are redacted or represented only by safe transition information.
+6. State diagnostics are correlated with the relevant action/request/trace context where available.
+7. Diagnostics do not expose the complete Dynamic state tree by default.
+8. Diagnostics do not become a second state-management mechanism.
+9. State diagnostics do not mutate state.
+10. State diagnostics do not change rendering or interaction behavior.
+
+### 07.7.7 — Sensitive-Data Protection
+
+Observability must never become a path for leaking credentials, OTPs, tokens, personal data, or other sensitive runtime values.
+
+Frozen principles:
+
+1. Sensitive data is never logged merely because it is available in runtime state.
+2. Full request/response payloads are not logged by default.
+3. Authentication credentials/tokens are not logged.
+4. OTPs and verification secrets are not logged.
+5. Personal/user-sensitive values are redacted or omitted.
+6. Binding/context/response values are logged only when safe and necessary for diagnosis.
+7. State diagnostics use safe values or transition-only representations for sensitive state.
+8. Backend JSON diagnostics do not expose sensitive payload contents.
+9. Debug mode does not bypass sensitive-data protection.
+10. Production observability follows the same protection boundary.
+
+### 07.7.8 — JSON / Backend Response Diagnostics
+
+Backend response diagnostics are useful for understanding Dynamic parsing and resolution without turning logging into a payload dump.
+
+Frozen principles:
+
+1. Backend response processing is observable at meaningful lifecycle boundaries.
+2. Response status/result information may be logged safely.
+3. `traceId`, `screenId`, `schemaVersion`, and other safe metadata may be logged where available.
+4. Parse/decode success and failure are distinguishable.
+5. Unknown/unsupported definition information is observable.
+6. Full backend JSON payloads are not logged by default.
+7. Sensitive backend fields are never logged in raw form.
+8. Diagnostic output identifies the failure location/reason without requiring the entire payload.
+9. JSON diagnostics remain observational and do not modify the decoded response.
+10. Debug visibility never changes the backend response handling behavior.
+
+### 07.7.9 — Development / Debug Mode
+
+Development/debug mode provides additional safe diagnostic visibility without creating a different Dynamic runtime.
+
+Frozen principles:
+
+1. Development and production use the same Dynamic runtime behavior.
+2. Debug mode may expose additional safe diagnostic information.
+3. Debug mode may increase diagnostic verbosity.
+4. Debug mode does not change rendering behavior.
+5. Debug mode does not change state behavior.
+6. Debug mode does not change action/request behavior.
+7. Debug mode does not change navigation or fallback behavior.
+8. Debug mode does not bypass sensitive-data protection.
+9. Debug mode uses the existing logging infrastructure.
+10. Debugging remains observational rather than becoming a second runtime implementation.
+
+### 07.7.10 — Diagnostic Filtering & Verbosity
+
+Filtering and verbosity control only what diagnostics are visible, not what the Dynamic runtime does.
+
+Frozen principles:
+
+1. Structured Dynamic diagnostics flow through the existing logger.
+2. Diagnostics can be filtered by the project's supported categories/levels.
+3. Verbosity controls diagnostic visibility/detail.
+4. Filtering never changes rendering.
+5. Filtering never changes Dynamic state behavior.
+6. Filtering never changes action execution.
+7. Filtering never changes requests.
+8. Filtering never changes navigation or fallback.
+9. Filtering never changes definition resolution.
+10. Diagnostic filtering is therefore observational only.
+
+### 07.7.11 — Production Observability Boundary
+
+Production uses the same Dynamic runtime as development.
+
+Production observability is intentionally minimal and actionable:
+
+```text
+meaningful failure
+safe context
+safe correlation
+existing logger
+```
+
+Frozen principles:
+
+1. Development and production share the same runtime behavior.
+2. Production diagnostics remain minimal and actionable.
+3. Safe correlation IDs remain available where useful.
+4. Sensitive data is never exposed.
+5. Full request/response payloads are not logged in production.
+6. Full Dynamic state is not logged in production.
+7. Meaningful runtime failures remain diagnosable.
+8. No separate production Dynamic debug panel is introduced by this boundary.
+9. Existing logging infrastructure remains the production observability path.
+10. Production logging never changes application behavior.
+
+### 07.7.12 — Final Observability Boundary / Freeze
+
+DYNAMIC-07.7 closes observability without creating another runtime subsystem.
+
+Frozen principles:
+
+1. Dynamic observability uses one existing-logger pipeline.
+2. Lifecycle, resolution, action/request, state, and response diagnostics use structured context.
+3. Canonical identifiers provide correlation across related Dynamic operations.
+4. Diagnostics distinguish meaningful success/failure outcomes.
+5. Sensitive data protection applies in all modes.
+6. Debug mode adds safe visibility only.
+7. Filtering and verbosity affect visibility only.
+8. Production logging remains minimal, actionable, and safe.
+9. Observability never changes Dynamic rendering, state, actions, requests, navigation, resolution, fallback, or recovery.
+10. No separate Dynamic observability/telemetry architecture is introduced.
+
+## DYNAMIC-07 — Frozen Decisions
+
+1. Backend provides the valid Dynamic structure; frontend does not create a duplicate SDUI validation engine.
+2. Frontend parses, resolves registered definitions, renders, diagnoses, falls back, and recovers safely.
+3. Unknown definitions and unsupported capabilities remain distinct.
+4. Unknown types are never guessed or silently substituted.
+5. Capability compatibility is Definition-owned and explicit.
+6. Runtime errors use structured diagnostics and the existing logging infrastructure.
+7. Fallback is localized except Template failure, which uses the screen-level fallback.
+8. Fallback UI is not itself a Dynamic definition.
+9. Dynamic failures are contained and recovery is deterministic.
+10. Child failures do not unnecessarily destroy valid surrounding UI/state.
+11. Request failures follow DYNAMIC-06.4.2.
+12. Recovery cannot mutate registry definitions, application architecture, or executable frontend behavior.
+13. Observability follows the causal Dynamic lifecycle.
+14. Observability reuses the existing logger and does not introduce a separate telemetry framework.
+15. Diagnostics use canonical IDs and correlation metadata rather than raw state/payload dumps.
+16. Definition resolution diagnostics distinguish `RESOLVED`, `UNKNOWN`, and `UNSUPPORTED`.
+17. Action/request tracing correlates trigger, execution, result, state, destination, and navigation where applicable.
+18. State diagnostics observe transitions and changed paths using safe values only.
+19. Sensitive data and full payloads are never logged merely for debugging convenience.
+20. Debug mode adds safe visibility without changing runtime behavior.
+21. Filtering and verbosity affect diagnostic visibility only.
+22. Production observability is minimal, actionable, correlated, and safe.
+23. Observability never changes Dynamic runtime behavior.
+24. No additional Dynamic observability, validation, compatibility, or recovery framework is required by DYNAMIC-07.
 
 ---
 
