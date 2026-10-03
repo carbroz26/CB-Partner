@@ -26,6 +26,7 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicValue
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.doubleOrNull
@@ -119,15 +120,15 @@ class DynamicResponseMapper {
     private fun JsonElement.toDynamicValue(): DynamicValue = when (this) {
         JsonNull -> DynamicValue.NullValue
         is JsonObject -> DynamicValue.ObjectValue(
-            content.entries.associate { (key, value) -> key to value.toDynamicValue() },
+            entries.associate { (key, value) -> key to value.toDynamicValue() },
         )
         is JsonArray -> DynamicValue.ArrayValue(map { it.toDynamicValue() })
         else -> {
-            val primitive = jsonPrimitive
+            val primitive = this as? JsonPrimitive
             when {
-                primitive.booleanOrNull != null -> DynamicValue.BooleanValue(primitive.booleanOrNull!!)
-                primitive.doubleOrNull != null -> DynamicValue.NumberValue(primitive.doubleOrNull!!)
-                primitive.contentOrNull != null -> DynamicValue.StringValue(primitive.content)
+                primitive?.booleanOrNull != null -> DynamicValue.BooleanValue(primitive.booleanOrNull!!)
+                primitive?.doubleOrNull != null -> DynamicValue.NumberValue(primitive.doubleOrNull!!)
+                primitive?.contentOrNull != null -> DynamicValue.StringValue(primitive.content)
                 else -> DynamicValue.NullValue
             }
         }
