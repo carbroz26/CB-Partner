@@ -26,13 +26,10 @@ import com.carbroz.cbpartner.domain.model.dynamic.DynamicValue
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.JsonArray
 
 class DynamicResponseMapper {
 
@@ -89,7 +86,7 @@ class DynamicResponseMapper {
         properties = properties.toDynamicValueMap(),
         validation = validation?.toDomain(),
         binding = binding?.toDomain(),
-        actions = actions?.toDomain(),
+        actions = actions?.toDomain() ?: emptyMap(),
     )
 
     private fun DynamicValidationDto.toDomain() = DynamicValidation(
@@ -124,9 +121,8 @@ class DynamicResponseMapper {
         is JsonObject -> DynamicValue.ObjectValue(
             content.entries.associate { (key, value) -> key to value.toDynamicValue() },
         )
-        else -> if (toString().startsWith("[")) {
-            DynamicValue.ArrayValue(jsonArray.map { it.toDynamicValue() })
-        } else {
+        is JsonArray -> DynamicValue.ArrayValue(map { it.toDynamicValue() })
+        else -> {
             val primitive = jsonPrimitive
             when {
                 primitive.booleanOrNull != null -> DynamicValue.BooleanValue(primitive.booleanOrNull!!)
