@@ -30,7 +30,12 @@ class DynamicRenderer(
         response: DynamicResponse,
         templateType: String? = null,
     ) {
-        renderScreen(response.data, templateType)
+        val screen = response.data
+        if (screen == null) {
+            Text(text = response.message)
+            return
+        }
+        renderScreen(screen, templateType)
     }
 
     @Composable
