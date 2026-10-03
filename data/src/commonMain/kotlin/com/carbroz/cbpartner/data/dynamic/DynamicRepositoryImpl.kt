@@ -3,6 +3,7 @@ package com.carbroz.cbpartner.data.dynamic
 import com.carbroz.cbpartner.data.dynamic.mapper.DynamicResponseMapper
 import com.carbroz.cbpartner.data.dynamic.model.DynamicResponseDto
 import com.carbroz.cbpartner.data.dynamic.remote.DynamicRemoteDataSource
+import com.carbroz.cbpartner.domain.model.dynamic.DynamicDestination
 import com.carbroz.cbpartner.domain.model.dynamic.DynamicResponse
 import com.carbroz.cbpartner.domain.repository.DynamicRepository
 import kotlinx.serialization.json.Json
@@ -21,14 +22,13 @@ class DynamicRepositoryImpl(
 ) : DynamicRepository {
 
     override suspend fun fetch(
-        endpoint: String,
-        method: String,
+        destination: DynamicDestination,
         headers: Map<String, String>,
         body: String?,
     ): Result<DynamicResponse> = runCatching {
         val remoteResponse = remoteDataSource.fetch(
-            endpoint = endpoint,
-            method = method,
+            endpoint = destination.endpoint,
+            method = destination.method,
             headers = headers,
             body = body,
         )
