@@ -13,7 +13,7 @@ data class DynamicResponse(
     val status: Int,
     val code: String,
     val message: String,
-    val data: DynamicScreen,
+    val data: DynamicScreen?,
     val traceId: String?,
     val nextScreen: DynamicNextScreen? = null,
 )
