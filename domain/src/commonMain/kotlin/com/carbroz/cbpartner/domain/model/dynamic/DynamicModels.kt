@@ -15,6 +15,16 @@ data class DynamicResponse(
     val message: String,
     val data: DynamicScreen,
     val traceId: String?,
+    val nextScreen: DynamicNextScreen? = null,
+)
+
+data class DynamicNextScreen(
+    val screenId: String,
+    val templateId: String,
+    val templateType: String,
+    val endpoint: String,
+    val method: String = "GET",
+    val authentication: String? = null,
 )
 
 data class DynamicScreen(
