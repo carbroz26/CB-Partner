@@ -42,6 +42,7 @@ fun DynamicScreen(
                 DynamicRenderer(
                     registry = registry,
                     onAction = { store.accept(DynamicIntent.Action(it)) },
+                    onValueChange = { key, value -> store.accept(DynamicIntent.ValueChanged(key, value)) },
                 ).Render(
                     response = current.response,
                     templateType = destination.templateType,
