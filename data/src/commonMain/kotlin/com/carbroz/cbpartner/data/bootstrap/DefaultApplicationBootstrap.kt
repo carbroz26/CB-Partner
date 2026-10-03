@@ -5,7 +5,7 @@ import com.carbroz.cbpartner.data.network.RemoteDataSource
 import com.carbroz.cbpartner.domain.bootstrap.ApplicationBootstrap
 import com.carbroz.cbpartner.domain.model.bootstrap.BootstrapFailure
 import com.carbroz.cbpartner.domain.model.bootstrap.BootstrapOutput
-import io.ktor.client.request.get
+import io.ktor.http.HttpMethod
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -17,11 +17,11 @@ internal class DefaultApplicationBootstrap(
     private val logger = Logger.withTag("Bootstrap")
 
     override suspend fun invoke(): Result<BootstrapOutput> {
-        logger.i { "Requesting $BASE_URL$BOOTSTRAP_ENDPOINT" }
+        logger.i { "Requesting $BOOTSTRAP_ENDPOINT" }
 
         return try {
             val response = remoteDataSource.execute(
-                method = io.ktor.http.HttpMethod.Get,
+                method = HttpMethod.Get,
                 url = BOOTSTRAP_ENDPOINT,
                 headers = mapOf(
                     "X-CarBroz-Platform" to "ANDROID",
@@ -60,7 +60,6 @@ internal class DefaultApplicationBootstrap(
     }
 
     private companion object {
-        const val BASE_URL = "http://localhost:3000"
         const val BOOTSTRAP_ENDPOINT = "/api/v1/partner/config/bootstrap"
     }
 }
